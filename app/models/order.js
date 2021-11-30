@@ -35,6 +35,7 @@ export default DS.Model.extend({
   libraryCardNumber: DS.attr('string'),
   xAccount: DS.attr('string'),
   customerTypeId: DS.attr('string'),
+  kohaUserCategory: DS.attr('string'),
   comments: DS.attr('string'),
   formLang: DS.attr('string'),
   authors: DS.attr('string'),
