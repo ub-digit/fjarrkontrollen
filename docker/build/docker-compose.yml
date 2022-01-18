@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  frontend:
+    image: docker.ub.gu.se/fjarrkontrollen-frontend:${GIT_REVISION}
+    build:
+      context: ./frontend
+      args:
+        - GIT_REPO_URL=${GIT_REPO_URL}
+        - GIT_REVISION=${GIT_REVISION}

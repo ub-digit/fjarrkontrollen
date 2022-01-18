@@ -684,6 +684,20 @@
                 {{/if}}
               </td>
             </tr>
+            <tr titel="Låntagarkategori i Koha">
+              <th>Låntagarkategori i Koha</th>
+              <td>
+                {{#if isEditing}}
+                {{form.element
+                  controlType="text"
+                  maxlength="2"
+                  property="kohaUserCategory"
+                }}
+                {{else}}
+                  {{changeset.kohaUserCategory}}
+                {{/if}}
+              </td>
+            </tr>
           </tbody>
         </table>
         <h4>Leveransuppgifter</h4>
