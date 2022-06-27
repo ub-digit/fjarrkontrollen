@@ -698,6 +698,20 @@
                 {{/if}}
               </td>
             </tr>
+            <tr titel="Organisation i Koha">
+              <th>Organisation i Koha</th>
+              <td>
+                {{#if isEditing}}
+                {{form.element
+                  controlType="text"
+                  maxlength="1"
+                  property="kohaOrganisation"
+                }}
+                {{else}}
+                  {{changeset.kohaOrganisation}}
+                {{/if}}
+              </td>
+            </tr>
           </tbody>
         </table>
         <h4>Leveransuppgifter</h4>
