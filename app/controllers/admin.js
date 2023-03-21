@@ -14,8 +14,6 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   isShowingUserSettingModal:false,
   loggedInUser: null,
 
-
-
   powerSelectOverlayedOptions: [{
     source: 'managingGroups',
     target: 'managingGroupOptions',
@@ -97,6 +95,16 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
             `Order status ändrad till levererad för order <b>${changeset.get('barcode')}</b>.`,
             'Status ändrad'
           );
+        }).catch((error) => {
+          if (error.isAdapterError && error.errors) {
+            this.get('toast').error(
+              error.errors[0].detail,
+              error.errors[0].title
+            );
+          }
+          else {
+            throw error;
+          }
         });
       }).catch((error) => {
         if (error.errors) {
