@@ -96,7 +96,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
             'Status ändrad'
           );
         }).catch((error) => {
-          if (error.isAdapterError && error.errors) {
+          if (isArray(error.errors)) {
             this.get('toast').error(
               error.errors[0].detail,
               error.errors[0].title
@@ -108,6 +108,8 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
         });
       }).catch((error) => {
         if (error.errors) {
+          // TODO: Why different error format?
+          // this is very confusing
           this.get('toast').warning(
             error.errors.message,
             error.errors.error
