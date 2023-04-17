@@ -50,6 +50,10 @@ html {
   overflow-y:scroll
 }
 
+body {
+  background-image: url('/img/background-image.png');
+}
+
 .pagination {
   .page-item {
     cursor: pointer;
