@@ -21,6 +21,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "ember-ajax": "^4.0.2",
     "ember-api-actions": "^0.2.8",
+    "ember-auto-import": "^2.6.3",
     "ember-bootstrap": "^2.5.0",
     "ember-bootstrap-changeset-validations": "^1.0.0",
     "ember-bootstrap-power-select": "^1.0.0",
@@ -58,11 +59,12 @@
     "ember-truth-helpers": "^2.1.0",
     "liquid-fire": "^0.29.5",
     "loader.js": "^4.2.3",
+    "mitt": "^3.0.0",
     "sass": "^1.15.2",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "webpack": "^5.80.0"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
-  },
-  "dependencies": {}
+  }
 }

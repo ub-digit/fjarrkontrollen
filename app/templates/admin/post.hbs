@@ -95,8 +95,8 @@
           {{/form.element}}
         {{else}}
           <p>
-            {{#if changeset.managingGroupId}}
-              {{get (find-by "id" changeset.managingGroupId managingGroups) "name"}}
+            {{#if order.managingGroupId}}
+              {{get (find-by "id" order.managingGroupId managingGroups) "name"}}
             {{else}}
               Ej angivet
             {{/if}}
@@ -124,8 +124,8 @@
           {{/form.element}}
         {{else}}
           <p>
-            {{#if changeset.pickupLocationId}}
-              {{get (find-by "id" changeset.pickupLocationId pickupLocations) "nameSv"}}
+            {{#if order.pickupLocationId}}
+              {{get (find-by "id" order.pickupLocationId pickupLocations) "nameSv"}}
             {{else}}
               Ej angivet
             {{/if}}
@@ -153,8 +153,8 @@
           {{/form.element}}
         {{else}}
           <p>
-            {{#if changeset.statusId}}
-              {{get (find-by "value" changeset.statusId statusOptions) "label"}}
+            {{#if order.statusId}}
+              {{get (find-by "value" order.statusId statusOptions) "label"}}
             {{else}}
                 Ej angivet
             {{/if}}
@@ -181,7 +181,7 @@
           {{!TODO: option for none, also applies to others}}
         {{else}}
           <p>
-            {{if changeset.lendingLibrary changeset.lendingLibrary "Ej angivet"}}
+            {{if order.lendingLibrary order.lendingLibrary "Ej angivet"}}
           </p>
         {{/if}}
         <h5>Levererad från</h5>
@@ -204,9 +204,9 @@
           {{/form.element}}
         {{else}}
           <p>
-            {{#if changeset.deliverySourceId}}
+            {{#if order.deliverySourceId}}
               {{get
-                (find-by "id" changeset.deliverySourceId deliverySources)
+                (find-by "id" order.deliverySourceId deliverySources)
                 "name"
               }}
             {{else}}
@@ -216,13 +216,13 @@
         {{/if}}
         <h5>Ej aktuell efter</h5>
         {{#if isEditing}}
-        {{form.element
-          controlType="text"
-          property="notValidAfter"
-        }}
+          {{form.element
+            controlType="text"
+            property="notValidAfter"
+          }}
         {{else}}
           <p>
-          {{if changeset.notValidAfter changeset.notValidAfter "Ej angivet"}}
+          {{if order.notValidAfter order.notValidAfter "Ej angivet"}}
           </p>
         {{/if}}
         <h5>Utanför Norden</h5>
@@ -253,7 +253,7 @@
           }}
         {{else}}
           <p>
-            {{if changeset.price changeset.price "Ej angivet"}}
+            {{if order.price order.price "Ej angivet"}}
           </p>
         {{/if}}
         <h5>Ska faktureras</h5>
@@ -275,12 +275,12 @@
               <th>Kommentar</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="comments"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="comments"
+                  }}
                 {{else}}
-                  {{changeset.comments}}
+                  {{order.comments}}
                 {{/if}}
               </td>
             </tr>
@@ -288,12 +288,12 @@
               <th>Titel</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="title"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="title"
+                  }}
                 {{else}}
-                  {{changeset.title}}
+                  {{order.title}}
                 {{/if}}
               </td>
             </tr>
@@ -301,12 +301,12 @@
               <th>Libris LF number</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="librisLfNumber"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="librisLfNumber"
+                  }}
                 {{else}}
-                  {{changeset.librisLfNumber}}
+                  {{order.librisLfNumber}}
                 {{/if}}
               </td>
             </tr>
@@ -314,11 +314,11 @@
               <th>Libris request id</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="librisRequestId"
-                }}
-                {{else if changeset.librisRequestId}}
+                  {{form.element
+                    controlType="text"
+                    property="librisRequestId"
+                  }}
+                {{else if order.librisRequestId}}
                   <a
                     target="_blank"
                     href="{{librisUrl}}"
@@ -333,12 +333,12 @@
               <th>Libris id</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="librisid"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="librisid"
+                  }}
                 {{else}}
-                  {{changeset.librisid}}
+                  {{order.librisid}}
                 {{/if}}
               </td>
             </tr>
@@ -346,12 +346,12 @@
               <th>Övrig librisdata</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="librismisc"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="librismisc"
+                  }}
                 {{else}}
-                  {{changeset.librismisc}}
+                  {{order.librismisc}}
                 {{/if}}
               </td>
             </tr>
@@ -359,12 +359,12 @@
               <th>Författare</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="authors"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="authors"
+                  }}
                 {{else}}
-                  {{changeset.authors}}
+                  {{order.authors}}
                 {{/if}}
 
               </td>
@@ -373,12 +373,12 @@
               <th>ISSN/ISBN</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="issnIsbn"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="issnIsbn"
+                  }}
                 {{else}}
-                  {{changeset.issnIsbn}}
+                  {{order.issnIsbn}}
                 {{/if}}
 
               </td>
@@ -387,54 +387,51 @@
               <th>Titel - tidskrift/bok</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="journalTitle"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="journalTitle"
+                  }}
                 {{else}}
-                  {{changeset.journalTitle}}
+                  {{order.journalTitle}}
                 {{/if}}
-
               </td>
             </tr>
             <tr titel="Publiceringsår">
               <th>Publiceringsår</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="publicationYear"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="publicationYear"
+                  }}
                 {{else}}
-                  {{changeset.publicationYear}}
+                  {{order.publicationYear}}
                 {{/if}}
-
               </td>
             </tr>
             <tr titel="Volym">
               <th>Volym</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="volume"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="volume"
+                  }}
                 {{else}}
-                  {{changeset.volume}}
+                  {{order.volume}}
                 {{/if}}
-
               </td>
             </tr>
             <tr titel="Nummer">
               <th>Nummer</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="issue"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="issue"
+                  }}
                 {{else}}
-                  {{changeset.issue}}
+                  {{order.issue}}
                 {{/if}}
               </td>
             </tr>
@@ -442,12 +439,12 @@
               <th>Sidor</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="pages"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="pages"
+                  }}
                 {{else}}
-                  {{changeset.pages}}
+                  {{order.pages}}
                 {{/if}}
               </td>
             </tr>
@@ -455,12 +452,12 @@
               <th>Period</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="period"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="period"
+                  }}
                 {{else}}
-                  {{changeset.period}}
+                  {{order.period}}
                 {{/if}}
               </td>
             </tr>
@@ -468,12 +465,12 @@
               <th>Publikationstyp</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="publicationType"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="publicationType"
+                  }}
                 {{else}}
-                  {{changeset.publicationType}}
+                  {{order.publicationType}}
                 {{/if}}
               </td>
             </tr>
@@ -498,7 +495,7 @@
                     {{/el.control}}
                   {{/form.element}}
                 {{else}}
-                  {{get (find-by "id" changeset.orderTypeId orderTypes) 'nameSv'}}
+                  {{get (find-by "id" order.orderTypeId orderTypes) 'nameSv'}}
                 {{/if}}
               </td>
             </tr>
@@ -523,7 +520,7 @@
                     {{/el.control}}
                   {{/form.element}}
                 {{else}}
-                  {{get (find-by "id" changeset.deliveryMethodId deliveryMethods) 'name'}}
+                  {{get (find-by "id" order.deliveryMethodId deliveryMethods) 'name'}}
                 {{/if}}
               </td>
             </tr>
@@ -538,12 +535,12 @@
               <th>Lånekortsnummer</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="libraryCardNumber"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="libraryCardNumber"
+                  }}
                 {{else}}
-                  {{changeset.libraryCardNumber}}
+                  {{order.libraryCardNumber}}
                 {{/if}}
               </td>
             </tr>
@@ -551,12 +548,12 @@
               <th>Namn</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="name"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="name"
+                  }}
                 {{else}}
-                  {{changeset.name}}
+                  {{order.name}}
                 {{/if}}
 
               </td>
@@ -566,12 +563,12 @@
               <th>X-konto</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="xAccount"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="xAccount"
+                  }}
                 {{else}}
-                  {{changeset.xAccount}}
+                  {{order.xAccount}}
                 {{/if}}
               </td>
             </tr>
@@ -580,12 +577,12 @@
               <th>E-post</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="emailAddress"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="emailAddress"
+                  }}
                 {{else}}
-                  {{changeset.emailAddress}}
+                  {{order.emailAddress}}
                 {{/if}}
               </td>
             </tr>
@@ -594,12 +591,12 @@
               <th>Språkval i formulär</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="formLang"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="formLang"
+                  }}
                 {{else}}
-                  {{changeset.formLang}}
+                  {{order.formLang}}
                 {{/if}}
               </td>
             </tr>
@@ -608,12 +605,12 @@
               <th>Organisation</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="company1"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="company1"
+                  }}
                 {{else}}
-                  {{changeset.company1}}
+                  {{order.company1}}
                 {{/if}}
               </td>
             </tr>
@@ -622,12 +619,12 @@
               <th>Institution</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="company2"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="company2"
+                  }}
                 {{else}}
-                  {{changeset.company2}}
+                  {{order.company2}}
                 {{/if}}
               </td>
             </tr>
@@ -636,12 +633,12 @@
               <th>Avdelning</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="company3"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="company3"
+                  }}
                 {{else}}
-                  {{changeset.company3}}
+                  {{order.company3}}
                 {{/if}}
               </td>
             </tr>
@@ -650,12 +647,12 @@
               <th>Telefon</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="phoneNumber"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="phoneNumber"
+                  }}
                 {{else}}
-                  {{changeset.phoneNumber}}
+                  {{oder.phoneNumber}}
                 {{/if}}
               </td>
             </tr>
@@ -680,7 +677,7 @@
                     {{/el.control}}
                   {{/form.element}}
                 {{else}}
-                  {{get (find-by "id" changeset.customerTypeId customerTypes) 'nameSv'}}
+                  {{get (find-by "id" order.customerTypeId customerTypes) 'nameSv'}}
                 {{/if}}
               </td>
             </tr>
@@ -688,13 +685,13 @@
               <th>Låntagarkategori i Koha</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  maxlength="2"
-                  property="kohaUserCategory"
-                }}
+                  {{form.element
+                    controlType="text"
+                    maxlength="2"
+                    property="kohaUserCategory"
+                  }}
                 {{else}}
-                  {{changeset.kohaUserCategory}}
+                  {{order.kohaUserCategory}}
                 {{/if}}
               </td>
             </tr>
@@ -702,13 +699,13 @@
               <th>Organisation i Koha</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  maxlength="1"
-                  property="kohaOrganisation"
-                }}
+                  {{form.element
+                    controlType="text"
+                    maxlength="1"
+                    property="kohaOrganisation"
+                  }}
                 {{else}}
-                  {{changeset.kohaOrganisation}}
+                  {{order.kohaOrganisation}}
                 {{/if}}
               </td>
             </tr>
@@ -721,12 +718,12 @@
               <th>Gatuadress/Box</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="deliveryAddress"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="deliveryAddress"
+                  }}
                 {{else}}
-                  {{changeset.deliveryAddress}}
+                  {{order.deliveryAddress}}
                 {{/if}}
               </td>
             </tr>
@@ -734,12 +731,12 @@
               <th>Postnummer</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="deliveryPostalCode"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="deliveryPostalCode"
+                  }}
                 {{else}}
-                  {{changeset.deliveryPostalCode}}
+                  {{order.deliveryPostalCode}}
                 {{/if}}
               </td>
             </tr>
@@ -748,12 +745,12 @@
               <th>Ort</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="deliveryCity"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="deliveryCity"
+                  }}
                 {{else}}
-                  {{changeset.deliveryCity}}
+                  {{order.deliveryCity}}
                 {{/if}}
               </td>
             </tr>
@@ -762,10 +759,10 @@
               <th>Box</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="deliveryBox"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="deliveryBox"
+                  }}
                 {{else}}
                   {{changeset.deliveryBox}}
                 {{/if}}
@@ -775,12 +772,12 @@
               <th>Kommentar</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="deliveryComments"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="deliveryComments"
+                  }}
                 {{else}}
-                  {{changeset.deliveryComments}}
+                  {{order.deliveryComments}}
                 {{/if}}
               </td>
             </tr>
@@ -794,12 +791,12 @@
               <th>Namn</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="invoicingName"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="invoicingName"
+                  }}
                 {{else}}
-                  {{changeset.invoicingName}}
+                  {{order.invoicingName}}
                 {{/if}}
               </td>
             </tr>
@@ -808,12 +805,12 @@
               <th>Företag</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="invoicingCompany"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="invoicingCompany"
+                  }}
                 {{else}}
-                  {{changeset.invoicingCompany}}
+                  {{order.invoicingCompany}}
                 {{/if}}
               </td>
             </tr>
@@ -822,12 +819,12 @@
               <th>Gatuadress/Box</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="invoicingAddress"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="invoicingAddress"
+                  }}
                 {{else}}
-                  {{changeset.invoicingAddress}}
+                  {{order.invoicingAddress}}
                 {{/if}}
               </td>
             </tr>
@@ -836,12 +833,12 @@
               <th>Postnummer</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="invoicingPostalAddress1"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="invoicingPostalAddress1"
+                  }}
                 {{else}}
-                  {{changeset.invoicingPostalAddress1}}
+                  {{order.invoicingPostalAddress1}}
                 {{/if}}
               </td>
             </tr>
@@ -850,12 +847,12 @@
               <th>Ort</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="invoicingPostalAddress2"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="invoicingPostalAddress2"
+                  }}
                 {{else}}
-                  {{changeset.invoicingPostalAddress2}}
+                  {{order.invoicingPostalAddress2}}
                 {{/if}}
               </td>
             </tr>
@@ -864,12 +861,12 @@
               <th>Beställarid</th>
               <td>
                 {{#if isEditing}}
-                {{form.element
-                  controlType="text"
-                  property="invoicingId"
-                }}
+                  {{form.element
+                    controlType="text"
+                    property="invoicingId"
+                  }}
                 {{else}}
-                  {{changeset.invoicingId}}
+                  {{order.invoicingId}}
                 {{/if}}
               </td>
             </tr>
@@ -1050,7 +1047,7 @@
                   {{#if (eq (get (find-by "id" note.noteTypeId noteTypes) 'label') "system")}}
                     <i class="fas fa-cog"></i>
                   {{else if (eq (get (find-by "id" note.noteTypeId noteTypes) 'label') "user")}}
-                    <i class="far fa-file-alt messages-card-title-icon"></i>                
+                    <i class="far fa-file-alt messages-card-title-icon"></i>
                   {{else if (eq (get (find-by "id" note.noteTypeId noteTypes) 'label') "email")}}
                     <i class="far fa-envelope"></i>
                   {{/if}}

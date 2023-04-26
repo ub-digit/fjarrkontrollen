@@ -4,7 +4,8 @@ import { inject } from '@ember/service';
 import ResetScroll from "../../mixins/reset-scroll";
 
 export default Ember.Route.extend(ResetScroll, {
-  session: inject('session'),
+  session: inject(),
+  mitt: inject(),
 
   model(param) {
     return RSVP.hash({
@@ -31,5 +32,20 @@ export default Ember.Route.extend(ResetScroll, {
     });
     controller.setProperties(model);
     this.controllerFor('admin.index').set('lastOrderViewed', model.order.get('id'));
+    const maybeFetchNotes = (updatedOrder) => {
+      if (updatedOrder.get('id') === model.order.get('id')) {
+        this.store.query('note', { order_id: updatedOrder.get('id') }).then(notes => {
+          controller.set('notes', notes);
+        });
+      }
+    }
+    this.set('maybeFetchNotes', maybeFetchNotes);
+    this.mitt.emitter.on('orderUpdated', maybeFetchNotes);
+  },
+  actions: {
+    willTransition() {
+      this.mitt.emitter.off('orderUpdated', this.maybeFetchNotes);
+      return true;
+    }
   }
 });
