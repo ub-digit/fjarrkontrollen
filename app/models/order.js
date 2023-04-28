@@ -57,7 +57,7 @@ export default DS.Model.extend({
   orderPath: DS.attr('string'),
   createdAt: DS.attr('string'),
   updatedAt: DS.attr('string'),
-  managingGroupId: DS.attr('string'),  
+  managingGroupId: DS.attr('string'),
   pickupLocationId: DS.attr('string'),
   userId: DS.attr('string'),
   statusId: DS.attr('string'),

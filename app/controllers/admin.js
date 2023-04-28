@@ -4,10 +4,12 @@ import { inject } from '@ember/service';
 import { isArray } from '@ember/array';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
 import ENV from '../config/environment';
+import mitt from 'mitt';
 
 export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   session: inject(),
   toast: inject(),
+  mitt: inject(),
 
   isShowingScanModal: false,
   isShowingSetDeliveredScanModal: false,
@@ -29,7 +31,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   }],
 
   affiliation: computed('session', 'loggedInUser.{managingGroupId,pickupLocationId}', function() {
-    let currentUserId = this.get('session.data.authenticated.userid'); 
+    let currentUserId = this.get('session.data.authenticated.userid');
     let currentUser = this.store.peekRecord('user', currentUserId);
     if (currentUser.managingGroupId) {
       return " | Handläggningsgrupp: " + this.get('managingGroups').findBy('id', currentUser.managingGroupId.toString()).name;
@@ -91,6 +93,11 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
     scanDelivered(changeset) {
       return this.findOrderPromise(changeset.get('barcode')).then((order) => {
         return order.setDelivered().then(() => {
+          // Manually reload order since was not fetched using
+          // order id (using barcode) which results in warning and
+          // Ember not pushing the record to store(?)
+          order.reload();
+          this.mitt.emitter.emit('orderUpdated', order);
           this.get('toast').success(
             `Order status ändrad till levererad för order <b>${changeset.get('barcode')}</b>.`,
             'Status ändrad'
