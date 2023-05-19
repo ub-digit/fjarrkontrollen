@@ -1,0 +1,833 @@
+{{#bs-form
+  formLayout="vertical"
+  model=changeset
+  onSubmit=saveOrder
+  onInvalid=(action "orderInvalid")
+  showAllValidations=showAllValidations
+as |form|}}
+{{yield (hash form=form changeset=changeset)}}
+<div class="row">
+  <div class="col-12">
+    {{#if errors}}
+      {{#each errors as |error|}}
+        {{#bs-alert dismissible=false type="danger"}}
+          {{error}}
+        {{/bs-alert}}
+      {{/each}}
+    {{/if}}
+    {{!#liquid-if message}}
+      {{!#bs-alert dismissible=false type="success"}}
+        {{!message}}
+      {{!/bs-alert}}
+    {{!/liquid-if}}
+  </div>
+</div>
+{{#if kohaSearchUrl }}
+  <div class="order-search">
+    <a target="_blank" href="{{kohaSearchUrl}}">Sök posten i Koha</a>
+  </div>
+{{/if}}
+<div class="row">
+  <div class="col-12 col-md-6">
+    <h5>Handläggningsgrupp</h5>
+
+    {{#if isEditing}}
+      {{#form.element
+        disabled=order.isNew
+        controlType="power-select"
+        options=managingGroups
+        value=(find-by "id" changeset.managingGroupId managingGroups)
+        onChange=(action (mut changeset.managingGroupId) value="id")
+      as |el|
+      }}
+        {{#el.control
+          searchField="name"
+          searchEnabled=true
+          searchPlaceholder="Type your name"
+        as |pickupLocation|
+        }}
+          {{pickupLocation.name}}
+        {{/el.control}}
+      {{/form.element}}
+    {{else}}
+      <p>
+        {{#if order.managingGroupId}}
+          {{get (find-by "id" order.managingGroupId managingGroups) "name"}}
+        {{else}}
+          Ej angivet
+        {{/if}}
+      </p>
+    {{/if}}
+
+    <h5>Avhämtningsbibliotek</h5>
+
+    {{#if isEditing}}
+      {{#form.element
+        controlType="power-select"
+        options=pickupLocations
+        value=(find-by "id" changeset.pickupLocationId pickupLocations)
+        onChange=(action (mut changeset.pickupLocationId) value="id")
+      as |el|
+      }}
+        {{#el.control
+          searchField="nameSv"
+          searchEnabled=true
+          searchPlaceholder="Type your name"
+        as |pickupLocation|
+        }}
+          {{pickupLocation.nameSv}}
+        {{/el.control}}
+      {{/form.element}}
+    {{else}}
+      <p>
+        {{#if order.pickupLocationId}}
+          {{get (find-by "id" order.pickupLocationId pickupLocations) "nameSv"}}
+        {{else}}
+          Ej angivet
+        {{/if}}
+      </p>
+    {{/if}}
+    {{!TODO: Implement isActive}}
+    <h5>Status</h5>
+    {{#if isEditing}}
+      {{#form.element
+        controlType="power-select"
+        options=statusOptions
+        placeholder="Välj status"
+        value=(find-by "value" changeset.statusId statusOptions)
+        onChange=(action (mut changeset.statusId) value="value")
+      as |el|
+      }}
+        {{#el.control
+          searchField="label"
+          searchEnabled=true
+          searchPlaceholder="Type your name"
+        as |status|
+        }}
+          {{status.label}}
+        {{/el.control}}
+      {{/form.element}}
+    {{else}}
+      <p>
+        {{#if order.statusId}}
+          {{get (find-by "value" order.statusId statusOptions) "label"}}
+        {{else}}
+            Ej angivet
+        {{/if}}
+      </p>
+    {{/if}}
+    <h5>Arkivera</h5>
+    {{form.element
+      label="Arkiverad"
+      controlType="checkbox"
+      class="form-group"
+      disabled=(not isEditing)
+      value=changeset.isArchived
+      onChange=(action (mut changeset.isArchived))
+    }}
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <h5>Utlånande bibliotek</h5>
+    {{#if isEditing}}
+      {{form.element
+        property="lendingLibrary"
+        controlType="text"
+      }}
+      {{!TODO: active only filter}}
+      {{!TODO: option for none, also applies to others}}
+    {{else}}
+      <p>
+        {{if order.lendingLibrary order.lendingLibrary "Ej angivet"}}
+      </p>
+    {{/if}}
+    <h5>Levererad från</h5>
+    {{#if isEditing}}
+      {{#form.element
+        controlType="power-select"
+        options=deliverySourceOptions
+        value=(find-by "value" changeset.deliverySourceId deliverySourceOptions)
+        onChange=(action (mut changeset.deliverySourceId) value="value")
+      as |el|
+      }}
+        {{#el.control
+          searchField="label"
+          searchEnabled=true
+          searchPlaceholder="Type your name"
+        as |option|
+        }}
+          {{option.label}}
+        {{/el.control}}
+      {{/form.element}}
+    {{else}}
+      <p>
+        {{#if order.deliverySourceId}}
+          {{get
+            (find-by "id" order.deliverySourceId deliverySources)
+            "name"
+          }}
+        {{else}}
+          Ej angivet
+        {{/if}}
+      </p>
+    {{/if}}
+    <h5>Ej aktuell efter</h5>
+    {{#if isEditing}}
+      {{form.element
+        controlType="text"
+        property="notValidAfter"
+      }}
+    {{else}}
+      <p>
+      {{if order.notValidAfter order.notValidAfter "Ej angivet"}}
+      </p>
+    {{/if}}
+    <h5>Utanför Norden</h5>
+    {{form.element
+      label="Utanför Norden"
+      controlType="checkbox"
+      disabled=(not isEditing)
+      value=changeset.orderOutsideScandinavia
+    }}
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <h5>Återlämningsdatum</h5>
+    {{#if isEditing}}
+      {{form.element
+        controlType="text"
+        property="loanPeriod"
+      }}
+    {{else}}
+      <p>
+        {{if changeset.loanPeriod changeset.loanPeriod "Ej angivet"}}
+      </p>
+    {{/if}}
+    <h5>Pris (SEK)</h5>
+    {{#if isEditing}}
+      {{form.element
+        controlType="number"
+        property="price"
+      }}
+    {{else}}
+      <p>
+        {{if order.price order.price "Ej angivet"}}
+      </p>
+    {{/if}}
+    <h5>Ska faktureras</h5>
+    {{form.element
+      label="Ska faktureras"
+      controlType="checkbox"
+      disabled=(not isEditing)
+      value=changeset.toBeInvoiced
+      onChange=(action (mut changeset.toBeInvoiced))
+    }}
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <h4>Orderkort</h4>
+    <table class="table table-striped{{if isEditing " table-sm"}}">
+      <tbody>
+        <tr titel="Kommentar">
+          <th>Kommentar</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="comments"
+              }}
+            {{else}}
+              {{order.comments}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Titel">
+          <th>Titel</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="title"
+              }}
+            {{else}}
+              {{order.title}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Libris LF number">
+          <th>Libris LF number</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="librisLfNumber"
+              }}
+            {{else}}
+              {{order.librisLfNumber}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Libris request id">
+          <th>Libris request id</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="librisRequestId"
+              }}
+            {{else if order.librisRequestId}}
+              <a
+                target="_blank"
+                href="{{librisUrl}}"
+              >
+                {{changeset.librisRequestId}}
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Libris id">
+          <th>Libris id</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="librisid"
+              }}
+            {{else}}
+              {{order.librisid}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Övrig librisdata">
+          <th>Övrig librisdata</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="librismisc"
+              }}
+            {{else}}
+              {{order.librismisc}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Författare">
+          <th>Författare</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="authors"
+              }}
+            {{else}}
+              {{order.authors}}
+            {{/if}}
+
+          </td>
+        </tr>
+        <tr titel="ISSN/ISBN">
+          <th>ISSN/ISBN</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="issnIsbn"
+              }}
+            {{else}}
+              {{order.issnIsbn}}
+            {{/if}}
+
+          </td>
+        </tr>
+        <tr titel="Titel - tidskrift/bok">
+          <th>Titel - tidskrift/bok</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="journalTitle"
+              }}
+            {{else}}
+              {{order.journalTitle}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Publiceringsår">
+          <th>Publiceringsår</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="publicationYear"
+              }}
+            {{else}}
+              {{order.publicationYear}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Volym">
+          <th>Volym</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="volume"
+              }}
+            {{else}}
+              {{order.volume}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Nummer">
+          <th>Nummer</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="issue"
+              }}
+            {{else}}
+              {{order.issue}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Sidor">
+          <th>Sidor</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="pages"
+              }}
+            {{else}}
+              {{order.pages}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Period">
+          <th>Period</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="period"
+              }}
+            {{else}}
+              {{order.period}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Publikationstyp">
+          <th>Publikationstyp</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="publicationType"
+              }}
+            {{else}}
+              {{order.publicationType}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Beställningstyp">
+          <th>Beställningstyp</th>
+          <td>
+            {{#if isEditing}}
+              {{#form.element
+                controlType="power-select"
+                options=orderTypes
+                value=(find-by "id" changeset.orderTypeId orderTypes)
+                onChange=(action (mut changeset.orderTypeId) value="id")
+              as |el|
+              }}
+                {{#el.control
+                  searchField="nameSv"
+                  searchEnabled=true
+                  searchPlaceholder="Type your name"
+                as |orderType|
+                }}
+                  {{orderType.nameSv}}
+                {{/el.control}}
+              {{/form.element}}
+            {{else}}
+              {{get (find-by "id" order.orderTypeId orderTypes) 'nameSv'}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Leveransmetod">
+          <th>Leveransmetod</th>
+          <td>
+            {{#if isEditing}}
+              {{#form.element
+                controlType="power-select"
+                options=deliveryMethods
+                value=(find-by "id" changeset.deliveryMethodId deliveryMethods)
+                onChange=(action (mut changeset.deliveryMethodId) value="id")
+              as |el|
+              }}
+                {{#el.control
+                  searchField="name"
+                  searchEnabled=true
+                  searchPlaceholder="Type your name"
+                as |deliveryMethod|
+                }}
+                  {{deliveryMethod.name}}
+                {{/el.control}}
+              {{/form.element}}
+            {{else}}
+              {{get (find-by "id" order.deliveryMethodId deliveryMethods) 'name'}}
+            {{/if}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-12 col-md-6">
+    <h4>Låntagare</h4>
+    <table class="table table-striped {{if isEditing " table-sm"}}">
+      <tbody>
+        <tr titel="Lånekortsnummer">
+          <th>Lånekortsnummer</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="libraryCardNumber"
+              }}
+            {{else}}
+              {{order.libraryCardNumber}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Namn">
+          <th>Namn</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="name"
+              }}
+            {{else}}
+              {{order.name}}
+            {{/if}}
+
+          </td>
+        </tr>
+
+        <tr titel="X-konto">
+          <th>X-konto</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="xAccount"
+              }}
+            {{else}}
+              {{order.xAccount}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="E-post">
+          <th>E-post</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="emailAddress"
+              }}
+            {{else}}
+              {{order.emailAddress}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Språkval i formulär">
+          <th>Språkval i formulär</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="formLang"
+              }}
+            {{else}}
+              {{order.formLang}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Organisation">
+          <th>Organisation</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="company1"
+              }}
+            {{else}}
+              {{order.company1}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Institution">
+          <th>Institution</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="company2"
+              }}
+            {{else}}
+              {{order.company2}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Avdelning">
+          <th>Avdelning</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="company3"
+              }}
+            {{else}}
+              {{order.company3}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Telefon">
+          <th>Telefon</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="phoneNumber"
+              }}
+            {{else}}
+              {{oder.phoneNumber}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Kundtyp">
+          <th>Kundtyp</th>
+          <td>
+            {{#if isEditing}}
+              {{#form.element
+                controlType="power-select"
+                options=customerTypes
+                value=(find-by "id" changeset.customerTypeId customerTypes)
+                onChange=(action (mut changeset.customerTypeId) value="id")
+              as |el|
+              }}
+                {{#el.control
+                  searchField="nameSv"
+                  searchEnabled=true
+                  searchPlaceholder="Type your name"
+                as |customerType|
+                }}
+                  {{customerType.nameSv}}
+                {{/el.control}}
+              {{/form.element}}
+            {{else}}
+              {{get (find-by "id" order.customerTypeId customerTypes) 'nameSv'}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Låntagarkategori i Koha">
+          <th>Låntagarkategori i Koha</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                maxlength="2"
+                property="kohaUserCategory"
+              }}
+            {{else}}
+              {{order.kohaUserCategory}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Organisation i Koha">
+          <th>Organisation i Koha</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                maxlength="1"
+                property="kohaOrganisation"
+              }}
+            {{else}}
+              {{order.kohaOrganisation}}
+            {{/if}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>Leveransuppgifter</h4>
+    <table class="table table-striped {{if isEditing " table-sm"}}">
+      <tbody>
+        <tr titel="Gatuadress/Box">
+          <th>Gatuadress/Box</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="deliveryAddress"
+              }}
+            {{else}}
+              {{order.deliveryAddress}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Postnummer">
+          <th>Postnummer</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="deliveryPostalCode"
+              }}
+            {{else}}
+              {{order.deliveryPostalCode}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Ort">
+          <th>Ort</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="deliveryCity"
+              }}
+            {{else}}
+              {{order.deliveryCity}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Box">
+          <th>Box</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="deliveryBox"
+              }}
+            {{else}}
+              {{changeset.deliveryBox}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Kommentar">
+          <th>Kommentar</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="deliveryComments"
+              }}
+            {{else}}
+              {{order.deliveryComments}}
+            {{/if}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Faktureringsuppgifter</h4>
+    <table class="table table-striped{{if isEditing " table-sm"}}">
+      <tbody>
+        <tr titel="Namn">
+          <th>Namn</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="invoicingName"
+              }}
+            {{else}}
+              {{order.invoicingName}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Företag">
+          <th>Företag</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="invoicingCompany"
+              }}
+            {{else}}
+              {{order.invoicingCompany}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Gatuadress/Box">
+          <th>Gatuadress/Box</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="invoicingAddress"
+              }}
+            {{else}}
+              {{order.invoicingAddress}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Postnummer">
+          <th>Postnummer</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="invoicingPostalAddress1"
+              }}
+            {{else}}
+              {{order.invoicingPostalAddress1}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Ort">
+          <th>Ort</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="invoicingPostalAddress2"
+              }}
+            {{else}}
+              {{order.invoicingPostalAddress2}}
+            {{/if}}
+          </td>
+        </tr>
+
+        <tr titel="Beställarid">
+          <th>Beställarid</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                property="invoicingId"
+              }}
+            {{else}}
+              {{order.invoicingId}}
+            {{/if}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{{/bs-form}}

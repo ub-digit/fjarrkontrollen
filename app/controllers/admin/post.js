@@ -2,47 +2,20 @@ import Ember from 'ember';
 import OrderValidations from '../../validations/order';
 import MessageValidations from '../../validations/message';
 import NoteValidations from '../../validations/note';
-import powerSelectOverlayedOptions from '../../mixins/power-select-overlayed-options'
 import { A } from '@ember/array';
-//import { observer } from '@ember/object';
-//import EmberObject, { computed } from '@ember/object';
 import { computed } from '@ember/object';
 import { isBlank } from '@ember/utils';
-//import { debounce } from '@ember/runloop';
 import { inject } from '@ember/service';
 import ENV from '../../config/environment';
 import RSVP from 'rsvp';
 
-export default Ember.Controller.extend(powerSelectOverlayedOptions, {
+export default Ember.Controller.extend({
   OrderValidations,
   MessageValidations,
   NoteValidations,
 
   session: inject(),
-
   userId: computed.reads('session.data.authenticated.userid'),
-
-  powerSelectOverlayedOptions: [{
-    source: 'deliverySources',
-    target: 'deliverySourceOptions',
-    valueProperty: 'id',
-    labelProperty: 'name',
-    disabledProperty: 'isDisabled',
-    noneLabel: 'Ej angivet'
-  }, {
-    source: 'deliveryMethods',
-    target: 'deliveryMethodOptions',
-    valueProperty: 'id',
-    labelProperty: 'name',
-    disabledProperty: 'isDisabled',
-    noneLabel: 'Ej angivet'
-  }, {
-    source: 'statuses',
-    target: 'statusOptions',
-    valueProperty: 'id',
-    labelProperty: 'nameSv',
-    disabledProperty: 'isDisabled'
-  }],
 
   isEditing: false,
   isCreatingMessage: false,
@@ -57,8 +30,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   emailTemplateId: null,
   addBiblioInfo: true,
 
-  lastOrderViewed: null,
-
+  lastOrderViewed: null, //TODO: Seems like this can be removed/is unused
 
   librisUrl: computed('order.librisRequestId', function() {
     return ENV.APP.librisFjarrlanURL + this.get('order.librisRequestId');
@@ -79,10 +51,6 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
        ".pdf?token=" +
        this.get('session.data.authenticated.token')
        + "&layout=delivery_note";
-  }),
-
-  kohaSearchUrl: computed('order.orderNumber', function() {
-    return ENV.APP.kohaSearchURL + this.get('order.orderNumber');
   }),
 
   messageLanguageOption: computed('messageLanguage', function() {
@@ -123,23 +91,8 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
     }
   }),
 
-  /*messageTemplateObserver: observer('messageLanguage', 'emailTemplateId') {
-  },
-  */
-
-  /*
-  messageObserver: observer('message', function() {
-    debounce(this, () => {
-      if (!(this.isDestroyed || this.isDestroying)) {
-        this.set('message', null);
-      }
-    }, 3000);
-  }),
-  */
   init() {
     this._super(...arguments);
-    //this.set('messages', A());
-    //TODO: Move to setupController?
     this.set('messageLanguageOptions', A([{
       label: 'Svenska',
       language: 'sv',
@@ -219,13 +172,6 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
           reject(error);
         });
       });
-    },
-    orderInvalid(changeset) {
-      //TODO: translation of prop, lookup with i18n
-      //and create custom validation message
-      this.set('errors', changeset.get('errors').map((error) => {
-        return error['validation'];
-      }));
     },
     //TODO: inconsistent naming
     editOrder() {
