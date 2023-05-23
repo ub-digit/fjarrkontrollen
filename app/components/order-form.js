@@ -81,9 +81,12 @@ export default Component.extend(powerSelectOverlayedOptions, {
         this.set('changeset.kohaUserCategory', patron.user_category);
         this.set('changeset.phoneNumber', patron.phone);
 
+        this.set('changeset.customerTypeId', this.get('customerTypes').findBy('label', 'koha').get('id'));
+
         // Hidden properties
         this.set('changeset.authenticatedXAccount', patron.xaccount);
         this.set('changeset.kohaBorrowernumbert', patron.borrowernumber);
+
       }).catch((error) => {
         if (error.status == 404) {
           this.get('toast').warning(
