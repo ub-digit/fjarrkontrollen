@@ -9,13 +9,14 @@
   <div class="col-12 col-md-8 order">
     {{#order-form
       order=order
-      orderValidations=OrderValidations
+      orderValidations=NewOrderValidations
       saveOrder=(action "saveOrder")
       deliverySources=deliverySources
       deliveryMethods=deliveryMethods
       statuses=statuses
       managingGroups=managingGroups
       pickupLocations=pickupLocations
+      customerTypes=customerTypes
       orderTypes=orderTypes
       showAllValidations=showAllValidations
       isEditing=isEditing

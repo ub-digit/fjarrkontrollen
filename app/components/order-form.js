@@ -29,7 +29,9 @@ export default Component.extend(powerSelectOverlayedOptions, {
     labelProperty: 'nameSv',
     disabledProperty: 'isDisabled'
   }],
+  ajax: inject('authenticated-ajax'),
   session: inject(),
+  toast: inject(),
   userId: computed.reads('session.data.authenticated.userid'),
 
   errors: null,
@@ -37,10 +39,13 @@ export default Component.extend(powerSelectOverlayedOptions, {
   showAllValidations: true, //??
 
   setManagingGroup: Ember.observer('changeset.orderTypeId', function() {
-    if (this.get('order').isNew) {
-      let orderType = this.get('orderTypes').findBy('id', this.get('changeset.orderTypeId'));
-      this.set('changeset.managingGroupId', orderType.get('defaultManagingGroupId'));
-    }
+    //WTF??
+    Ember.run.once(this, function() {
+      if (this.get('order').isNew && this.get('changeset.orderTypeId')) {
+        let orderType = this.get('orderTypes').findBy('id', this.get('changeset.orderTypeId'));
+        this.set('changeset.managingGroupId', orderType.get('defaultManagingGroupId'));
+      }
+    });
   }),
 
   kohaSearchUrl: computed('order.orderNumber', function() {
@@ -53,18 +58,48 @@ export default Component.extend(powerSelectOverlayedOptions, {
     //
     let order = get(this, 'order');
     let validator = get(this, 'orderValidations');
-    this.changeset = new Changeset(order, validator);
-    /*
     this.set('changeset', new Changeset(
       this.order,
-      lookupValidator(this.orderValidations),
+      lookupValidator(validator),
       this.orderValidations
     ));
-    */
+    if (this.get('order.isNew')) {
+      this.set('changeset.statusId', this.get('statuses').findBy('label', 'new').get('id'));
+    }
   },
 
 
   actions: {
+    fetchPatronInfo(cardnumber) {
+      console.log('action triggered');
+      this.ajax.request(`${ENV.APP.serviceURL}/koha_patrons/${cardnumber}`).then((data) => {
+        let patron = data.patron;
+        this.set('changeset.name', `${patron.first_name} ${patron.last_name}`);
+        this.set('changeset.xAccount', patron.xaccount);
+        this.set('changeset.emailAddress', patron.email);
+        this.set('changeset.kohaOrganisation', patron.organisation);
+        this.set('changeset.kohaUserCategory', patron.user_category);
+        this.set('changeset.phoneNumber', patron.phone);
+
+        // Hidden properties
+        this.set('changeset.authenticatedXAccount', patron.xaccount);
+        this.set('changeset.kohaBorrowernumbert', patron.borrowernumber);
+      }).catch((error) => {
+        if (error.status == 404) {
+          this.get('toast').warning(
+            `Hittar ingen låntagare med lånekortsnummber <b>${cardnumber}</b>.`,
+            'Låntagaren hittades inte'
+          );
+        }
+        else {
+          this.get('toast').error(
+            'Ett oväntat serverfel har inträffat.',
+            'Oväntat serverfel'
+          );
+        }
+      });
+    },
+
     orderInvalid(changeset) {
       //TODO: translation of prop, lookup with i18n
       //and create custom validation message
