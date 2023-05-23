@@ -36,7 +36,7 @@ export default Component.extend(powerSelectOverlayedOptions, {
 
   errors: null,
   saveOrder: null, //??
-  showAllValidations: true, //??
+  showAllValidations: false,
 
   setManagingGroup: Ember.observer('changeset.orderTypeId', function() {
     //WTF??
@@ -55,7 +55,6 @@ export default Component.extend(powerSelectOverlayedOptions, {
   init() {
     this._super(...arguments);
     //this.set() ?
-    //
     let order = get(this, 'order');
     let validator = get(this, 'orderValidations');
     this.set('changeset', new Changeset(
@@ -67,7 +66,6 @@ export default Component.extend(powerSelectOverlayedOptions, {
       this.set('changeset.statusId', this.get('statuses').findBy('label', 'new').get('id'));
     }
   },
-
 
   actions: {
     fetchPatronInfo(cardnumber) {

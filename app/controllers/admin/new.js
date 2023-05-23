@@ -12,7 +12,7 @@ export default Ember.Controller.extend({
   session: inject(),
   userId: computed.reads('session.data.authenticated.userid'),
   isEditing: true,
-
+  showAllValidations: false,
   messageErrors: null, //???
 
   actions: {

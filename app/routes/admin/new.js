@@ -28,5 +28,16 @@ export default Ember.Route.extend(ResetScroll, {
       controller.set(property, optionModels[property]);
     });
     controller.set('order', model);
+  },
+
+  actions: {
+    willTransition() {
+      this.controllerFor(this.routeName).set('showAllValidations', false);
+      let order = this.modelFor(this.routeName);
+      if (order.get('isNew')) {
+        this.store.deleteRecord(order);
+      }
+      return true;
+    }
   }
 });
