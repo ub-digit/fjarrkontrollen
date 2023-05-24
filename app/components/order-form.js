@@ -69,7 +69,6 @@ export default Component.extend(powerSelectOverlayedOptions, {
 
   actions: {
     fetchPatronInfo(cardnumber) {
-      console.log('action triggered');
       this.ajax.request(`${ENV.APP.serviceURL}/koha_patrons/${cardnumber}`).then((data) => {
         let patron = data.patron;
         this.set('changeset.name', `${patron.first_name} ${patron.last_name}`);
