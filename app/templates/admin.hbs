@@ -5,6 +5,9 @@
     {{!perhaps should be just button, nav is semantically confusing}}
     {{#navbar.nav class="flex-grow-1" as |nav| }}
       {{#nav.item}}
+        <a class="new-order-link" href={{href-to "admin.new"}}><i class="fas fa-plus-circle"></i> Skapa order</a>
+      {{/nav.item}}
+      {{#nav.item}}
         {{#bs-button type="link" onClick=(action (mut isShowingScanModal) true)}}
           <i class="fas fa-barcode"></i> Scanna streckkod
         {{/bs-button}}
@@ -15,8 +18,8 @@
         {{/bs-button}}
       {{/nav.item}}
     {{/navbar.nav}}
-     <a class="export-link" href="{{exportUrl}}"><i class="fa fa-table"></i> Ladda ner till Excel</a>
-     <span class="p-2 user-name">{{activeUserSirName}}{{affiliation}}</span>
+    <a class="pr-2" href="{{exportUrl}}"><i class="fa fa-table"></i> Ladda ner till Excel</a>
+    <span class="p-2 user-name">{{activeUserSirName}}{{affiliation}}</span>
     {{#bs-button type="link" onClick=(action "logout")}}Logga ut{{/bs-button}}
   {{/navbar.content}}
 {{/bs-navbar}}
@@ -37,7 +40,6 @@
     managingGroups=managingGroupOptions
     pickupLocations=pickupLocationOptions
     loggedInUser=loggedInUser
-    onSubmit=(action "scanDelivered")
     open=isShowingUserSettingModal
   }}
 
