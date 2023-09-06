@@ -32,10 +32,6 @@ export default Ember.Controller.extend({
 
   lastOrderViewed: null, //TODO: Seems like this can be removed/is unused
 
-  librisUrl: computed('order.librisRequestId', function() {
-    return ENV.APP.librisFjarrlanURL + this.get('order.librisRequestId');
-  }),
-
   printOrderUrl: computed('order.id', function() {
     return ENV.APP.serviceURL +
       '/orders/' +
