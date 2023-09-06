@@ -52,6 +52,10 @@ export default Component.extend(powerSelectOverlayedOptions, {
     return this.get('order.orderNumber') ? ENV.APP.kohaSearchURL + this.get('order.orderNumber') : false;
   }),
 
+  librisUrl: computed('order.librisRequestId', function() {
+    return ENV.APP.librisFjarrlanURL + this.get('order.librisRequestId');
+  }),
+
   init() {
     this._super(...arguments);
     //this.set() ?
