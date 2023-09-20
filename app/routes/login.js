@@ -7,7 +7,7 @@ import Changeset from 'ember-changeset';
 
 export default Ember.Route.extend(UnAuthenticatedRouteMixin, {
   setupController: function(controller) {
-    let credentials = new EmberObject({
+    let credentials = EmberObject.create({
       identification: '',
       password: ''
     });
