@@ -1,7 +1,7 @@
 ---
 language: node_js
 node_js:
-  - "6"
+  - "8"
 
 sudo: false
 dist: trusty
@@ -13,5 +13,12 @@ cache:
   directories:
     - $HOME/.npm
 
-before_install:
-  - npm config set spin false
+env:
+  global:
+    # See https://git.io/vdao3 for details.
+    - JOBS=1
+
+script:
+  - npm run lint:hbs
+  - npm run lint:js
+  - npm test
