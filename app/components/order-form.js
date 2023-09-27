@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import Changeset from 'ember-changeset';
+import { Changeset } from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
 import { computed } from '@ember/object';
@@ -72,7 +72,7 @@ export default Component.extend(powerSelectOverlayedOptions, {
     //this.set() ?
     let order = get(this, 'order');
     let validator = get(this, 'orderValidations');
-    this.set('changeset', new Changeset(
+    this.set('changeset', Changeset(
       order,
       lookupValidator(validator),
       validator
