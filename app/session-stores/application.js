@@ -1,5 +1,5 @@
 import AdaptiveStore from 'ember-simple-auth/session-stores/adaptive';
 
-export default AdaptiveStore.extend({
-  cookieName: 'gub-fjarrkontrollen'
-});
+export default class ApplicatoinSessionStore extends AdaptiveStore {
+  cookieName = 'gub-fjarrkontrollen'
+}

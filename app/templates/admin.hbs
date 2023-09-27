@@ -1,11 +1,11 @@
 {{#bs-navbar class="mb-4" toggleBreakpoint="sm" as |navbar|}}
-  <a class="navbar-brand" href={{href-to "admin"}}>Fjärrkontrollen</a>
+  {{#link-to 'admin' class='navbar-brand'}}Fjärrkontrollen{{/link-to}}
   {{navbar.toggle}}
   {{#navbar.content}}
     {{!perhaps should be just button, nav is semantically confusing}}
     {{#navbar.nav class="flex-grow-1" as |nav| }}
       {{#nav.item}}
-        <a class="new-order-link" href={{href-to "admin.new"}}><i class="fas fa-plus-circle"></i> Skapa order</a>
+        {{#link-to 'admin.new' class='new-order-link'}}<i class="fas fa-plus-circle"></i> Skapa order{{/link-to}}
       {{/nav.item}}
       {{#nav.item}}
         {{#bs-button type="link" onClick=(action (mut isShowingScanModal) true)}}

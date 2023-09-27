@@ -1,12 +1,12 @@
-import Ember from 'ember';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { isEmpty, isBlank } from '@ember/utils';
 import { computed } from '@ember/object';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
-  sessionAccount: inject(),
+export default class AdminIndexRoute extends Route {
+  @service sessionAccount;
 
-  queryParams: {
+  queryParams = {
     managingGroupId: {
       refreshModel: true
     },
@@ -46,15 +46,16 @@ export default Ember.Route.extend({
     sortDirection: {
       refreshModel: true
     },
-  },
+  }
 
-  defaultFiltersValuesSet: false, //hack
-  setDefaultFiltersValues: computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet', function() {
+  defaultFiltersValuesSet = false //hack
+
+  setDefaultFiltersValues = computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet', function() {
     return (
       this.get('sessionAccount.authenticatedOrRestored') == 'authenticated' &&
       !this.get('defaultFiltersValuesSet')
     );
-  }),
+  })
 
   model(params) {
     let filter = {};
@@ -105,7 +106,7 @@ export default Ember.Route.extend({
       filter['sortdir'] = params.sortDirection;
     }
     return this.store.query('order', filter);
-  },
+  }
 
   setupController(controller) {
     this._super(...arguments); // This sets model
@@ -128,4 +129,4 @@ export default Ember.Route.extend({
       this.set('defaultFiltersValuesSet', true);
     }
   }
-});
+}
