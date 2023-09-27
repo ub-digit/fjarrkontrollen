@@ -8,6 +8,9 @@ module.exports = function (defaults) {
     'ember-bootstrap': {
       'bootstrapVersion': 4,
       'importBootstrapCSS': false
+    },
+    'ember-simple-auth': {
+      useSessionSetupMethod: true
     }
   });
 

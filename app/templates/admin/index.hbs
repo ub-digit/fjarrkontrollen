@@ -241,7 +241,7 @@ as |form|
       <tbody>
         {{#each model as |order|}}
           <tr class="{{if (eq order.id lastOrderViewed) "table-success"}}">
-            <td><a href="{{href-to "admin.post" order.id}}">{{order.orderNumber}}</a></td>
+            <td>{{#link-to "admin.post" order.id}}{{order.orderNumber}}{{/link-to}}</td>
             <td>
               {{#if order.orderPath}}
                 {{#if (eq order.orderPath 'LibrisEnduser')}}

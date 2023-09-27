@@ -1,9 +1,13 @@
-import Ember from 'ember';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
+import { inject as service } from '@ember/service';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  authenticationRoute: 'login',
+export default class AdminRoute extends Route {
+  @service session;
+
+  beforeModel(transition) {
+    this.session.requireAuthentication(transition, 'login');
+  }
 
   model() {
     return RSVP.hash({
@@ -21,7 +25,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       emailTemplates: this.store.findAll('email-template'),
       statuses: this.store.findAll('status'),
     });
-  },
+  }
 
   setupController(controller, model) {
     [
@@ -31,4 +35,4 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
   }
 
-});
+}
