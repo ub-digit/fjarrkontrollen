@@ -1,30 +1,30 @@
 import Route from '@ember/routing/route';
-import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
-export default Route.extend(ApplicationRouteMixin, {
-  session: inject(),
-  sessionAccount: inject('session-account'),
+export default class ApplicatoinRoute extends Route {
+  @service session;
+  @service sessionAccount;
 
-  routeAfterAuthentication: 'admin.index',
-  routeIfAlreadyAuthenticated: 'admin.index',
+  async beforeModel() {
+    await this.session.setup();
+  }
 
   model() {
     return this._loadCurrentUser('restored');
-  },
+  }
 
   sessionAuthenticated() {
     this._super(...arguments);
     this._loadCurrentUser('authenticated');
-  },
+  }
 
   _loadCurrentUser(authenticatedOrRestored) {
     return this.get('sessionAccount')
       .loadCurrentUser(authenticatedOrRestored)
       .catch(() => this.get('session').invalidate());
-  },
+  }
 
-  actions: {
+  actions = {
     loading(transition, originRoute) {
       let controller = this.controllerFor('application');
       controller.set('isLoading', true);
@@ -33,4 +33,4 @@ export default Route.extend(ApplicationRouteMixin, {
       });
     }
   }
-});
+}
