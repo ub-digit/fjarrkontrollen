@@ -3,6 +3,7 @@ import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
 import { computed } from '@ember/object';
+import { observer } from '@ember/object';
 import { inject } from '@ember/service';
 import { get }   from '@ember/object';
 import ENV from '../config/environment';
@@ -38,6 +39,16 @@ export default Component.extend(powerSelectOverlayedOptions, {
   saveOrder: null, //??
   showAllValidations: false,
 
+  tmpReactivityFix: Ember.observer('order', function() {
+    let order = get(this, 'order');
+    let validator = get(this, 'orderValidations');
+    this.set('changeset', new Changeset(
+      order,
+      lookupValidator(validator),
+      validator
+    ));
+  }),
+
   setManagingGroup: Ember.observer('changeset.orderTypeId', function() {
     //WTF??
     Ember.run.once(this, function() {
@@ -62,13 +73,10 @@ export default Component.extend(powerSelectOverlayedOptions, {
     let order = get(this, 'order');
     let validator = get(this, 'orderValidations');
     this.set('changeset', new Changeset(
-      this.order,
+      order,
       lookupValidator(validator),
-      this.orderValidations
+      validator
     ));
-    if (this.get('order.isNew')) {
-      this.set('changeset.statusId', this.get('statuses').findBy('label', 'new').get('id'));
-    }
   },
 
   actions: {
