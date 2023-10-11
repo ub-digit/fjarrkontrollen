@@ -502,9 +502,13 @@ as |form|}}
               {{/if}}
             {{else}}
               {{order.libraryCardNumber}}
+              {{#if order.kohaBorrowernumber}}
+                <i class="fas fa-check"></i>
+              {{/if}}
             {{/if}}
           </td>
         </tr>
+
         <tr titel="Namn">
           <th>Namn</th>
           <td>
@@ -639,6 +643,20 @@ as |form|}}
               {{/form.element}}
             {{else}}
               {{get (find-by "id" order.customerTypeId customerTypes) 'nameSv'}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr titel="Låntagarnummer i Koha">
+          <th>Låntagarnummer i Koha</th>
+          <td>
+            {{#if isEditing}}
+              {{form.element
+                controlType="text"
+                disabled="disabled"
+                property="kohaBorrowernumber"
+              }}
+            {{else}}
+              {{order.kohaBorrowernumber}}
             {{/if}}
           </td>
         </tr>
