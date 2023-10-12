@@ -8,7 +8,7 @@ export default Ember.Route.extend(ResetScroll, {
   mitt: inject(),
 
   model() {
-    let newStatusId = this.set('changeset.statusId', this.get('statuses').findBy('label', 'new').get('id'));
+    let newStatusId = this.modelFor('admin')['statuses'].findBy('label', 'new').get('id');
     return this.store.createRecord('order', {orderPath: 'Staff', statusId: newStatusId});
   },
 
