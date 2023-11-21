@@ -1,11 +1,11 @@
+import { reads } from '@ember/object/computed';
+import { once } from '@ember/runloop';
 import Component from '@ember/component';
 import { Changeset } from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
-import { computed } from '@ember/object';
-import { observer } from '@ember/object';
+import { computed, observer, get } from '@ember/object';
 import { inject } from '@ember/service';
-import { get }   from '@ember/object';
 import ENV from '../config/environment';
 
 export default Component.extend(powerSelectOverlayedOptions, {
@@ -33,27 +33,17 @@ export default Component.extend(powerSelectOverlayedOptions, {
   ajax: inject('authenticated-ajax'),
   session: inject(),
   toast: inject(),
-  userId: computed.reads('session.data.authenticated.userid'),
+  userId: reads('session.data.authenticated.userid'),
 
   errors: null,
   saveOrder: null, //??
   showAllValidations: false,
 
-  tmpReactivityFix: Ember.observer('order', function() {
-    let order = get(this, 'order');
-    let validator = get(this, 'orderValidations');
-    this.set('changeset', new Changeset(
-      order,
-      lookupValidator(validator),
-      validator
-    ));
-  }),
-
-  setManagingGroup: Ember.observer('changeset.orderTypeId', function() {
+  setManagingGroup: observer('changeset.orderTypeId', function() {
     //WTF??
-    Ember.run.once(this, function() {
-      if (this.get('order').isNew && this.get('changeset.orderTypeId')) {
-        let orderType = this.get('orderTypes').findBy('id', this.get('changeset.orderTypeId'));
+    once(this, function() {
+      if (this.order.isNew && this.get('changeset.orderTypeId')) {
+        let orderType = this.orderTypes.findBy('id', this.get('changeset.orderTypeId'));
         this.set('changeset.managingGroupId', orderType.get('defaultManagingGroupId'));
       }
     });
@@ -70,8 +60,8 @@ export default Component.extend(powerSelectOverlayedOptions, {
   init() {
     this._super(...arguments);
     //this.set() ?
-    let order = get(this, 'order');
-    let validator = get(this, 'orderValidations');
+    let order = this.order;
+    let validator = this.orderValidations;
     this.set('changeset', Changeset(
       order,
       lookupValidator(validator),
@@ -90,7 +80,7 @@ export default Component.extend(powerSelectOverlayedOptions, {
         this.set('changeset.kohaUserCategory', patron.user_category);
         this.set('changeset.phoneNumber', patron.phone);
 
-        this.set('changeset.customerTypeId', this.get('customerTypes').findBy('label', 'koha').get('id'));
+        this.set('changeset.customerTypeId', this.customerTypes.findBy('label', 'koha').get('id'));
 
         // Hidden properties
         this.set('changeset.authenticatedXAccount', patron.xaccount);
@@ -98,13 +88,13 @@ export default Component.extend(powerSelectOverlayedOptions, {
 
       }).catch((error) => {
         if (error.status == 404) {
-          this.get('toast').warning(
+          this.toast.warning(
             `Hittar ingen låntagare med lånekortsnummber <b>${cardnumber}</b>.`,
             'Låntagaren hittades inte'
           );
         }
         else {
-          this.get('toast').error(
+          this.toast.error(
             'Ett oväntat serverfel har inträffat.',
             'Oväntat serverfel'
           );

@@ -19,10 +19,10 @@ export default Service.extend({
   },
 
   defaultPickupLocationId: computed('userPickupLocationId', function() {
-    return this.get('userPickupLocationId') ? this.get('userPickupLocationId').toString() : null;
+    return this.userPickupLocationId ? this.userPickupLocationId.toString() : null;
   }),
 
   defaultManagingGroupId: computed('userManagingGroupId', function() {
-    return this.get('userManagingGroupId') ? this.get('userManagingGroupId').toString() : null;
+    return this.userManagingGroupId ? this.userManagingGroupId.toString() : null;
   })
 });

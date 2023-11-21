@@ -1,47 +1,33 @@
-{{#bs-navbar class="mb-4" toggleBreakpoint="sm" as |navbar|}}
-  {{#link-to 'admin' class='navbar-brand'}}Fjärrkontrollen{{/link-to}}
+<BsNavbar @class="mb-4" @toggleBreakpoint="sm" as |navbar|>
+  <LinkTo @route="admin" class="navbar-brand">Fjärrkontrollen</LinkTo>
   {{navbar.toggle}}
-  {{#navbar.content}}
+  <navbar.content>
     {{!perhaps should be just button, nav is semantically confusing}}
-    {{#navbar.nav class="flex-grow-1" as |nav| }}
-      {{#nav.item}}
-        {{#link-to 'admin.new' class='new-order-link'}}<i class="fas fa-plus-circle"></i> Skapa order{{/link-to}}
-      {{/nav.item}}
-      {{#nav.item}}
-        {{#bs-button type="link" onClick=(action (mut isShowingScanModal) true)}}
+    <navbar.nav @class="flex-grow-1" as |nav|>
+      <nav.item>
+        <LinkTo @route="admin.new" class="new-order-link"><i class="fas fa-plus-circle"></i> Skapa order</LinkTo>
+      </nav.item>
+      <nav.item>
+        <BsButton @type="link" @onClick={{action (mut isShowingScanModal) true}}>
           <i class="fas fa-barcode"></i> Scanna streckkod
-        {{/bs-button}}
-      {{/nav.item}}
-      {{#nav.item}}
-        {{#bs-button type="link" onClick=(action (mut isShowingSetDeliveredScanModal) true)}}
+        </BsButton>
+      </nav.item>
+      <nav.item>
+        <BsButton @type="link" @onClick={{action (mut isShowingSetDeliveredScanModal) true}}>
           <i class="fa fa-paper-plane"></i> Skicka meddelande om kopior att hämta
-        {{/bs-button}}
-      {{/nav.item}}
-    {{/navbar.nav}}
+        </BsButton>
+      </nav.item>
+    </navbar.nav>
     <a class="pr-2" href="{{exportUrl}}"><i class="fa fa-table"></i> Ladda ner till Excel</a>
     <span class="p-2 user-name">{{activeUserSirName}}{{affiliation}}</span>
-    {{#bs-button type="link" onClick=(action "logout")}}Logga ut{{/bs-button}}
-  {{/navbar.content}}
-{{/bs-navbar}}
+    <BsButton @type="link" @onClick={{action "logout"}}>Logga ut</BsButton>
+  </navbar.content>
+</BsNavbar>
 <div class="container-fluid">
-  {{scan-order-modal
-    title="Scanna streckkod på ordern"
-    onSubmit=(action "scan")
-    open=isShowingScanModal
-  }}
-  {{scan-order-modal
-    title="Ändra orderstatus till levererad"
-    onSubmit=(action "scanDelivered")
-    open=isShowingSetDeliveredScanModal
-  }}
+  <ScanOrderModal @title="Scanna streckkod på ordern" @onSubmit={{action "scan"}} @open={{isShowingScanModal}} />
+  <ScanOrderModal @title="Ändra orderstatus till levererad" @onSubmit={{action "scanDelivered"}} @open={{isShowingSetDeliveredScanModal}} />
 
-  {{user-setting-modal
-    title="Inställningar"
-    managingGroups=managingGroupOptions
-    pickupLocations=pickupLocationOptions
-    loggedInUser=loggedInUser
-    open=isShowingUserSettingModal
-  }}
+  <UserSettingModal @title="Inställningar" @managingGroups={{managingGroupOptions}} @pickupLocations={{pickupLocationOptions}} @loggedInUser={{loggedInUser}} @open={{isShowingUserSettingModal}} />
 
   {{liquid-outlet}}
 </div>

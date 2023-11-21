@@ -1,19 +1,20 @@
- import { computed } from '@ember/object';
-import { inject } from '@ember/service';
-import AjaxService from 'ember-ajax/services/ajax';
-import ENV from '../config/environment';
+import { computed } from '@ember/object';
+import Service, { inject as service } from '@ember/service';
+//import ENV from '../config/environment';
 
-export default AjaxService.extend({
-  trustedHosts: [ENV.APP.serviceURL.replace(/^https?:\/\//, '').replace(/:\d+$/, '')],
-  session: inject(),
-  headers: computed('session.data.authenticated.token', {
-    get() {
-      let headers = {};
-      const token = this.get('session.data.authenticated.token');
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+export default class AuthenticatedFetch extends Service {
+  //trustedHosts: [ENV.APP.serviceURL.replace(/^https?:\/\//, '').replace(/:\d+$/, '')],
+  @service session;
+
+  fetch(resource, options = {}) {
+    const token = this.session.data.authenticated.token;
+    // TODO: Less ugly way of doing this?
+    if (token) {
+      if ('headers' in options) {
+        options.headers = {};
       }
-      return headers;
+      options.headers.Authorization = `Bearer ${token}`;
     }
-  })
-});
+    return fetch(resource, options);
+  }
+}

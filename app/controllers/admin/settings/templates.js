@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import $ from 'jquery';
+import { later } from '@ember/runloop';
+import Controller from '@ember/controller';
 import EmailTemplateValidations from '../../../validations/email-template';
 import powerSelectOverlayedOptions from '../../../mixins/power-select-overlayed-options'
 import { A } from '@ember/array';
@@ -11,7 +13,7 @@ import { inject } from '@ember/service';
 import ENV from '../../../config/environment';
 import RSVP from 'rsvp';
 
-export default Ember.Controller.extend(powerSelectOverlayedOptions, {
+export default Controller.extend(powerSelectOverlayedOptions, {
   toast: inject(),
   isShowingEmailTemplateEditModal: false,
   currentTemplate: null,
@@ -33,7 +35,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
     }],
 
   templates: computed('emailTemplate.@each.position', function() {
-    return this.get("emailTemplate").sortBy('position').filterBy('isNew', false);
+    return this.emailTemplate.sortBy('position').filterBy('isNew', false);
   }),
 
   generateGUID() {
@@ -48,7 +50,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
 
   actions: {
     toggleModal(template) {
-      if (this.get("isShowingEmailTemplateEditModal")) {
+      if (this.isShowingEmailTemplateEditModal) {
         this.set("isShowingEmailTemplateEditModal", false);
       }
       else {
@@ -66,15 +68,15 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
         if (confirm('Är du säker på att du vill ta bort denna e-post mall?')) {
           this.store.findRecord('email_template', templateId, {reload: true}).then((template) => {
               template.destroyRecord().then(() => { 
-              this.get('toast').success('E-post mallen togs bort.','Borttagen', {positionClass: 'toast-top-right', showDuration: '300', hideDuration: '1000', timeOut: '2000', extendedTimeOut: '2000'});
+              this.toast.success('E-post mallen togs bort.','Borttagen', {positionClass: 'toast-top-right', showDuration: '300', hideDuration: '1000', timeOut: '2000', extendedTimeOut: '2000'});
           });
           });
         }
       },
       resetState() {
-      if (this.get("currentTemplate") && !this.get("currentTemplate.id")) {
+      if (this.currentTemplate && !this.get("currentTemplate.id")) {
         // remove record from store if not saved (ie cancel btn pressed)
-        this.get("currentTemplate").deleteRecord();
+        this.currentTemplate.deleteRecord();
       }
       },
       onSubmit(changeset) {
@@ -83,10 +85,10 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
         changeset.save().then((model) => {
           this.send('toggleModal');
           //this.send('refreshRoute');
-          this.get('toast').success('E-post mallen uppdaterades.','Sparad', {positionClass: 'toast-top-right', showDuration: '300', hideDuration: '1000', timeOut: '2000', extendedTimeOut: '2000'});
-          Ember.run.later(this, function () {
-            Ember.$('tr').css("background-color", "transparent"); 
-            Ember.$('#' + model.id ).css("background-color", "#c3e6cb");    
+          this.toast.success('E-post mallen uppdaterades.','Sparad', {positionClass: 'toast-top-right', showDuration: '300', hideDuration: '1000', timeOut: '2000', extendedTimeOut: '2000'});
+          later(this, function () {
+            $('tr').css("background-color", "transparent"); 
+            $('#' + model.id ).css("background-color", "#c3e6cb");    
              }, 100);
         }).catch((error) => {
           reject(error);

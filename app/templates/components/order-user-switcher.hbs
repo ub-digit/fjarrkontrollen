@@ -1,21 +1,21 @@
-{{#bs-dropdown as |dd|}}
+<BsDropdown as |dd|>
     
     {{#if assignedUsername}}
-      {{#dd.button type="primary" class="btn-sm"}}
+      <dd.button @type="primary" @class="btn-sm">
         {{assignedUsername}}
         <span class="caret"></span>
-      {{/dd.button}}
+      </dd.button>
     {{else}}
-      {{#dd.button class="btn-sm"}}
+      <dd.button @class="btn-sm">
         Ingen
         <span class="caret"></span>
-      {{/dd.button}}
+      </dd.button>
     {{/if}}
     <span class="caret"></span>
 
-  {{#dd.menu as |ddm|}}
+  <dd.menu as |ddm|>
     {{#unless assignedUserIsLoggedInUser}}
-      {{#ddm.item}}
+      <ddm.item>
         <a
           class="dropdown-item"
           href="javascript:void(0)"
@@ -23,10 +23,10 @@
         >
           {{loggedInUsername}}
         </a>
-      {{/ddm.item}}
+      </ddm.item>
     {{/unless}}
     {{#if assignedUserId}}
-      {{#ddm.item}}
+      <ddm.item>
         <a
           class="dropdown-item"
           href="javascript:void(0)"
@@ -34,10 +34,10 @@
         >
           Släpp order
         </a>
-      {{/ddm.item}}
+      </ddm.item>
     {{/if}}
-  {{/dd.menu}}
-{{/bs-dropdown}}
+  </dd.menu>
+</BsDropdown>
 <div class="ml-2 spinner{{if setOrderAssignedUser.isRunning " loading"}}">
   <i class="fas fa-spinner fa-spin"></i>
 </div>

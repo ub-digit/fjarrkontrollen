@@ -51,16 +51,14 @@ export default class AdminIndexRoute extends Route {
   defaultFiltersValuesSet = false //hack
 
   setDefaultFiltersValues = computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet', function() {
-    return (
-      this.get('sessionAccount.authenticatedOrRestored') == 'authenticated' &&
-      !this.get('defaultFiltersValuesSet')
-    );
+    return this.get('sessionAccount.authenticatedOrRestored') == 'authenticated' &&
+    !this.defaultFiltersValuesSet;
   })
 
   model(params) {
     let filter = {};
 
-    if (this.get('setDefaultFiltersValues')) {
+    if (this.setDefaultFiltersValues) {
       params.managingGroupId = this.get('sessionAccount.defaultManagingGroupId');
       params.pickupLocationId = this.get('sessionAccount.defaultPickupLocationId');
     }
@@ -123,7 +121,7 @@ export default class AdminIndexRoute extends Route {
     ].forEach(function (property) {
       controller.set(property, optionModels[property]);
     });
-    if (this.get('setDefaultFiltersValues')) {
+    if (this.setDefaultFiltersValues) {
       controller.set('managingGroupId', this.get('sessionAccount.defaultManagingGroupId'));
       controller.set('pickupLocationId', this.get('sessionAccount.defaultPickupLocationId'));
       this.set('defaultFiltersValuesSet', true);
