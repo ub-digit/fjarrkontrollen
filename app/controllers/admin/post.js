@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { reads } from '@ember/object/computed';
+import Controller from '@ember/controller';
 import OrderValidations from '../../validations/order';
 import MessageValidations from '../../validations/message';
 import NoteValidations from '../../validations/note';
@@ -9,13 +10,13 @@ import { inject } from '@ember/service';
 import ENV from '../../config/environment';
 import RSVP from 'rsvp';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   OrderValidations,
   MessageValidations,
   NoteValidations,
 
   session: inject(),
-  userId: computed.reads('session.data.authenticated.userid'),
+  userId: reads('session.data.authenticated.userid'),
 
   isEditing: false,
   isCreatingMessage: false,
@@ -50,37 +51,37 @@ export default Ember.Controller.extend({
   }),
 
   messageLanguageOption: computed('messageLanguage', function() {
-    return this.get('messageLanguageOptions').findBy('language', this.get('messageLanguage'));
+    return this.messageLanguageOptions.findBy('language', this.messageLanguage);
   }),
 
   emailTemplateOptions: computed('emailTemplates', function() {
-    return this.get('emailTemplates').rejectBy('disabled');
+    return this.emailTemplates.rejectBy('disabled');
   }),
 
   emailTemplate: computed('emailTemplateId', function() {
-    return this.get('emailTemplateOptions').findBy('id', this.get('emailTemplateId'));
+    return this.emailTemplateOptions.findBy('id', this.emailTemplateId);
   }),
 
   emailTemplateSubject: computed('messageLanguageOption', 'emailTemplate', function() {
-    let option = this.get('messageLanguageOption');
-    let template = this.get('emailTemplate');
+    let option = this.messageLanguageOption;
+    let template = this.emailTemplate;
     return template ? template.get(option['subjectProperty']) : null;
   }),
 
   emailTemplateBody: computed('messageLanguageOption', 'emailTemplate', 'addBiblioInfo', function() {
-    let option = this.get('messageLanguageOption');
-    let template = this.get('emailTemplate');
+    let option = this.messageLanguageOption;
+    let template = this.emailTemplate;
     let emailTemplateBody = '';
     if (template) {
       emailTemplateBody = template.get(option['bodyProperty']);
-      if (this.get('addBiblioInfo')) {
-        emailTemplateBody += this.get('biblioInfo');
+      if (this.addBiblioInfo) {
+        emailTemplateBody += this.biblioInfo;
       }
       return emailTemplateBody;
     }
     else {
-      if (this.get('addBiblioInfo')) {
-        emailTemplateBody += this.get('biblioInfo');
+      if (this.addBiblioInfo) {
+        emailTemplateBody += this.biblioInfo;
         return emailTemplateBody;
       }
       return null;
@@ -110,7 +111,7 @@ export default Ember.Controller.extend({
     'order.journalTitle',
     'messageLanguage',
     function () {
-      let messageLanguage = this.get('messageLanguage');
+      let messageLanguage = this.messageLanguage;
       let properties = A([
         {
           key: 'orderNumber',
@@ -135,7 +136,7 @@ export default Ember.Controller.extend({
         }
       ]);
 
-      let order = this.get('order');
+      let order = this.order;
       let message = properties.map((item) => {
         let value = order.get(item.key);
         if (!isBlank(value)) {
@@ -147,14 +148,14 @@ export default Ember.Controller.extend({
         .join("\n") + "\n";
       let separator = '------------------------- \n';
       return "\n\n" + separator + message +  separator;
-	}),
+  }),
 
   actions: {
     /** Order **/
     saveOrder(changeset) {
       return new RSVP.Promise((resolve, reject) => {
         changeset.save().then(() => {
-          this.get('notes').update().then(() => {
+          this.notes.update().then(() => {
             this.set('isEditing', false);
             resolve();
           }).catch((error) => {
@@ -187,14 +188,14 @@ export default Ember.Controller.extend({
       this.set('addBiblioInfo', true);
 
       var bibInfo = '';
-      if (this.get("addBiblioInfo")) {
-        var bibInfo = this.get('biblioInfo');
+      if (this.addBiblioInfo) {
+        var bibInfo = this.biblioInfo;
       }
 
       this.set('message',
         this.store.createRecord(
           'note',
-          { isEmail: true, noteTypeId: this.get('noteTypes').findBy('label', 'email').id, userId: this.get('userId'), orderId: this.get('order.id'), message: bibInfo }
+          { isEmail: true, noteTypeId: this.noteTypes.findBy('label', 'email').id, userId: this.userId, orderId: this.get('order.id'), message: bibInfo }
         )
       );
       this.set('isCreatingMessage', true);
@@ -205,7 +206,7 @@ export default Ember.Controller.extend({
     saveMessage(changeset) {
        return new RSVP.Promise((resolve, reject) => {
         changeset.save().then(() => {
-          this.get('notes').update().then(() => {
+          this.notes.update().then(() => {
             this.set('isCreatingMessage', false);
             resolve();
           }).catch((error) => {
@@ -234,7 +235,7 @@ export default Ember.Controller.extend({
         this.set('note',
           this.store.createRecord(
             'note',
-            { isEmail: false, noteTypeId: this.get('noteTypes').findBy('label', 'user').id, userId: this.get('userId'), orderId: this.get('order.id') }
+            { isEmail: false, noteTypeId: this.noteTypes.findBy('label', 'user').id, userId: this.userId, orderId: this.get('order.id') }
           )
         );
       }
@@ -247,7 +248,7 @@ export default Ember.Controller.extend({
     saveNote(changeset) {
       return new RSVP.Promise((resolve, reject) => {
         changeset.save().then(() => {
-          this.get('notes').update().then(() => {
+          this.notes.update().then(() => {
             this.set('isCreatingNote', false);
             resolve();
           }).catch((error) => {
@@ -268,12 +269,12 @@ export default Ember.Controller.extend({
       }));
     },
     onTemplatePropertyChange(changeset, property, value) {
-      if (this.get('emailTemplate')) {
+      if (this.emailTemplate) {
         if (
             !isBlank(changeset.get('subject')) &&
-            changeset.get('subject') != this.get('emailTemplateSubject') ||
+            changeset.get('subject') != this.emailTemplateSubject ||
             !isBlank(changeset.get('message')) &&
-            changeset.get('message') != this.get('emailTemplateBody')
+            changeset.get('message') != this.emailTemplateBody
         ) {
           if (!confirm("Gjorda ändringar kommer att gå förlorade, tryck OK för att fortsätta.")) {
             return;
@@ -281,8 +282,8 @@ export default Ember.Controller.extend({
         }
       }
       this.set(property, value);
-      changeset.set('subject', this.get('emailTemplateSubject'));
-      changeset.set('message', this.get('emailTemplateBody'));
+      changeset.set('subject', this.emailTemplateSubject);
+      changeset.set('message', this.emailTemplateBody);
       changeset.set('emailTemplateLabel', this.get('emailTemplate.label'));
     },
 
@@ -291,13 +292,13 @@ export default Ember.Controller.extend({
       if(addBiblioInfo) {
         changeset.set(
           'message',
-          message + this.get('biblioInfo')
+          message + this.biblioInfo
         );
       }
       else {
         changeset.set(
           'message',
-          message.replace(this.get('biblioInfo'), '')
+          message.replace(this.biblioInfo, '')
         );
       }
       this.set('addBiblioInfo', addBiblioInfo);
@@ -313,7 +314,7 @@ export default Ember.Controller.extend({
 
     /** Sticky note **/
     toggleStickyNote(noteId) {
-      let order = this.get('order');
+      let order = this.order;
       order.set(
         'stickyNoteId',
         order.get('stickyNoteId') == noteId ? null : noteId

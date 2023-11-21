@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
-export default Ember.Component.extend({
+export default Component.extend({
   totalPages: null,
   currentPage: null,
   currentPageItemsCount: 4,
@@ -10,11 +10,11 @@ export default Ember.Component.extend({
   lastPageItemsCount: 2,
 
   isLastPage: computed('currentPage', 'totalPages', function() {
-    return this.get('currentPage') == this.get('totalPages');
+    return this.currentPage == this.totalPages;
   }),
 
   isFirstPage: computed('currentPage', function() {
-    return this.get('currentPage') == 1;
+    return this.currentPage == 1;
   }),
 
   //showAllPages (override) ??
@@ -27,11 +27,11 @@ export default Ember.Component.extend({
     'firstPageItemsCount',
     'lastPageItemsCount', function() {
       //TODO: Normalize numbers parseInt?
-      let total = this.get('totalPages');
-      let current = this.get('currentPage');
-      let currentCount = this.get('currentPageItemsCount');
-      let firstCount = this.get('firstPageItemsCount');
-      let lastCount = this.get('lastPageItemsCount');
+      let total = this.totalPages;
+      let current = this.currentPage;
+      let currentCount = this.currentPageItemsCount;
+      let firstCount = this.firstPageItemsCount;
+      let lastCount = this.lastPageItemsCount;
       let items = A([]);
 
       if (!total) {
@@ -42,7 +42,7 @@ export default Ember.Component.extend({
         for (let i = from; i <= to; ++i) {
           items.push({
             page: i,
-            isActive: this.get('currentPage') == i
+            isActive: this.currentPage == i
           });
         }
       };
@@ -102,19 +102,19 @@ export default Ember.Component.extend({
 
   actions: {
     nextPage() {
-      if (this.get('currentPage') < this.get('totalPages')) {
-        this.get('pageChanged')(this.get('currentPage') + 1);
+      if (this.currentPage < this.totalPages) {
+        this.pageChanged(this.currentPage + 1);
       }
     },
 
     previousPage() {
-      if (this.get('currentPage') > 1) {
-        this.get('pageChanged')(this.get('currentPage') - 1);
+      if (this.currentPage > 1) {
+        this.pageChanged(this.currentPage - 1);
       }
     },
 
     changePage(value) {
-      this.get('pageChanged')(value);
+      this.pageChanged(value);
     }
   }
 });

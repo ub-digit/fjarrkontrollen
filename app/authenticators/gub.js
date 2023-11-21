@@ -3,16 +3,14 @@ import { Promise, resolve } from 'rsvp';
 import ENV from '../config/environment';
 import { inject as service } from '@ember/service';
 import { run } from '@ember/runloop';
-import { isUnauthorizedError} from 'ember-ajax/errors';
 
 export default class GUPAuthenticator extends Base {
-  @service ajax;
 
+  //TODO: review this
   restore(data) {
     return new Promise((resolve, reject) => {
-      this.ajax.request(
-        `${ENV.APP.authenticationBaseURL}/${data.token}`
-      ).then(() => {
+    fetch(`${ENV.APP.authenticationBaseURL}/${data.token}`)
+      .then(() => {
         run(() => {
           resolve(data);
         });
@@ -24,11 +22,16 @@ export default class GUPAuthenticator extends Base {
 
   authenticate(credentials) {
     return new Promise((resolve, reject) => {
-      this.ajax.post(ENV.APP.authenticationBaseURL, {
-        data: {
+      this.fetch(ENV.APP.authenticationBaseURL, {
+        method: 'POST',
+        headers: { //TODO: Need this?
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           xkonto: credentials.identification,
           password: credentials.password
-        }
+        })
       }).then((response_data) => {
         run(() => {
           const data = {
@@ -42,7 +45,8 @@ export default class GUPAuthenticator extends Base {
           resolve(data);
         });
       }).catch((error) => {
-        run(null, reject, isUnauthorizedError(error) ? "Fel användarnamn eller lösenord" : error);
+        //@TODO: error format??
+        run(null, reject, true ? "Fel användarnamn eller lösenord" : error);
       });
     });
   }

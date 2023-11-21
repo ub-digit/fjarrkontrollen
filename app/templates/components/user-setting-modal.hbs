@@ -1,79 +1,27 @@
-{{#bs-modal
-  open=open
-  onHide=(action (mut open) false)
-  onHidden=(action "resetState")
-    as |modal|
-}}
-  {{#modal.header}}
+<BsModal @open={{open}} @onHide={{action (mut open) false}} @onHidden={{action "resetState"}} as |modal|>
+  <modal.header>
     <h4 class="modal-title">{{title}}</h4>
-  {{/modal.header}}
+  </modal.header>
   {{#with (changeset loggedInUser) as |changeset|}}
-    {{#modal.body}}
-		{{#bs-form
-			model=changeset
-			formLayout="vertical"
-			class="user-details-form"
-			onSubmit=(action "onSubmit" changeset)
-		as |form|
-		}}
-			{{form.element
-	          label="xkonto"
-	          controlType="text"
-	          property="xkonto"
-	          readonly=true
-	        }}
-			{{form.element
-	          label="Namn"
-	          controlType="text"
-	          property="name"
-	        }}
-	        {{#form.element
-	          label="Handläggningsgrupp"
-	          controlType="power-select"
-	          options=managingGroups
-	          disabled=(if changeset.pickupLocationId  true)
-	          value=(find-by "value" changeset.managingGroupId managingGroups)
-	          onChange=(action (mut changeset.managingGroupId) value="value")
-	        as |el|
-	        }}
-	        {{#el.control
-	        	renderInPlace=true
-                searchField="label"
-                searchEnabled=true
-                searchPlaceholder="Skriv handläggningsgrupp"
-              as |option|
-              }}
-              	{{option.label}}
-              {{/el.control}}
-            {{/form.element}}
-	        {{#form.element
-	          label="Avhämtningsbibliotek"
-	          controlType="power-select"
-	          options=pickupLocations
-	          disabled=(if changeset.managingGroupId  true)
-	          value=(find-by "value" changeset.pickupLocationId pickupLocations)
-	          onChange=(action (mut changeset.pickupLocationId) value="value")
-	        as |el|
-	        }}
-	        {{#el.control
-	        	renderInPlace=true
-                searchField="label"
-                searchEnabled=true
-                searchPlaceholder="Skriv avhämtningsbibliotek"
-              as |option|
-              }}
-              	{{option.label}}
-              {{/el.control}}
-            {{/form.element}}
-		{{/bs-form}}
-    {{/modal.body}}
-    {{#modal.footer}}
-      {{#bs-button onClick=(action modal.close) type="secondary"}}Avbryt{{/bs-button}}
-      {{#bs-button
-        onClick=(action modal.submit)
-        type="success"
-        disabled=(or isSubmitting changeset.isInvalid)
-      }}Skicka{{/bs-button}}
-    {{/modal.footer}}
+    <modal.body>
+    <BsForm @model={{changeset}} @formLayout="vertical" @class="user-details-form" @onSubmit={{action "onSubmit" changeset}} as |form|>
+      <form.element @label="xkonto" @controlType="text" @property="xkonto" @readonly={{true}} />
+      <form.element @label="Namn" @controlType="text" @property="name" />
+          <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroups}} @disabled={{if changeset.pickupLocationId true}} @value={{find-by "value" changeset.managingGroupId managingGroups}} @onChange={{action (mut changeset.managingGroupId) value="value"}} as |el|>
+          <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
+                {{option.label}}
+              </el.control>
+            </form.element>
+          <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocations}} @disabled={{if changeset.managingGroupId true}} @value={{find-by "value" changeset.pickupLocationId pickupLocations}} @onChange={{action (mut changeset.pickupLocationId) value="value"}} as |el|>
+          <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
+                {{option.label}}
+              </el.control>
+            </form.element>
+    </BsForm>
+    </modal.body>
+    <modal.footer>
+      <BsButton @onClick={{action modal.close}} @type="secondary">Avbryt</BsButton>
+      <BsButton @onClick={{action modal.submit}} @type="success" @disabled={{or isSubmitting changeset.isInvalid}}>Skicka</BsButton>
+    </modal.footer>
   {{/with}}
-{{/bs-modal}}
+</BsModal>

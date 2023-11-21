@@ -1,4 +1,4 @@
-import DS from 'ember-data';
+import Model from '@ember-data/model';
 import ENV from '../config/environment';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
@@ -25,27 +25,12 @@ export default class ApplicationAdapter extends ActiveModelAdapter {
     }
     return this._super(...arguments);
   }
-
-  /*
-  authorize(xhr) {
-    let { token } = this.get('session.data.authenticated');
-    if (isPresent(token)) {
-      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-    }
-  }
-  ajax: function(url, type, hash) {
-    if (Ember.isEmpty(hash)) { hash = {}; }
-    if (Ember.isEmpty(hash.data)) { hash.data = {}; }
-    hash.data.token = this.container.lookup('route:application').get('session.content.secure.token');
-    return this._super(url, type, hash);
-  }
-  */
 }
 
 // TODO: Where is this used/needed? Should not id just be number in model?
-DS.Model.reopen({
+Model.reopen({
   idInt: computed('id', function() {
-    return this.get('id') ? parseInt(this.get('id')) : undefined;
+    return this.id ? parseInt(this.id) : undefined;
   })
 });
 

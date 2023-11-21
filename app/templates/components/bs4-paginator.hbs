@@ -1,15 +1,4 @@
-{{#abstract-paginator
-    navAriaLabelText=navAriaLabelText
-    previousText=previousText
-    nextText=nextText
-    currentPage=currentPage
-    totalPages=totalPages
-    currentPageItemsCount=currentPageItemsCount
-    firstPageItemsCount=firstPageItemsCount
-    lastPageItemsCount=lastPageItemsCount
-    pageChanged=pageChanged
-  as |paginator|
-}}
+<AbstractPaginator @navAriaLabelText={{navAriaLabelText}} @previousText={{previousText}} @nextText={{nextText}} @currentPage={{currentPage}} @totalPages={{totalPages}} @currentPageItemsCount={{currentPageItemsCount}} @firstPageItemsCount={{firstPageItemsCount}} @lastPageItemsCount={{lastPageItemsCount}} @pageChanged={{pageChanged}} as |paginator|>
   <nav aria-label="{{navAriaLabelText}}">
     <ul class="pagination">
       {{#if paginator.isFirstPage}}
@@ -70,4 +59,4 @@
       {{/if}}
     </ul>
   </nav>
-{{/abstract-paginator}}
+</AbstractPaginator>

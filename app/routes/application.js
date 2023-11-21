@@ -19,9 +19,9 @@ export default class ApplicatoinRoute extends Route {
   }
 
   _loadCurrentUser(authenticatedOrRestored) {
-    return this.get('sessionAccount')
+    return this.sessionAccount
       .loadCurrentUser(authenticatedOrRestored)
-      .catch(() => this.get('session').invalidate());
+      .catch(() => this.session.invalidate());
   }
 
   actions = {

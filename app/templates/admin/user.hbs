@@ -1,98 +1,51 @@
 
 <div class="container">
-	<div class="row justify-content-md-center">
-		<div class="col-6">
-			<h1>Inställningar</h1>
-			{{#bs-form
-				model=this
-				formLayout="vertical"
-				class="user-details-form"
-				onSubmit=(action "saveUser" activeUser)
-			as |form|
-			}}
-			<div class="row">
-				{{model.id}}
-				<div class="col">
-					{{form.element
-			          label="xkonto"
-			          controlType="text"
-			          property="activeUser.xkonto"
-			          readonly=true
-			        }}
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					{{form.element
-			          label="Namn"
-			          controlType="text"
-			          property="activeUser.name"
-			        }}
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-			        {{#form.element
-			          label="Handläggningsgrupp"
-			          controlType="power-select"
-			          options=managingGroupOptions
-			          disabled=(if activeUser.pickupLocationId  true)
-			          value=(find-by "value" activeUser.managingGroupId managingGroupOptions)
-			          onChange=(action (mut activeUser.managingGroupId) value="value")
-			        as |el|
-			        }}
-			        {{#el.control
-		                searchField="label"
-		                searchEnabled=true
-		                searchPlaceholder="Skriv handläggningsgrupp"
-		              as |option|
-		              }}
-		              	{{option.label}}
-		              {{/el.control}}
-		            {{/form.element}}
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					{{activeUser.managingGroupId}}
-			        {{#form.element
-			          label="Avhämtningsbibliotek"
-			          controlType="power-select"
-			          options=pickupLocationOptions
-			          disabled=(if activeUser.managingGroupId  true)
-			          value=(find-by "value" activeUser.pickupLocationId pickupLocationOptions)
-			          onChange=(action (mut activeUser.pickupLocationId) value="value")
-			        as |el|
-			        }}
-			        {{#el.control
-		                searchField="label"
-		                searchEnabled=true
-		                searchPlaceholder="Skriv avhämtningsbibliotek"
-		              as |option|
-		              }}
-		              	{{option.label}}
-		              {{/el.control}}
-		            {{/form.element}}
-				</div>
-			</div>
-			<div class="row user-details-form-footer">
-				<div class="col">
-					{{#bs-button
-			            type="secondary"
-			            onClick=(action 'exitUserAdmin')
-			        }}
-			        Avbryt
-			        {{/bs-button}}
-					{{#bs-button
-			            type="success"
-			            buttonType="submit"
-			        }}
-			        Spara
-			        {{/bs-button}}
+  <div class="row justify-content-md-center">
+    <div class="col-6">
+      <h1>Inställningar</h1>
+      <BsForm @model={{this}} @formLayout="vertical" @class="user-details-form" @onSubmit={{action "saveUser" activeUser}} as |form|>
+      <div class="row">
+        {{model.id}}
+        <div class="col">
+          <form.element @label="xkonto" @controlType="text" @property="activeUser.xkonto" @readonly={{true}} />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <form.element @label="Namn" @controlType="text" @property="activeUser.name" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+              <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroupOptions}} @disabled={{if activeUser.pickupLocationId true}} @value={{find-by "value" activeUser.managingGroupId managingGroupOptions}} @onChange={{action (mut activeUser.managingGroupId) value="value"}} as |el|>
+              <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
+                    {{option.label}}
+                  </el.control>
+                </form.element>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          {{activeUser.managingGroupId}}
+              <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @disabled={{if activeUser.managingGroupId true}} @value={{find-by "value" activeUser.pickupLocationId pickupLocationOptions}} @onChange={{action (mut activeUser.pickupLocationId) value="value"}} as |el|>
+              <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
+                    {{option.label}}
+                  </el.control>
+                </form.element>
+        </div>
+      </div>
+      <div class="row user-details-form-footer">
+        <div class="col">
+          <BsButton @type="secondary" @onClick={{action "exitUserAdmin"}}>
+              Avbryt
+              </BsButton>
+          <BsButton @type="success" @buttonType="submit">
+              Spara
+              </BsButton>
 
-		    	</div>
-			</div>
-			{{/bs-form}}
-		</div>
-	</div>
+          </div>
+      </div>
+      </BsForm>
+    </div>
+  </div>
 </div>

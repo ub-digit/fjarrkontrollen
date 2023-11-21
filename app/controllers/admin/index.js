@@ -1,14 +1,13 @@
-import Ember from 'ember';
-import { computed } from '@ember/object';
+import Controller from '@ember/controller';
+import { computed, observer } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { inject } from '@ember/service';
 import { debounce } from '@ember/runloop';
-import { observer } from '@ember/object';
 //import { task } from 'ember-concurrency';
 import powerSelectOverlayedOptions from '../../mixins/power-select-overlayed-options'
 import { A } from '@ember/array';
 
-export default Ember.Controller.extend(powerSelectOverlayedOptions, {
+export default Controller.extend(powerSelectOverlayedOptions, {
   sessionAccount: inject(),
 
   powerSelectOverlayedOptions: [{
@@ -112,7 +111,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
 
   init() {
     this._super(...arguments);
-    this.set('searchTermsDebounced', this.get('searchTerms'));
+    this.set('searchTermsDebounced', this.searchTerms);
     this.set('isArchivedOptions', A([{
       label: 'Visa bada aktiva och arkiverade',
       value: '',
@@ -127,7 +126,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   },
 
   myOrdersFilterActive: computed('userId', function() {
-    return !!this.get('userId');
+    return !!this.userId;
   }),
 
   ordersFilterChanged: observer(
@@ -147,7 +146,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   }),
 
   setSearchTermsDebounced() {
-    this.set('searchTermsDebounced', this.get('searchTerms'));
+    this.set('searchTermsDebounced', this.searchTerms);
   },
 
   actions: {

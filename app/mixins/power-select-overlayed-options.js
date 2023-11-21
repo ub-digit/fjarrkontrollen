@@ -32,9 +32,9 @@ const powerSelectOverlayedOptions = Mixin.create({
   init() {
     this._super(...arguments);
     //TODO: Better message, and check type??
-    assert('powerSelectOverlayedOptions must be set', this.get('powerSelectOverlayedOptions'));
+    assert('powerSelectOverlayedOptions must be set', this.powerSelectOverlayedOptions);
 
-    this.get('powerSelectOverlayedOptions').forEach((settings) => {
+    this.powerSelectOverlayedOptions.forEach((settings) => {
       defineProperty(
         this,
         settings['target'],
