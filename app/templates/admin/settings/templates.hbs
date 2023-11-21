@@ -1,141 +1,88 @@
-
-
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-sm">
-			<div class="action-tools">
-				{{#bs-button onClick=(action "createTemplate") type="secondary"}}Skapa ny mall <i class="fas fa-plus"></i>{{/bs-button}}
-			</div>
-		</div>
-	</div>
-	<table class="table table-striped table-responsive">
-		<thead class="thead-dark">
-				<th>ID</th>
-				<th>Rubrik (sv)</th>
-				<th>Rubrik (en)</th>
-				<th>Meddelande (sv)</th>
-				<th>Meddelande (en)</th>
-				<th>Inaktiverat</th>
-				<th>Position</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-		</thead>
-		<tbody>
-			{{#each this.templates as |template|}}
-		    	<tr id="{{template.id}}">
-		    		<td>{{template.id}}</td>
-		    		<td>{{template.subjectSv}}</td>
-		    		<td>{{template.subjectEn}}</td>
-		    		<td>{{template.bodySv}}</td>
-		    		<td>{{template.bodyEn}}</td>
-		    		<td>{{if template.disabled "Ja" "Nej"}}</td>
-		    		<td>{{template.position}}</td>
-		    		<td>
-			    		{{#bs-button  class="btn-sm" onClick=(action "deleteTemplate" template.id )}}
-		      				<i class="far fa-trash-alt"></i>
-		        		{{/bs-button}}
+  <div class="row">
+    <div class="col-sm">
+      <div class="action-tools">
+        <BsButton @onClick={{action "createTemplate"}} @type="secondary">Skapa ny mall <i class="fas fa-plus"></i></BsButton>
+      </div>
+    </div>
+  </div>
+  <table class="table table-striped table-responsive">
+    <thead class="thead-dark">
+        <th>ID</th>
+        <th>Rubrik (sv)</th>
+        <th>Rubrik (en)</th>
+        <th>Meddelande (sv)</th>
+        <th>Meddelande (en)</th>
+        <th>Inaktiverat</th>
+        <th>Position</th>
+        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    </thead>
+    <tbody>
+      {{#each this.templates as |template|}}
+          <tr id="{{template.id}}">
+            <td>{{template.id}}</td>
+            <td>{{template.subjectSv}}</td>
+            <td>{{template.subjectEn}}</td>
+            <td>{{template.bodySv}}</td>
+            <td>{{template.bodyEn}}</td>
+            <td>{{if template.disabled "Ja" "Nej"}}</td>
+            <td>{{template.position}}</td>
+            <td>
+              <BsButton @class="btn-sm" @onClick={{action "deleteTemplate" template.id}}>
+                  <i class="far fa-trash-alt"></i>
+                </BsButton>
 
-			    		{{#bs-button class="btn-sm" onClick=(action  "toggleModal" template)}}
-		      				<i class="fas fa-edit"></i>
-		        		{{/bs-button}}
-		        	</td>
-		    	</tr>
-			{{/each}}
-		</tbody>
-	</table>
+              <BsButton @class="btn-sm" @onClick={{action "toggleModal" template}}>
+                  <i class="fas fa-edit"></i>
+                </BsButton>
+              </td>
+          </tr>
+      {{/each}}
+    </tbody>
+  </table>
 </div>
 
-{{#bs-modal size="lg" open=isShowingEmailTemplateEditModal
-  onHide=(action (mut isShowingEmailTemplateEditModal) false)
-  onHidden=(action "resetState")
-    as |modal|
-}}
-  {{#modal.header}}
+<BsModal @size="lg" @open={{isShowingEmailTemplateEditModal}} @onHide={{action (mut isShowingEmailTemplateEditModal) false}} @onHidden={{action "resetState"}} as |modal|>
+  <modal.header>
     <h4 class="modal-title">{{if currentTemplate.id  "Ändra e-post mall"  "Skapa e-post mall"}}</h4>
-  {{/modal.header}}
-  	{{#with (changeset currentTemplate EmailTemplateValidations) as |changesetObj|}}
-	    {{#modal.body}}
-	      {{#bs-form
-	        model=changesetObj
-	        onSubmit=(action "onSubmit" changesetObj)
-	      as |form|
-	      }}
-	      	<div class="container">
-		      	<div class="row">
-		      		<div class="col-sm">
-				        {{form.element
-				          id="subjectSv"
-				          controlType="text"
-				          autofocus=true
-				          label="Titel (sv)"
-				          placeholder=""
-				          property="subjectSv"
-				        }}
-		        	</div>
-		        	<div class="col-sm">
-						{{form.element
-				          id="subjectEn"
-				          controlType="text"
-				          label="Titel (en)"
-				          placeholder=""
-				          property="subjectEn"
-				        }}
-				    </div>
-		        </div>
+  </modal.header>
+    {{#with (changeset currentTemplate EmailTemplateValidations) as |changesetObj|}}
+      <modal.body>
+        <BsForm @model={{changesetObj}} @onSubmit={{action "onSubmit" changesetObj}} as |form|>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                <form.element @id="subjectSv" @controlType="text" @autofocus={{true}} @label="Titel (sv)" @placeholder="" @property="subjectSv" />
+              </div>
+              <div class="col-sm">
+            <form.element @id="subjectEn" @controlType="text" @label="Titel (en)" @placeholder="" @property="subjectEn" />
+            </div>
+            </div>
 
-		        <div class="row">
-			        <div class="col-sm">
-						{{form.element
-				          id="bodySv"
-				          controlType="textarea"
-				          label="Meddelande (sv)"
-				          rows="10"
-				          placeholder=""
-				          property="bodySv"
-				        }}
-			        </div>
-			        <div class="col-sm">
-						{{form.element
-				          id="bodyEn"
-				          rows="10"
-				          controlType="textarea"
-				          label="Meddelande (en)"
-				          placeholder=""
-				          property="bodyEn"
-				        }}
-			        </div>
-		        </div>
+            <div class="row">
+              <div class="col-sm">
+            <form.element @id="bodySv" @controlType="textarea" @label="Meddelande (sv)" @rows="10" @placeholder="" @property="bodySv" />
+              </div>
+              <div class="col-sm">
+            <form.element @id="bodyEn" @rows="10" @controlType="textarea" @label="Meddelande (en)" @placeholder="" @property="bodyEn" />
+              </div>
+            </div>
 
-		        <div class="row">
-			        <div class="col-sm">
-						{{form.element
-				          id="label"
-				          controlType="text"
-				          label="Label"
-				          placeholder=""
-				          property="label"
-				          readonly=true
-				        }}
-			        </div>
-			        <div class="col-sm">
-						{{form.element
-				          id="position"
-				          controlType="text"
-				          label="Position"
-				          placeholder=""
-				          property="position"
-				        }}
-			        </div>
-		        </div>
-		        {{yield form}}
-	        </div>
-	      {{/bs-form}}
-	    {{/modal.body}}
-	    {{#modal.footer}}
-	      {{#bs-button onClick=(action modal.close) type="secondary"}}Avbryt{{/bs-button}}
-	      {{#bs-button
-	        onClick=(action modal.submit)
-	        type="success"
-	      }}Spara och stäng{{/bs-button}}
-	    {{/modal.footer}}
+            <div class="row">
+              <div class="col-sm">
+            <form.element @id="label" @controlType="text" @label="Label" @placeholder="" @property="label" @readonly={{true}} />
+              </div>
+              <div class="col-sm">
+            <form.element @id="position" @controlType="text" @label="Position" @placeholder="" @property="position" />
+              </div>
+            </div>
+            {{yield form}}
+          </div>
+        </BsForm>
+      </modal.body>
+      <modal.footer>
+        <BsButton @onClick={{action modal.close}} @type="secondary">Avbryt</BsButton>
+        <BsButton @onClick={{action modal.submit}} @type="success">Spara och stäng</BsButton>
+      </modal.footer>
     {{/with}}
-{{/bs-modal}}
+</BsModal>

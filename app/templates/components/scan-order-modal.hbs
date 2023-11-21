@@ -1,44 +1,23 @@
-{{#bs-modal
-  open=open
-  onHide=(action (mut open) false)
-  onHidden=(action "resetState")
-    as |modal|
-}}
-  {{#modal.header}}
+<BsModal @open={{open}} @onHide={{action (mut open) false}} @onHidden={{action "resetState"}} as |modal|>
+  <modal.header>
     <h4 class="modal-title">{{title}}</h4>
-  {{/modal.header}}
+  </modal.header>
   {{#with (changeset barcodeData BarcodeDataValidations) as |changeset|}}
-    {{#modal.body}}
+    <modal.body>
       {{#if error}}
-        {{#bs-alert type="danger" dismissible=false}}
+        <BsAlert @type="danger" @dismissible={{false}}>
           {{error}}
-        {{/bs-alert}}
+        </BsAlert>
       {{/if}}
-      {{#bs-form
-        model=changeset
-        onSubmit=(action "onSubmit" changeset)
-        isSubmitting=isSubmitting
-      as |form|
-      }}
-        {{form.element
-          id="scan-order-modal-input"
-          controlType="text"
-          autofocus=true
-          label="Streckkod"
-          placeholder="Scanna streckkod (exempel: 2014052015160216)"
-          property="barcode"
-        }}
+      <BsForm @model={{changeset}} @onSubmit={{action "onSubmit" changeset}} @isSubmitting={{isSubmitting}} as |form|>
+        <form.element @id="scan-order-modal-input" @controlType="text" @autofocus={{true}} @label="Streckkod" @placeholder="Scanna streckkod (exempel: 2014052015160216)" @property="barcode" />
         {{yield form}}
-      {{/bs-form}}
-    {{/modal.body}}
-    {{#modal.footer}}
-      {{#bs-button onClick=(action modal.close) type="secondary"}}Avbryt{{/bs-button}}
-      {{#bs-button
-        onClick=(action modal.submit)
-        type="success"
-        disabled=(or isSubmitting changeset.isInvalid)
-      }}Skicka{{/bs-button}}
-    {{/modal.footer}}
+      </BsForm>
+    </modal.body>
+    <modal.footer>
+      <BsButton @onClick={{action modal.close}} @type="secondary">Avbryt</BsButton>
+      <BsButton @onClick={{action modal.submit}} @type="success" @disabled={{or isSubmitting changeset.isInvalid}}>Skicka</BsButton>
+    </modal.footer>
   {{/with}}
-{{/bs-modal}}
+</BsModal>
 
