@@ -1,5 +1,13 @@
 import AdaptiveStore from 'ember-simple-auth/session-stores/adaptive';
 
-export default class ApplicatoinSessionStore extends AdaptiveStore {
+import Configuration from 'ember-simple-auth/configuration';
+
+Configuration.routeAfterAuthentication = 'admin.index';
+
+export default class ApplicationSessionStore extends AdaptiveStore {
   cookieName = 'gub-fjarrkontrollen'
+
+  handleAuthentication() {
+    super.handleAuthentication('admin.index');
+  }
 }
