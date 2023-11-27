@@ -10,11 +10,11 @@ export default class ApplicationAdapter extends ActiveModelAdapter {
 
   host = ENV.APP.serviceURL;
 
-  @computed('session.data.authenticated.access_token')
+  @computed('session.data.authenticated.token')
   get headers() {
     const headers = {};
     if (this.session.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${this.session.data.authenticated.access_token}`;
+      headers['Authorization'] = `Bearer ${this.session.data.authenticated.token}`;
     }
     return headers;
   }
@@ -23,7 +23,7 @@ export default class ApplicationAdapter extends ActiveModelAdapter {
     if (status === 401) {
       this.session.invalidate()
     }
-    return this._super(...arguments);
+    return super.handleResponse(...arguments);
   }
 }
 

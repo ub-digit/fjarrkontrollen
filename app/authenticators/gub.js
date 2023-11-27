@@ -22,7 +22,8 @@ export default class GUPAuthenticator extends Base {
 
   authenticate(credentials) {
     return new Promise((resolve, reject) => {
-      this.fetch(ENV.APP.authenticationBaseURL, {
+      fetch(ENV.APP.authenticationBaseURL, {
+        mode: 'cors',
         method: 'POST',
         headers: { //TODO: Need this?
           'Accept': 'application/json',
@@ -32,17 +33,19 @@ export default class GUPAuthenticator extends Base {
           xkonto: credentials.identification,
           password: credentials.password
         })
-      }).then((response_data) => {
+      })
+      .then(response => response.json())
+      .then((data) => {
         run(() => {
-          const data = {
-            token: response_data.access_token,
-            userManagingGroupId: response_data.user.managing_group_id,
-            userPickupLocationId: response_data.user.pickup_location_id,
-            username: response_data.user.xkonto,
-            userid: response_data.user.id,
-            name: response_data.user.name
+          const authData = {
+            token: data.access_token,
+            userManagingGroupId: data.user.managing_group_id,
+            userPickupLocationId: data.user.pickup_location_id,
+            username: data.user.xkonto,
+            userid: data.user.id,
+            name: data.user.name
           };
-          resolve(data);
+          resolve(authData);
         });
       }).catch((error) => {
         //@TODO: error format??
