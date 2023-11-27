@@ -31,6 +31,7 @@ export default class AdminController extends Controller.extend(powerSelectOverla
     noneLabel: 'Inget valt'
   }];
 
+  /*
   @computed('session', 'loggedInUser.{managingGroupId,pickupLocationId}')
   get affiliation() {
     let currentUserId = this.get('session.data.authenticated.userid');
@@ -58,6 +59,7 @@ export default class AdminController extends Controller.extend(powerSelectOverla
     this.set("loggedInUser", currentUser);
     return currentUser.name;
   }
+  */
 
   @computed('session.data.authenticated.token') //TODO: ???
   get exportUrl() {
