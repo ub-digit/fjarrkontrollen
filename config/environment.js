@@ -24,7 +24,7 @@ module.exports = function (environment) {
       // when it is created
     },
   };
-
+  //@TODO: is this used?
   ENV['simple-auth'] = {
     authorizer: 'authorizer:gub',
     //crossOriginWhitelist: ['http://localhost:4000/'],
