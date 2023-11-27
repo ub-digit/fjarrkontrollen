@@ -19,7 +19,7 @@
       </nav.item>
     </navbar.nav>
     <a class="pr-2" href="{{exportUrl}}"><i class="fa fa-table"></i> Ladda ner till Excel</a>
-    <span class="p-2 user-name">{{activeUserSirName}}{{affiliation}}</span>
+    <!-- <span class="p-2 user-name">{{activeUserSirName}}{{affiliation}}</span> -->
     <BsButton @type="link" @onClick={{action "logout"}}>Logga ut</BsButton>
   </navbar.content>
 </BsNavbar>
@@ -27,7 +27,7 @@
   <ScanOrderModal @title="Scanna streckkod på ordern" @onSubmit={{action "scan"}} @open={{isShowingScanModal}} />
   <ScanOrderModal @title="Ändra orderstatus till levererad" @onSubmit={{action "scanDelivered"}} @open={{isShowingSetDeliveredScanModal}} />
 
-  <UserSettingModal @title="Inställningar" @managingGroups={{managingGroupOptions}} @pickupLocations={{pickupLocationOptions}} @loggedInUser={{loggedInUser}} @open={{isShowingUserSettingModal}} />
+  <!-- <UserSettingModal @title="Inställningar" @managingGroups={{managingGroupOptions}} @pickupLocations={{pickupLocationOptions}} @loggedInUser={{loggedInUser}} @open={{isShowingUserSettingModal}} /> -->
 
   {{liquid-outlet}}
 </div>
