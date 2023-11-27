@@ -81,15 +81,25 @@
       Återställ filter <i class="fas fa-undo-alt"></i>
     </BsButton>
     <div class="ml-4">
-      Fjärrkontrollen hittade <strong>{{model.meta.query.total}}</strong> ordrar
+      Fjärrkontrollen hittade <strong>{{this.meta.query.total}}</strong> ordrar
     </div>
   </div>
 </div>
 </BsForm>
-{{#if (gt model.meta.pagination.pages 1)}}
+{{#if (gt this.meta.pagination.pages 1)}}
   <div class="row">
     <div class="col-12 d-flex justify-content-center">
-      <Bs4Paginator @navAreaLabelText="Orders pagination" @previousText="Föregående" @nextText="Nästa" @currentPage={{model.meta.pagination.page}} @totalPages={{model.meta.pagination.pages}} @currentPageItemsCount={{3}} @firstPageItemsCount={{2}} @lastPageItemsCount={{2}} @pageChanged={{action (mut currentPage)}} />
+      <Bs4Paginator
+        @navAreaLabelText="Orders pagination"
+        @previousText="Föregående"
+        @nextText="Nästa"
+        @currentPage={{this.meta.pagination.page}}
+        @totalPages={{this.meta.pagination.pages}}
+        @currentPageItemsCount={{3}}
+        @firstPageItemsCount={{2}}
+        @lastPageItemsCount={{2}}
+        @pageChanged={{action (mut this.currentPage)}}
+      />
       {{! TODO rename => onPageChange}}
     </div>
   </div>
@@ -111,7 +121,7 @@
         </SortFields>
       </thead>
       <tbody>
-        {{#each model as |order|}}
+        {{#each this.model as |order|}}
           <tr class="{{if (eq order.id lastOrderViewed) "table-success"}}">
             <td><LinkTo @route="admin.post" @model={{order.id}}>{{order.orderNumber}}</LinkTo></td>
             <td>
@@ -157,9 +167,19 @@
   </div>
 </div>
 <div class="row">
-  {{#if (gt model.meta.pagination.pages 1)}}
+  {{#if (gt this.meta.pagination.pages 1)}}
     <div class="col-12 d-flex justify-content-center">
-      <Bs4Paginator @navAreaLabelText="Orders pagination" @previousText="Föregående" @nextText="Nästa" @currentPage={{model.meta.pagination.page}} @totalPages={{model.meta.pagination.pages}} @currentPageItemsCount={{3}} @firstPageItemsCount={{2}} @lastPageItemsCount={{2}} @pageChanged={{action (mut currentPage)}} />
+      <Bs4Paginator
+        @navAreaLabelText="Orders pagination"
+        @previousText="Föregående"
+        @nextText="Nästa"
+        @currentPage={{this.meta.pagination.page}}
+        @totalPages={{this.meta.pagination.pages}}
+        @currentPageItemsCount={{3}}
+        @firstPageItemsCount={{2}}
+        @lastPageItemsCount={{2}}
+        @pageChanged={{action (mut currentPage)}}
+      />
       {{! TODO rename => onPageChange}}
     </div>
   {{else}}
