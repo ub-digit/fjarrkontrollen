@@ -5,6 +5,7 @@ import Route from '@ember/routing/route';
 
 export default class AdminIndexRoute extends Route {
   @service sessionAccount;
+  @service store;
 
   queryParams = {
     managingGroupId: {
@@ -50,10 +51,10 @@ export default class AdminIndexRoute extends Route {
 
   defaultFiltersValuesSet = false //hack
 
-  setDefaultFiltersValues = computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet', function() {
-    return this.get('sessionAccount.authenticatedOrRestored') == 'authenticated' &&
-    !this.defaultFiltersValuesSet;
-  })
+  @computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet')
+  get setDefaultFiltersValues() {
+    return this.sessionAccount.authenticatedOrRestored == 'authenticated' && !this.defaultFiltersValuesSet;
+  }
 
   model(params) {
     let filter = {};
@@ -106,8 +107,9 @@ export default class AdminIndexRoute extends Route {
     return this.store.query('order', filter);
   }
 
-  setupController(controller) {
-    this._super(...arguments); // This sets model
+  setupController(controller, model) {
+    controller.set('model', model);
+    controller.set('meta', model.meta);
     let optionModels = this.modelFor('admin');
     [
       'managingGroups',
