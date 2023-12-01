@@ -32,8 +32,8 @@ as |form|>
     <h5>Handläggningsgrupp</h5>
 
     {{#if isEditing}}
-      <form.element @disabled={{order.isNew}} @controlType="power-select" @options={{managingGroups}} @value={{find-by "id" changeset.managingGroupId managingGroups}} @onChange={{action (mut changeset.managingGroupId) value="id"}} as |el|>
-        <el.control @searchField="name" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |pickupLocation|>
+      <form.element @controlType="power-select" @options={{managingGroups}} @value={{find-by "id" changeset.managingGroupId managingGroups}} @onChange={{action (mut changeset.managingGroupId) value="id"}} as |el|>
+        <el.control @disabled={{order.isNew}} @searchField="name" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |pickupLocation|>
           {{pickupLocation.name}}
         </el.control>
       </form.element>
@@ -82,7 +82,14 @@ as |form|>
       </p>
     {{/if}}
     <h5>Arkivera</h5>
-    <form.element @label="Arkiverad" @controlType="checkbox" @disabled={{not isEditing}} @value={{changeset.isArchived}} @onChange={{action (mut changeset.isArchived)}} />
+    <form.element
+      @label="Arkiverad"
+      @controlType="checkbox"
+      @value={{changeset.isArchived}}
+      @onChange={{action (mut changeset.isArchived)}}
+      as |el|>
+        <el.control @disabled={{not isEditing}}/>
+      </form.element>
   </div>
   <div class="col-12 col-sm-6 col-md-3">
     <h5>Utlånande bibliotek</h5>
@@ -123,7 +130,13 @@ as |form|>
       </p>
     {{/if}}
     <h5>Utanför Norden</h5>
-    <form.element @label="Utanför Norden" @controlType="checkbox" @disabled={{not isEditing}} @value={{changeset.orderOutsideScandinavia}} />
+    <form.element
+      @label="Utanför Norden"
+      @controlType="checkbox"
+      @value={{changeset.orderOutsideScandinavia}}
+    as |el|>
+      <el.control  @disabled={{not isEditing}}/>
+    </form.element>
   </div>
   <div class="col-12 col-sm-6 col-md-3">
     <h5>Återlämningsdatum</h5>
@@ -143,7 +156,14 @@ as |form|>
       </p>
     {{/if}}
     <h5>Ska faktureras</h5>
-    <form.element @label="Ska faktureras" @controlType="checkbox" @disabled={{not isEditing}} @value={{changeset.toBeInvoiced}} @onChange={{action (mut changeset.toBeInvoiced)}} />
+    <form.element
+      @label="Ska faktureras"
+      @controlType="checkbox"
+      @value={{changeset.toBeInvoiced}}
+      @onChange={{action (mut changeset.toBeInvoiced)}}
+    as |el|>
+      <el.control @disabled={{not isEditing}}/>
+    </form.element>
   </div>
 </div>
 <div class="row">
@@ -471,9 +491,10 @@ as |form|>
             {{#if isEditing}}
               <form.element
                 @controlType="text"
-                @disabled="disabled"
                 @property="kohaBorrowernumber"
-              />
+              as |el|>
+                <el.control @disabled={{true}}/>
+              </form.element>
             {{else}}
               {{order.kohaBorrowernumber}}
             {{/if}}
