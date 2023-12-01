@@ -20,16 +20,16 @@
           </h2>
           <div class="order-header-tools">
             {{#if isEditing}}
-              <BsButton @class="btn-sm" @onClick={{action "cancelEditOrder" orderForm.changeset}}>
+              <BsButton class="btn-sm" @onClick={{action "cancelEditOrder" orderForm.changeset}}>
                 Stäng <i class="fas fa-times"></i>
               </BsButton>
 
-              <BsButton @type="primary" @class="btn-sm" @buttonType="submit" @disabled={{orderForm.form.isSubmitting}}>
+              <BsButton @type="primary" class="btn-sm" @buttonType="submit" @disabled={{orderForm.form.isSubmitting}}>
                 Spara <i class="fas fa-check"></i>
                 {{#if orderForm.form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
               </BsButton>
             {{else}}
-              <BsButton @type="primary" @class="btn-sm" @onClick={{action "editOrder" orderForm.changeset}}>
+              <BsButton @type="primary" class="btn-sm" @onClick={{action "editOrder" orderForm.changeset}}>
                 Redigera <i class="fas fa-pencil-alt fa-xs ml-1"></i>
               </BsButton>
             {{/if}}
@@ -95,7 +95,7 @@
                 FIXME: why no padding, wtf
                 "Fix" by adding form-group class
               }}
-              <form.element @label="Bifoga bibliografiska uppgifter i svaret" @controlType="checkbox" @class="form-group" @value={{addBiblioInfo}} @onChange={{action "onAddBiblioInfoChange" changeset}} />
+              <form.element @label="Bifoga bibliografiska uppgifter i svaret" @controlType="checkbox" @value={{addBiblioInfo}} @onChange={{action "onAddBiblioInfoChange" changeset}} />
 
               <BsButton @type="secondary" @buttonType="submit" @disabled={{form.isSubmitting}}>
                 Skicka
@@ -105,7 +105,7 @@
           {{/with}}
         {{else if isCreatingNote}}
           {{#with (changeset note NoteValidations) as |changeset|}}
-            <BsForm @formLayout="vertical" @model={{changeset}} @onSubmit={{action "saveNote"}} @onInvalid={{action "noteInvalid"}} @showAllValidations={{showAllValidations}} as |form|>
+            <BsForm @formLayout="vertical" @model={{changeset}} @onSubmit={{action "saveNote"}} @onInvalid={{action "noteInvalid"}} @showAllValidations={{this.showAllValidations}} as |form|>
               <div class="d-flex flex-row-reverse">
                 <BsButton @type="link" @onClick={{action (mut isCreatingNote) false}}>
                   <i class="fas fa-times"></i>
@@ -144,18 +144,18 @@
                   {{moment-format note.createdAt "YYYY-MM-DD HH:mm"}} av {{get (find-by "id" note.userId users) "xkonto"}}
                 </h6>
                 {{#if (eq (get (find-by "id" note.noteTypeId noteTypes) 'label') "user")}}
-                <BsButton @title="Ta bort notering." @type="link" @class="font-size-sm" @onClick={{action "deleteNote" note.id}}>
+                <BsButton @title="Ta bort notering." @type="link" class="font-size-sm" @onClick={{action "deleteNote" note.id}}>
                   <small>
                     <i class="fas fa-trash-alt messages-card-remove-icon"></i>
                   </small>
                 </BsButton>
-                <BsButton @title="Ändra notering." @type="link" @class="font-size-sm" @onClick={{action "showCreateNote" note}}>
+                <BsButton @title="Ändra notering." @type="link" class="font-size-sm" @onClick={{action "showCreateNote" note}}>
                   <small>
                     <i class="fas fa-edit messages-card-edit-icon"></i>
                   </small>
                 </BsButton>
                 {{/if}}
-                <BsButton @title="Sätter denna notering som sticky. Detta gör att den blir tillgänglig i översiktslistan." @type="link" @class="font-size-sm" @onClick={{action "toggleStickyNote" note.id}}>
+                <BsButton @title="Sätter denna notering som sticky. Detta gör att den blir tillgänglig i översiktslistan." @type="link" class="font-size-sm" @onClick={{action "toggleStickyNote" note.id}}>
                   <small>
                     <i class="fas fa-thumbtack messages-card-sticky-icon {{ if (eq note.id order.stickyNoteId) " active"}}"></i>
                   </small>

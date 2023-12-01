@@ -10,7 +10,7 @@ export default class AuthenticatedFetch extends Service {
     const token = this.session.data.authenticated.token;
     // TODO: Less ugly way of doing this?
     if (token) {
-      if ('headers' in options) {
+      if (!('headers' in options)) {
         options.headers = {};
       }
       options.headers.Authorization = `Bearer ${token}`;

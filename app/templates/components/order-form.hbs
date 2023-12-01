@@ -1,5 +1,11 @@
-<BsForm @formLayout="vertical" @model={{changeset}} @onSubmit={{saveOrder}} @onInvalid={{action "orderInvalid"}} @showAllValidations={{showAllValidations}} as |form|>
-{{yield (hash form=form changeset=changeset)}}
+<BsForm
+  @formLayout="vertical"
+  @model={{this.changeset}}
+  @onSubmit={{this.saveOrder}}
+  @onInvalid={{action "orderInvalid"}}
+  @showAllValidations={{this.showAllValidations}}
+as |form|>
+{{yield (hash form=form changeset=this.changeset)}}
 <div class="row">
   <div class="col-12">
     {{#if errors}}
@@ -76,7 +82,7 @@
       </p>
     {{/if}}
     <h5>Arkivera</h5>
-    <form.element @label="Arkiverad" @controlType="checkbox" @class="form-group" @disabled={{not isEditing}} @value={{changeset.isArchived}} @onChange={{action (mut changeset.isArchived)}} />
+    <form.element @label="Arkiverad" @controlType="checkbox" @disabled={{not isEditing}} @value={{changeset.isArchived}} @onChange={{action (mut changeset.isArchived)}} />
   </div>
   <div class="col-12 col-sm-6 col-md-3">
     <h5>Utlånande bibliotek</h5>

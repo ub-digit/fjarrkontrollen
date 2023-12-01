@@ -1,4 +1,4 @@
-<BsForm @model={{this}} @formLayout="vertical" @class="orders-filters-form" as |form|>
+<BsForm @model={{this}} @formLayout="vertical" class="orders-filters-form" as |form|>
 <div class="row">
   <div class="col-12">
     <div class="row">
@@ -10,28 +10,34 @@
         </form.element>
       </div>
       <div class="col-6 col-sm-3 col-lg-4">
-        <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @value={{find-by "value" pickupLocationId pickupLocationOptions}} @onChange={{action (mut pickupLocationId) value="value"}} as |el|>
+        <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @value={{find-by "value" pickupLocationId pickupLocationOptions}} @onChange={{this.setPickupLocationId}} as |el|>
           <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
             {{option.label}}
           </el.control>
         </form.element>
       </div>
       <div class="col-6 col-sm-3 col-lg-2">
-        <form.element @label="Status" @controlType="power-select" @options={{statusGroups}} @value={{find-by "label" statusGroupLabel statusGroups}} @onChange={{action (mut statusGroupLabel) value="label"}} as |el|>
+        <form.element
+          @label="Status"
+          @controlType="power-select"
+          @options={{this.statusGroups}}
+          @value={{find-by "label" statusGroupLabel statusGroups}}
+          @onChange={{this.setStatusGroupLabel}}
+        as |el|>
           <el.control @searchField="nameSv" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |statusGroup|>
             {{statusGroup.nameSv}}
           </el.control>
         </form.element>
       </div>
       <div class="col-6 col-sm-2 col-lg-2 d-flex align-items-end mb-sm-2 mb-lg-2">
-        <form.element @label="Mina ordrar" @class="form-group" @controlType="checkbox" @value={{myOrdersFilterActive}} @onChange={{action "setMyOrders"}} />
+        <form.element @label="Mina ordrar" @controlType="checkbox" @value={{myOrdersFilterActive}} @onChange={{action "setMyOrders"}} />
       </div>
       <div class="col-6 col-sm-3 col-lg-4">
         <form.element @label="Sök i fritext" @controlType="text" @value={{searchTerms}} @onChange={{action "setSearchTerms"}} />
       </div>
 
       {{#liquid-if filtersExpanded class="col-12 border-top"}}
-        <div class="row">
+        <div class="row mt-4 mb-4">
           <div class="col-6 col-sm-3 col-lg-2">
             <form.element @label="Leveransställe" @controlType="power-select" @options={{deliverySourceOptions}} @value={{find-by "value" deliverySourceLabel deliverySourceOptions}} @onChange={{action (mut deliverySourceLabel) value="value"}} as |el|>
               <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
@@ -61,14 +67,14 @@
             </form.element>
           </div>
           <div class="col-6 col-lg-2 d-flex align-items-end mb-lg-2">
-            <form.element @label="Skall faktureras" @class="form-group" @controlType="checkbox" @value={{toBeInvoiced}} @onChange={{action "setToBeInvoiced"}} />
+            <form.element @label="Skall faktureras" @controlType="checkbox" @value={{toBeInvoiced}} @onChange={{action "setToBeInvoiced"}} />
           </div>
         </div>
       {{/liquid-if}}
     </div>
   </div>
   <div class="col-12 d-flex justify-content-center border-top">
-    <BsButton @class="px-3" @title={{if filtersExpanded "Dölj fler filter" "Visa fler filter"}} @type="link" @active={{filtersExpanded}} @onClick={{toggle "filtersExpanded" this}}>
+    <BsButton class="px-3" @title={{if filtersExpanded "Dölj fler filter" "Visa fler filter"}} @type="link" @active={{filtersExpanded}} @onClick={{toggle "filtersExpanded" this}}>
       {{#if filtersExpanded}}
       <i class="fas fa-angle-up"></i>
       {{else}}

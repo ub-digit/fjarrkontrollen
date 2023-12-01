@@ -15,7 +15,7 @@
             <span class="badge badge-secondary ml-2">{{order.orderPath}}</span>
           </h2>
           <div class="order-header-tools">
-            <BsButton @type="primary" @class="btn-sm" @buttonType="submit" @disabled={{orderForm.form.isSubmitting}}>
+            <BsButton @type="primary" class="btn-sm" @buttonType="submit" @disabled={{orderForm.form.isSubmitting}}>
               Spara <i class="fas fa-check"></i>
               {{#if orderForm.form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
             </BsButton>
