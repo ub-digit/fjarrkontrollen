@@ -16,7 +16,7 @@ export default Component.extend({
   classNames: ['order-user-switcher'],
 
   assignedUserIsLoggedInUser: computed('assignedUserId', 'loggedInUserId', function() {
-    return this.assignedUserId ==  this.loggedInUserId;
+    return this.assignedUserId == this.loggedInUserId;
   }),
 
   setOrderAssignedUser: task(function * (orderId, newUserId) {

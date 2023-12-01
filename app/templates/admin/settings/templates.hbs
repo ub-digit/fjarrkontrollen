@@ -28,11 +28,11 @@
             <td>{{if template.disabled "Ja" "Nej"}}</td>
             <td>{{template.position}}</td>
             <td>
-              <BsButton @class="btn-sm" @onClick={{action "deleteTemplate" template.id}}>
+              <BsButton class="btn-sm" @onClick={{action "deleteTemplate" template.id}}>
                   <i class="far fa-trash-alt"></i>
                 </BsButton>
 
-              <BsButton @class="btn-sm" @onClick={{action "toggleModal" template}}>
+              <BsButton class="btn-sm" @onClick={{action "toggleModal" template}}>
                   <i class="fas fa-edit"></i>
                 </BsButton>
               </td>

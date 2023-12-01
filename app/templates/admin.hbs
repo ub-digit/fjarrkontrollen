@@ -1,9 +1,9 @@
-<BsNavbar @class="mb-4" @toggleBreakpoint="sm" as |navbar|>
+<BsNavbar class="mb-4" @toggleBreakpoint="sm" as |navbar|>
   <LinkTo @route="admin" class="navbar-brand">Fjärrkontrollen</LinkTo>
   {{navbar.toggle}}
   <navbar.content>
     {{!perhaps should be just button, nav is semantically confusing}}
-    <navbar.nav @class="flex-grow-1" as |nav|>
+    <navbar.nav class="flex-grow-1" as |nav|>
       <nav.item>
         <LinkTo @route="admin.new" class="new-order-link"><i class="fas fa-plus-circle"></i> Skapa order</LinkTo>
       </nav.item>
@@ -19,7 +19,7 @@
       </nav.item>
     </navbar.nav>
     <a class="pr-2" href="{{exportUrl}}"><i class="fa fa-table"></i> Ladda ner till Excel</a>
-    <!-- <span class="p-2 user-name">{{activeUserSirName}}{{affiliation}}</span> -->
+    <span class="p-2 user-name">{{this.sessionAccount.name}}{{this.affiliation}}</span>
     <BsButton @type="link" @onClick={{action "logout"}}>Logga ut</BsButton>
   </navbar.content>
 </BsNavbar>

@@ -4,7 +4,7 @@
   </modal.header>
   {{#with (changeset loggedInUser) as |changeset|}}
     <modal.body>
-    <BsForm @model={{changeset}} @formLayout="vertical" @class="user-details-form" @onSubmit={{action "onSubmit" changeset}} as |form|>
+    <BsForm @model={{changeset}} @formLayout="vertical" class="user-details-form" @onSubmit={{action "onSubmit" changeset}} as |form|>
       <form.element @label="xkonto" @controlType="text" @property="xkonto" @readonly={{true}} />
       <form.element @label="Namn" @controlType="text" @property="name" />
           <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroups}} @disabled={{if changeset.pickupLocationId true}} @value={{find-by "value" changeset.managingGroupId managingGroups}} @onChange={{action (mut changeset.managingGroupId) value="value"}} as |el|>
