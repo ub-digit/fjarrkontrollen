@@ -9,6 +9,7 @@ import mitt from 'mitt';
 
 export default class AdminController extends Controller.extend(powerSelectOverlayedOptions) {
   @service session;
+  @service sessionAccount;
   @service toast;
   @service mitt;
 
@@ -31,25 +32,23 @@ export default class AdminController extends Controller.extend(powerSelectOverla
     noneLabel: 'Inget valt'
   }];
 
-  /*
-  @computed('session', 'loggedInUser.{managingGroupId,pickupLocationId}')
+  @computed('sessionAccount.{defaultManagingGroupId,defaultPickupLocationId}')
   get affiliation() {
-    let currentUserId = this.get('session.data.authenticated.userid');
-    let currentUser = this.store.peekRecord('user', currentUserId);
-    if (currentUser.managingGroupId) {
-      return " | Handläggningsgrupp: " + this.managingGroups.findBy('id', currentUser.managingGroupId.toString()).name;
+    let managingGroupId = this.sessionAccount.defaultManagingGroupId;
+    let pickupLocationId = this.sessionAccount.defaultPickupLocationId;
+    if (managingGroupId) {
+      return " | Handläggningsgrupp: " + this.managingGroups.findBy('id', managingGroupId).name;
     }
     else {
-      if (currentUser.pickupLocationId) {
-        return " | Avhämtningsbibliotek: " + this.pickupLocations.findBy('id', currentUser.pickupLocationId.toString()).nameSv;
+      if (pickupLocationId) {
+        return " | Avhämtningsbibliotek: " + this.pickupLocations.findBy('id', pickupLocationId).nameSv;
       }
       else {
         return "";
       }
     }
-    this.set("loggedInUser", currentUser);
   }
-
+  /*
   //Could be replaced with @tracked loggeInUser?
   @computed('loggedInUser.name')
   get activeUserSirName() {

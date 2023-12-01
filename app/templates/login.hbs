@@ -2,7 +2,7 @@
   <div class="card login-form-card">
     <div class="card-body">
       <h5 class="card-title">Logga in i Fjärrkontrollen</h5>
-        <BsForm @class="login-form" @model={{this.changeset}} @onSubmit={{action "authenticate" this.changeset}} as |form|>
+        <BsForm @model={{this.changeset}} @onSubmit={{action "authenticate" this.changeset}} as |form|>
           <form.element @controlType="text" @focusIn={{action "resetServerErrors" this.changeset}} @property="identification" @placeholder="X-konto" @autofocus={{true}} />
           <form.element @controlType="password" @focusIn={{action "resetServerErrors" this.changeset}} @property="password" @placeholder="Lösenord" />
           <BsButton @type="primary" @buttonType="submit" @disabled={{or form.isSubmitting this.changeset.isInvalid}}>

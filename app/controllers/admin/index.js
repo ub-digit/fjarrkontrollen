@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { computed, observer } from '@ember/object';
+import { computed, observer, action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { inject } from '@ember/service';
 import { debounce } from '@ember/runloop';
@@ -149,6 +149,17 @@ export default Controller.extend(powerSelectOverlayedOptions, {
     this.set('searchTermsDebounced', this.searchTerms);
   },
 
+  @action
+  setPickupLocationId(pickupLocation) {
+    this.set('pickupLocationId', pickupLocation.value)
+  },
+
+  @action
+  setStatusGroupLabel(statusGroup) {
+    this.set('statusGroupLabel', statusGroup.get('label'))
+  },
+
+
   actions: {
     resetFilters() {
       [
@@ -182,6 +193,7 @@ export default Controller.extend(powerSelectOverlayedOptions, {
     setSearchTerms(value) {
       this.set('searchTerms', value);
       debounce(this, 'setSearchTermsDebounced', 500);
-    }
+    },
+
   }
 });

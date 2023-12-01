@@ -26,7 +26,6 @@ export default Controller.extend({
       });
       /*
       return changeset.validate().then(() => {
-        console.log('wtf validate');
         if (changeset.get('isValid')) {
           changeset.save().then((order) => {
             this.transitionToRoute('admin.post', order.get('id'));
