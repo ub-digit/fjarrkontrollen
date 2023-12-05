@@ -13,7 +13,7 @@ export default Controller.extend({
   session: inject(),
   userId: reads('session.data.authenticated.userid'),
   isEditing: true,
-  showAllValidations: false,
+  showValidations: false,
   messageErrors: null, //???
 
   actions: {
