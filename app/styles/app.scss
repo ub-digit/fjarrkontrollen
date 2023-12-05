@@ -271,3 +271,18 @@ body {
   display: block;
   padding: 0.375rem 0.76rem;
 }
+
+/*
+  Temporary fix for private showValidations
+  no longer overridable, fixed in ember-bootstrap 6.x,
+  but that requires Ember 4.x.
+ */
+.was-validated .form-control:valid,
+.form-control.is-valid {
+  border-color: rgb(206, 212, 218);
+  background-image: none;
+}
+
+.form-check-input.is-valid ~ .form-check-label {
+  border-color: rgb(33, 37, 41);
+}
