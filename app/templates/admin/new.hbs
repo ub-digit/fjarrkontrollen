@@ -1,26 +1,13 @@
 <div class="row">
   <div class="col-12 d-flex">
     <div class="flex-fill">
-      <a href={{href-to "admin.index"}}>
+      <LinkTo @route="admin.index">
         <i class="fas fa-chevron-left"></i> Tillbaka
-      </a>
+      </LinkTo>
     </div>
   </div>
   <div class="col-12 col-md-8 order">
-    {{#order-form
-      order=order
-      orderValidations=NewOrderValidations
-      saveOrder=(action "saveOrder")
-      deliverySources=deliverySources
-      deliveryMethods=deliveryMethods
-      statuses=statuses
-      managingGroups=managingGroups
-      pickupLocations=pickupLocations
-      customerTypes=customerTypes
-      orderTypes=orderTypes
-      showAllValidations=showAllValidations
-      isEditing=isEditing
-    as |orderForm|}}
+    <OrderForm @order={{order}} @orderValidations={{NewOrderValidations}} @saveOrder={{action "saveOrder"}} @deliverySources={{deliverySources}} @deliveryMethods={{deliveryMethods}} @statuses={{statuses}} @managingGroups={{managingGroups}} @pickupLocations={{pickupLocations}} @customerTypes={{customerTypes}} @orderTypes={{orderTypes}} @showValidations={{showValidations}} @isEditing={{isEditing}} as |orderForm|>
       <div class="row">
         <div class="col-12 order-header">
           <h2 class="order-header-title">
@@ -28,19 +15,14 @@
             <span class="badge badge-secondary ml-2">{{order.orderPath}}</span>
           </h2>
           <div class="order-header-tools">
-            {{#bs-button
-              type="primary"
-              class="btn-sm"
-              buttonType="submit"
-              disabled=orderForm.form.isSubmitting
-            }}
+            <BsButton @type="primary" class="btn-sm" @buttonType="submit" @disabled={{orderForm.form.isSubmitting}}>
               Spara <i class="fas fa-check"></i>
               {{#if orderForm.form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
-            {{/bs-button}}
+            </BsButton>
         </div>
         </div>
       </div>
-    {{/order-form}}
+    </OrderForm>
   </div>
 </div>
 {{outlet}}

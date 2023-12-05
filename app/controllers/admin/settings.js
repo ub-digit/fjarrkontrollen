@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import EmailTemplateValidations from '../../validations/email-template';
 import powerSelectOverlayedOptions from '../../mixins/power-select-overlayed-options'
 import { A } from '@ember/array';
@@ -11,6 +11,6 @@ import { inject } from '@ember/service';
 import ENV from '../../config/environment';
 import RSVP from 'rsvp';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 
 });
