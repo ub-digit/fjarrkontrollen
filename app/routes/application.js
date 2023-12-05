@@ -11,17 +11,8 @@ export default class ApplicationRoute extends Route {
   }
 
   model() {
-    return this._loadCurrentUser('restored');
-  }
-
-  sessionAuthenticated() {
-    this._super(...arguments);
-    this._loadCurrentUser('authenticated');
-  }
-
-  _loadCurrentUser(authenticatedOrRestored) {
     return this.sessionAccount
-      .loadCurrentUser(authenticatedOrRestored)
+      .loadCurrentUser('restored')
       .catch(() => this.session.invalidate());
   }
 

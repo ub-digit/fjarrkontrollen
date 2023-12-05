@@ -53,7 +53,7 @@ export default class AdminIndexRoute extends Route {
 
   @computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet')
   get setDefaultFiltersValues() {
-    return this.sessionAccount.authenticatedOrRestored == 'authenticated' && !this.defaultFiltersValuesSet;
+    return this.sessionAccount.authenticatedOrRestored === 'authenticated' && !this.defaultFiltersValuesSet;
   }
 
   model(params) {
