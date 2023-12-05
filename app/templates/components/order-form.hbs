@@ -3,7 +3,7 @@
   @model={{this.changeset}}
   @onSubmit={{this.saveOrder}}
   @onInvalid={{action "orderInvalid"}}
-  @showAllValidations={{this.showAllValidations}}
+  @showValidations={{this.showValidations}}
 as |form|>
 {{yield (hash form=form changeset=this.changeset)}}
 <div class="row">

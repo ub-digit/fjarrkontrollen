@@ -25,7 +25,7 @@ export default Controller.extend({
   messageErrors: null,
   noteErrors: null,
   message: null,
-  showAllValidations: false,
+  showValidations: false,
 
   messageLanguage: 'sv',
   emailTemplateId: null,
@@ -172,7 +172,7 @@ export default Controller.extend({
     },
     //TODO: inconsistent naming
     editOrder() {
-      this.set('showAllValidations', false);
+      this.set('showValidations', false);
       this.set('isEditing', true);
     },
     cancelEditOrder(changeset) {
