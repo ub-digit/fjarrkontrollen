@@ -41,7 +41,7 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
   userId = reads('session.data.authenticated.userid');
   errors = null;
   saveOrder = null; //??
-  showAllValidations = false;
+  showValidations = false;
   changeset = null;
 
   setManagingGroup = observer('changeset.orderTypeId', function() {
