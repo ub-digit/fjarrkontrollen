@@ -76,6 +76,7 @@
     "qunit": "^2.17.2",
     "sass": "^1.15.2",
     "toastr": "^2.1.4",
+    "torii": "github:adopted-ember-addons/torii",
     "webpack": "^5.80.0"
   },
   "engines": {

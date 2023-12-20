@@ -5,9 +5,10 @@ export default class SessionService extends BaseSessionService {
   @service sessionAccount;
 
   handleAuthentication() {
-    super.handleAuthentication(...arguments);
-    return this.sessionAccount
+    let result = super.handleAuthentication(...arguments);
+    this.sessionAccount
       .loadCurrentUser('authenticated')
       .catch(() => this.invalidate());
+    return result;
   }
 }
