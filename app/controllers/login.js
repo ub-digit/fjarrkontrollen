@@ -4,32 +4,17 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 export default class LoginController extends Controller {
   @service session;
-  @tracked hasServerErrors = false;
+  @tracked errorMessage = false; //#TODO Remove tracked?
 
   @action
-  resetServerErrors(changeset) {
-    if (this.hasServerErrors) {
-      changeset.validate();
-      this.hasServerErrors = false;
-    }
-  };
-
-  @action
-  authenticate(changeset) {
-    return this.session.authenticate('authenticator:gub', {
-        identification: changeset.get('identification'),
-        password: changeset.get('password')
-      })
-      .catch((error) => {
-        this.hasServerErrors = true;
-        changeset.pushErrors('identification', '');
-        if(typeof error === 'string') {
-          changeset.pushErrors('password', error);
-        }
-        else {
-          changeset.pushErrors('password', "Någonting gick fel, det går eventuellt för närvarande inte att logga in");
-          console.dir(error);
-        }
-      });
+  authenticate() {
+    this.get('session').authenticate('authenticator:torii', 'gub')
+    .catch((reason) => {
+      //TODO: errorMessage in template
+      this.set('errorMessage', reason.error.msg);
+    })
+    .finally(() => {
+      this.set('loginDisabled', false);
+    });
   }
 }
