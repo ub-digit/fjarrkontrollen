@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 import { isArray } from '@ember/array';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
 import ENV from '../config/environment';
-import mitt from 'mitt';
+import RSVP from 'rsvp';
 
 export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   session: inject(),
@@ -64,7 +64,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
   }),
 
   findOrderPromise(barcode) {
-    return this.store.findRecord('order', barcode).catch((error) => {
+    return this.store.queryRecord('order', {order_number: barcode}).catch((error) => {
       if (
           isArray(error.errors) &&
           error.errors[0] &&
@@ -91,36 +91,36 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
     },
 
     scanDelivered(changeset) {
-      return this.findOrderPromise(changeset.get('barcode')).then((order) => {
-        return order.setDelivered().then(() => {
-          // Manually reload order since was not fetched using
-          // order id (using barcode) which results in warning and
-          // Ember not pushing the record to store(?)
-          order.reload();
-          this.mitt.emitter.emit('orderUpdated', order);
-          this.get('toast').success(
-            `Order status ändrad till levererad för order <b>${changeset.get('barcode')}</b>.`,
-            'Status ändrad'
-          );
-        }).catch((error) => {
-          if (isArray(error.errors)) {
+      return new RSVP.Promise((resolve, reject) => {
+        this.findOrderPromise(changeset.get('barcode')).then((order) => {
+          order.setDelivered().then(() => {
+            // Manually reload order since was not fetched using
+            // order id (using barcode) which results in warning and
+            // Ember not pushing the record to store(?)
+            order.reload().then((order) => {
+              this.mitt.emitter.emit('orderUpdated', order);
+              this.get('toast').success(
+                `Order status ändrad till levererad för order <b>${changeset.get('barcode')}</b>.`,
+                'Status ändrad'
+              );
+              resolve();
+            }).catch((error) => reject(error));
+          }).catch((error) => reject(error));
+        }).catch((error) => reject(error));
+      }).catch((error) => {
+        if (error.errors) {
+          if (error.errors.status == '500') {
             this.get('toast').error(
-              error.errors[0].detail,
-              error.errors[0].title
+              error.errors.message,
+              error.errors.error
             );
           }
           else {
-            throw error;
+            this.get('toast').warning(
+              error.errors.message,
+              error.errors.error
+            );
           }
-        });
-      }).catch((error) => {
-        if (error.errors) {
-          // TODO: Why different error format?
-          // this is very confusing
-          this.get('toast').warning(
-            error.errors.message,
-            error.errors.error
-          );
         }
         else {
           throw error;
