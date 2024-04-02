@@ -111,23 +111,24 @@ export default class AdminController extends Controller.extend(powerSelectOverla
           }).catch((error) => reject(error));
         }).catch((error) => reject(error));
       }).catch((error) => reject(error));
-    }).catch((error) => {
-      if (error.errors) {
-        if (error.errors.status == '500') {
+    }).catch((err) => {
+      if (err.errors && isArray(err.errors)) {
+        let error = err.errors[0];
+        if (error.status == '500') {
           this.get('toast').error(
-            error.errors.message,
-            error.errors.error
+            error.message,
+            error.error
           );
         }
         else {
           this.get('toast').warning(
-            error.errors.message,
-            error.errors.error
+            error.message,
+            error.error
           );
         }
       }
       else {
-        throw error;
+        throw err;
       }
     });
   }
