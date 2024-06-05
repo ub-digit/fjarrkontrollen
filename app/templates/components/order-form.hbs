@@ -333,7 +333,7 @@ as |form|>
           <th>Beställningstyp</th>
           <td>
             {{#if isEditing}}
-              <form.element @controlType="power-select" @options={{orderTypes}} @value={{find-by "id" changeset.orderTypeId orderTypes}} @onChange={{action (mut changeset.orderTypeId) value="id"}} as |el|>
+              <form.element @controlType="power-select" @options={{orderTypes}} @value={{find-by "id" changeset.orderTypeId orderTypes}} @onChange={{action "setOrderType" changeset}} as |el|>
                 <el.control @searchField="nameSv" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |orderType|>
                   {{orderType.nameSv}}
                 </el.control>
