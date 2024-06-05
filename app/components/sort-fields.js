@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   sortFields: null,
   currentSortField: null,
@@ -10,10 +10,10 @@ export default Ember.Component.extend({
 
   actions: {
     onChangeSortField() {
-      this.get('onChangeSortField')(...arguments);
+      this.onChangeSortField(...arguments);
     },
     onChangeSortDirection() {
-      this.get('onChangeSortDirection')(...arguments);
+      this.onChangeSortDirection(...arguments);
     },
   }
 

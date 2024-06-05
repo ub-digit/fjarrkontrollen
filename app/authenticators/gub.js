@@ -1,21 +1,16 @@
 import Base from 'ember-simple-auth/authenticators/base';
 import { Promise, resolve } from 'rsvp';
 import ENV from '../config/environment';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { run } from '@ember/runloop';
 
-import {
-  isUnauthorizedError
-} from 'ember-ajax/errors';
+export default class GUPAuthenticator extends Base {
 
-export default Base.extend({
-  ajax: inject(),
-
+  //TODO: review this
   restore(data) {
     return new Promise((resolve, reject) => {
-      this.get('ajax').request(
-        `${ENV.APP.authenticationBaseURL}/${data.token}`
-      ).then(() => {
+    fetch(`${ENV.APP.authenticationBaseURL}/${data.token}`)
+      .then(() => {
         run(() => {
           resolve(data);
         });
@@ -23,34 +18,39 @@ export default Base.extend({
         run(null, reject, error);
       });
     });
-  },
+  }
 
   authenticate(credentials) {
     return new Promise((resolve, reject) => {
-      this.get('ajax').post(ENV.APP.authenticationBaseURL, {
-        data: {
+      fetch(ENV.APP.authenticationBaseURL, {
+        mode: 'cors',
+        method: 'POST',
+        headers: { //TODO: Need this?
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           xkonto: credentials.identification,
           password: credentials.password
-        }
-      }).then((response_data) => {
+        })
+      })
+      .then(response => response.json())
+      .then((data) => {
         run(() => {
-          const token = response_data.access_token;
-          const data = {
-            token: token,
-            userManagingGroupId: response_data.user.managing_group_id,
-            userPickupLocationId: response_data.user.pickup_location_id,
-            username: response_data.user.xkonto,
-            userid: response_data.user.id,
-            name: response_data.user.name
+          const authData = {
+            token: data.access_token,
+            userManagingGroupId: data.user.managing_group_id,
+            userPickupLocationId: data.user.pickup_location_id,
+            username: data.user.xkonto,
+            userid: data.user.id,
+            name: data.user.name
           };
-          resolve(data);
+          resolve(authData);
         });
       }).catch((error) => {
-        run(null, reject, isUnauthorizedError(error) ? "Fel användarnamn eller lösenord" : error);
+        //@TODO: error format??
+        run(null, reject, true ? "Fel användarnamn eller lösenord" : error);
       });
     });
-  },
-  invalidate(data) {
-    return resolve();
   }
-});
+}

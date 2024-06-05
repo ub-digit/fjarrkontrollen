@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { reads } from '@ember/object/computed';
+import Controller from '@ember/controller';
 import NewOrderValidations from '../../validations/new-order';
 import { computed } from '@ember/object';
 import { isBlank } from '@ember/utils';
@@ -6,13 +7,13 @@ import { inject } from '@ember/service';
 //import RSVP from 'rsvp';
 import ENV from '../../config/environment';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   NewOrderValidations,
 
   session: inject(),
-  userId: computed.reads('session.data.authenticated.userid'),
+  userId: reads('session.data.authenticated.userid'),
   isEditing: true,
-  showAllValidations: false,
+  showValidations: false,
   messageErrors: null, //???
 
   actions: {
@@ -25,7 +26,6 @@ export default Ember.Controller.extend({
       });
       /*
       return changeset.validate().then(() => {
-        console.log('wtf validate');
         if (changeset.get('isValid')) {
           changeset.save().then((order) => {
             this.transitionToRoute('admin.post', order.get('id'));

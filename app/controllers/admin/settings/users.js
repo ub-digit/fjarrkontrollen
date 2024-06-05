@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import $ from 'jquery';
+import { later } from '@ember/runloop';
+import Controller from '@ember/controller';
 import powerSelectOverlayedOptions from '../../../mixins/power-select-overlayed-options'
 import { A } from '@ember/array';
 //import { observer } from '@ember/object';
@@ -10,7 +12,7 @@ import { inject } from '@ember/service';
 import ENV from '../../../config/environment';
 import RSVP from 'rsvp';
 
-export default Ember.Controller.extend(powerSelectOverlayedOptions, {
+export default Controller.extend(powerSelectOverlayedOptions, {
     toast: inject(),
     isShowingEmailTemplateEditModal: false,
     isShowingUserEditModal: false,
@@ -42,7 +44,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
 
     usersExtended: computed('user.@each.{xkonto,name,managingGroupId,pickupLocationId}', function(item) {
         let that = this;
-        return this.get("user").forEach(function(item) {
+        return this.user.forEach(function(item) {
             if (item.managingGroupId) {
                 item.set('managingGroupName', that.get('managingGroups').findBy('id', item.managingGroupId.toString()).name);
             } 
@@ -66,7 +68,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
     }),
 
     usersExtendedSorted: computed('usersExtended', function() {
-        return this.get("usersExtended").sortBy('name').filterBy('isNew', false);
+        return this.usersExtended.sortBy('name').filterBy('isNew', false);
     }),
 
 
@@ -83,7 +85,7 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
 
     actions: {
         toggleModalUser(user) {
-            if (this.get("isShowingUserEditModal")) {
+            if (this.isShowingUserEditModal) {
                 this.set("isShowingUserEditModal", false);
             }
             else {
@@ -103,8 +105,8 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
 
         resetState() {
           this.set('messageErrors', null);
-            if (this.get("currentUser") && !this.get("currentUser.id")) {
-                this.get("currentUser").deleteRecord();
+            if (this.currentUser && !this.get("currentUser.id")) {
+                this.currentUser.deleteRecord();
             }
         },
 
@@ -112,10 +114,10 @@ export default Ember.Controller.extend(powerSelectOverlayedOptions, {
             return new RSVP.Promise((resolve, reject) => {
                 changeset.save().then((model) => {
                     this.send('toggleModalUser');
-                    this.get('toast').success('Användaren uppdaterades.','Sparad', {positionClass: 'toast-top-right', showDuration: '300', hideDuration: '1000', timeOut: '2000', extendedTimeOut: '2000'});
-                    Ember.run.later(this, function () {
-                        Ember.$('tr').css("background-color", "transparent"); 
-                        Ember.$('#' + model.id ).css("background-color", "#c3e6cb");      
+                    this.toast.success('Användaren uppdaterades.','Sparad', {positionClass: 'toast-top-right', showDuration: '300', hideDuration: '1000', timeOut: '2000', extendedTimeOut: '2000'});
+                    later(this, function () {
+                        $('tr').css("background-color", "transparent"); 
+                        $('#' + model.id ).css("background-color", "#c3e6cb");      
                      }, 100);
                 }).catch((error) => {
                     if (error.errors) {

@@ -1,4 +1,4 @@
-import Ember from 'ember';
-export default Ember.Controller.extend({
-  isLoading: false,
-});
+import Controller from '@ember/controller';
+export default class ApplicationController extends Controller {
+  isLoading = false;
+}

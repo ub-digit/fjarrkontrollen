@@ -1,15 +1,15 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 
-export default DS.Model.extend({
+export default Model.extend({
   //orderId: DS.belongsTo('order'),
   //userId: DS.belongsTo('user'),
-  orderId: DS.attr('string'),
-  userId: DS.attr('string'),
-  emailTemplateLabel: DS.attr('string'),
-  subject: DS.attr('string'),
-  message: DS.attr('string'),
-  isEmail: DS.attr('boolean'),
-  noteTypeId: DS.attr('string'),
-  createdAt: DS.attr('date'),
-  updatedAt: DS.attr('date')
+  orderId: attr('string'),
+  userId: attr('string'),
+  emailTemplateLabel: attr('string'),
+  subject: attr('string'),
+  message: attr('string'),
+  isEmail: attr('boolean'),
+  noteTypeId: attr('string'),
+  createdAt: attr('date'),
+  updatedAt: attr('date')
 });

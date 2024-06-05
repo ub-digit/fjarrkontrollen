@@ -1,22 +1,22 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-sm">
-			<h1>Admin</h1>
-		</div>
-	</div>
+  <div class="row">
+    <div class="col-sm">
+      <h1>Admin</h1>
+    </div>
+  </div>
 
-	<div class="row">
-		<div class="col-sm">
-			<ul class="nav nav-pills">
-			  <li class="nav-item">
-			    {{#link-to 'admin.settings.templates' class='nav-link'}}Mallar{{/link-to}}
-			  </li>
-			  <li class="nav-item">
-			   {{#link-to 'admin.settings.users' class='nav-link'}}Användare{{/link-to}}
-			  </li>
-			</ul>
-		</div>
-	</div>
+  <div class="row">
+    <div class="col-sm">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <LinkTo @route="admin.settings.templates" class="nav-link">Mallar</LinkTo>
+        </li>
+        <li class="nav-item">
+         <LinkTo @route="admin.settings.users" class="nav-link">Användare</LinkTo>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 {{liquid-outlet}}
