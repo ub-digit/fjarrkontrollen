@@ -44,9 +44,10 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
   showValidations = false;
   changeset = null;
 
-  setManagingGroup = observer('changeset.orderTypeId', function() {
-    //WTF??
-    //TODO: Test if this hack still needed after update
+  /*
+  // No longer works after update
+  setManagingGroup = observer('this.changeset.orderTypeId', function() {
+    console.log('hej hopp');
     once(this, function() {
       if (this.order.isNew && this.get('changeset.orderTypeId')) {
         let orderType = this.orderTypes.findBy('id', this.get('changeset.orderTypeId'));
@@ -54,6 +55,7 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
       }
     });
   })
+  */
 
   @computed('order.orderNumber')
   get kohaSearchUrl() {
@@ -115,5 +117,14 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
     this.set('errors', changeset.get('errors').map((error) => {
       return error['validation'];
     }));
+  }
+
+  // Use setter action instead since observers don't seem to work after update
+  @action
+  setOrderType(changeset, orderType) {
+    changeset.set('orderTypeId', orderType.get('id'));
+    if (this.order.isNew && orderType.get('id')) {
+      changeset.set('managingGroupId', orderType.get('defaultManagingGroupId'));
+    }
   }
 }
