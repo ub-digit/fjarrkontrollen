@@ -89,6 +89,7 @@ module.exports = function (environment) {
     ENV.APP.authenticationBaseURL = ENV.APP.serviceURL + '/session';
     ENV.torii.providers['gub-oauth2'].tokenExchangeUri = ENV.APP.authenticationBaseURL;
     ENV.torii.providers['gub-oauth2'].redirectUri = `${frontendBaseURL}/torii/redirect.html`;
+    ENV.APP['gub-oauth2'].authorizeUri = process.env.GUB_OAUTH2_AUTHORIZE_ENDPOINT;
   }
 
   return ENV;

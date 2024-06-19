@@ -6,7 +6,7 @@ export default Oauth2.extend({
   session: inject(),
 
   name: 'gub-oauth2',
-  baseUrl: 'https://github.com/login/oauth/authorize',
+  baseUrl: config['gub-oauth2'].authorizeUri,
   responseParams: ['code', 'state'],
 
   redirectUri: configurable('redirectUri', function(){
