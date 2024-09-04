@@ -19,7 +19,7 @@
       </nav.item>
     </navbar.nav>
     <a class="pr-2" href="{{exportUrl}}"><i class="fa fa-table"></i> Ladda ner till Excel</a>
-    <span class="p-2 user-name">{{this.sessionAccount.name}}{{this.affiliation}}</span>
+    <span class="p-2 user-name">{{this.session.data.authenticated.name}}{{this.affiliation}}</span>
     <BsButton @type="link" @onClick={{action "logout"}}>Logga ut</BsButton>
   </navbar.content>
 </BsNavbar>

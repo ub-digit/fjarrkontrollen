@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import Route from '@ember/routing/route';
 
 export default class AdminIndexRoute extends Route {
-  @service sessionAccount;
+  @service session;
   @service store;
 
   queryParams = {
@@ -49,19 +49,19 @@ export default class AdminIndexRoute extends Route {
     },
   }
 
-  defaultFiltersValuesSet = false //hack
+  defaultFilterValuesSet = false //hack
 
-  @computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet')
-  get setDefaultFiltersValues() {
-    return this.sessionAccount.authenticatedOrRestored === 'authenticated' && !this.defaultFiltersValuesSet;
+  @computed('session.authenticatedOrRestored', 'defaultFilterValuesSet')
+  get setDefaultFilterValues() {
+    return this.session.authenticatedOrRestored === 'authenticated' && !this.defaultFilterValuesSet;
   }
 
   model(params) {
     let filter = {};
 
-    if (this.setDefaultFiltersValues) {
-      params.managingGroupId = this.get('sessionAccount.defaultManagingGroupId');
-      params.pickupLocationId = this.get('sessionAccount.defaultPickupLocationId');
+    if (this.setDefaultFilterValues) {
+      params.managingGroupId = this.get('session.defaultManagingGroupId');
+      params.pickupLocationId = this.get('session.defaultPickupLocationId');
     }
 
     //TODO: Replace with mappings hash
@@ -123,10 +123,10 @@ export default class AdminIndexRoute extends Route {
     ].forEach(function (property) {
       controller.set(property, optionModels[property]);
     });
-    if (this.setDefaultFiltersValues) {
-      controller.set('managingGroupId', this.get('sessionAccount.defaultManagingGroupId'));
-      controller.set('pickupLocationId', this.get('sessionAccount.defaultPickupLocationId'));
-      this.set('defaultFiltersValuesSet', true);
+    if (this.setDefaultFilterValues) {
+      controller.set('managingGroupId', this.get('session.defaultManagingGroupId'));
+      controller.set('pickupLocationId', this.get('session.defaultPickupLocationId'));
+      this.set('defaultFilterValuesSet', true);
     }
   }
 }

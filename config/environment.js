@@ -18,7 +18,8 @@ module.exports = function (environment) {
       },
     },
     APP: {
-      librisFjarrlanURL: 'http://iller.libris.kb.se/librisfjarrlan/lf.php?action=request&type=user&id='
+      librisFjarrlanURL: 'http://iller.libris.kb.se/librisfjarrlan/lf.php?action=request&type=user&id=',
+      'gub-oauth2': {},
       // Here you can pass flags/options to your application instance
       // when it is created
     },

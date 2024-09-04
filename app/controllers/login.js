@@ -10,8 +10,7 @@ export default class LoginController extends Controller {
   authenticate() {
     this.get('session').authenticate('authenticator:torii', 'gub')
     .catch((reason) => {
-      //TODO: errorMessage in template
-      this.set('errorMessage', reason.error.msg);
+      this.set('errorMessage', reason);
     })
     .finally(() => {
       this.set('loginDisabled', false);

@@ -4,16 +4,9 @@ import { action } from '@ember/object';
 
 export default class ApplicationRoute extends Route {
   @service session;
-  @service sessionAccount;
 
   async beforeModel() {
     await this.session.setup();
-  }
-
-  model() {
-    return this.sessionAccount
-      .loadCurrentUser('restored')
-      .catch(() => this.session.invalidate());
   }
 
   @action
@@ -23,5 +16,11 @@ export default class ApplicationRoute extends Route {
     transition.promise.finally(function() {
       controller.set('isLoading', false);
     });
+  }
+
+  @action
+  accessDenied() {
+    // this needed, ever called?
+    this.transitionTo('login');
   }
 }

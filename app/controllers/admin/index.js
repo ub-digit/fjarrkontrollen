@@ -8,7 +8,7 @@ import powerSelectOverlayedOptions from '../../mixins/power-select-overlayed-opt
 import { A } from '@ember/array';
 
 export default Controller.extend(powerSelectOverlayedOptions, {
-  sessionAccount: inject(),
+  session: inject(),
 
   powerSelectOverlayedOptions: [{
     source: 'managingGroups',
@@ -175,8 +175,8 @@ export default Controller.extend(powerSelectOverlayedOptions, {
       });
       this.set('isArchivedOptionValue', 'false');
       this.set('statusGroupLabel', 'all');
-      this.set('managingGroupId', this.get('sessionAccount.defaultManagingGroupId'));
-      this.set('pickupLocationId', this.get('sessionAccount.defaultPickupLocationId'));
+      this.set('managingGroupId', this.get('session.defaultManagingGroupId'));
+      this.set('pickupLocationId', this.get('session.defaultPickupLocationId'));
     },
 
     setToBeInvoiced(value) {
@@ -185,7 +185,7 @@ export default Controller.extend(powerSelectOverlayedOptions, {
 
     setMyOrders(value) {
       this.set('userId', value
-        ? this.get('sessionAccount.userid')
+        ? this.get('session.authenticated.data.userid')
         : null
       );
     },

@@ -2,6 +2,9 @@
   <div class="card login-form-card">
     <div class="card-body">
       <h5 class="card-title">Logga in i Fjärrkontrollen</h5>
+      {{#if this.errorMessage}}
+        <div class="alert alert-danger col-xs-12">{{ this.errorMessage }}</div>
+      {{/if}}
       <BsButton @type="primary" @icon="glyphicon glyphicon-login" {{action "authenticate"}}>
         Logga in
       </BsButton>

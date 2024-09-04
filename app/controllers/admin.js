@@ -9,14 +9,13 @@ import RSVP from 'rsvp';
 
 export default class AdminController extends Controller.extend(powerSelectOverlayedOptions) {
   @service session;
-  @service sessionAccount;
   @service toast;
   @service mitt;
 
   @tracked isShowingScanModal = false;
   isShowingSetDeliveredScanModal = false; //Works without tracked?
   isShowingUserSettingModal = false; // Currently never mutated
-  loggedInUser = null;
+  //loggedInUser = null; //remove?
 
   powerSelectOverlayedOptions = [{
     source: 'managingGroups',
@@ -32,10 +31,10 @@ export default class AdminController extends Controller.extend(powerSelectOverla
     noneLabel: 'Inget valt'
   }];
 
-  @computed('sessionAccount.{defaultManagingGroupId,defaultPickupLocationId}')
+  @computed('session.{defaultManagingGroupId,defaultPickupLocationId}')
   get affiliation() {
-    let managingGroupId = this.sessionAccount.defaultManagingGroupId;
-    let pickupLocationId = this.sessionAccount.defaultPickupLocationId;
+    let managingGroupId = this.session.defaultManagingGroupId;
+    let pickupLocationId = this.session.defaultPickupLocationId;
     if (managingGroupId) {
       return " | Handläggningsgrupp: " + this.managingGroups.findBy('id', managingGroupId).name;
     }

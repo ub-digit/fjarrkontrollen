@@ -164,7 +164,7 @@
             </td>
             <td>{{get (find-by "id" order.statusId statuses) "nameSv"}}</td>
             <td>
-              <OrderUserSwitcher @setOrderAssignedUserPromise={{setOrderAssignedUserPromise}} @orderId={{order.id}} @assignedUsername={{get (find-by "id" order.userId users) "xkonto"}} @assignedUserId={{order.userId}} @loggedInUsername={{sessionAccount.username}} @loggedInUserId={{sessionAccount.userid}} />
+              <OrderUserSwitcher @setOrderAssignedUserPromise={{setOrderAssignedUserPromise}} @orderId={{order.id}} @assignedUsername={{get (find-by "id" order.userId users) "xkonto"}} @assignedUserId={{order.userId}} @loggedInUsername={{session.data.authenticated.username}} @loggedInUserId={{session.data.authenticated.userid}} />
             </td>
           </tr>
         {{/each}}
