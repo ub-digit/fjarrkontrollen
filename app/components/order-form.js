@@ -79,35 +79,37 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
 
   @action
   fetchPatronInfo(cardnumber) {
-    this.ajax.fetch(`${ENV.APP.serviceURL}/koha_patrons/${cardnumber}`).then((data) => {
-      let patron = data.patron;
-      this.set('changeset.name', `${patron.first_name} ${patron.last_name}`);
-      this.set('changeset.xAccount', patron.xaccount);
-      this.set('changeset.emailAddress', patron.email);
-      this.set('changeset.kohaOrganisation', patron.organisation);
-      this.set('changeset.kohaUserCategory', patron.user_category);
-      this.set('changeset.phoneNumber', patron.phone);
+    this.ajax.fetch(`${ENV.APP.serviceURL}/koha_patrons/${cardnumber}`)
+      .then(response => response.json())
+      .then((data) => {
+        let patron = data.patron;
+        this.set('changeset.name', `${patron.first_name} ${patron.last_name}`);
+        this.set('changeset.xAccount', patron.xaccount);
+        this.set('changeset.emailAddress', patron.email);
+        this.set('changeset.kohaOrganisation', patron.organisation);
+        this.set('changeset.kohaUserCategory', patron.user_category);
+        this.set('changeset.phoneNumber', patron.phone);
 
-      this.set('changeset.customerTypeId', this.customerTypes.findBy('label', 'koha').get('id'));
+        this.set('changeset.customerTypeId', this.customerTypes.findBy('label', 'koha').get('id'));
 
-      // Hidden properties
-      this.set('changeset.authenticatedXAccount', patron.xaccount);
-      this.set('changeset.kohaBorrowernumber', patron.borrowernumber);
+        // Hidden properties
+        this.set('changeset.authenticatedXAccount', patron.xaccount);
+        this.set('changeset.kohaBorrowernumber', patron.borrowernumber);
 
-    }).catch((error) => {
-      if (error.status == 404) {
-        this.toast.warning(
-          `Hittar ingen låntagare med lånekortsnummber <b>${cardnumber}</b>.`,
-          'Låntagaren hittades inte'
-        );
-      }
-      else {
-        this.toast.error(
-          'Ett oväntat serverfel har inträffat.',
-          'Oväntat serverfel'
-        );
-      }
-    });
+      }).catch((error) => {
+        if (error.status == 404) {
+          this.toast.warning(
+            `Hittar ingen låntagare med lånekortsnummber <b>${cardnumber}</b>.`,
+            'Låntagaren hittades inte'
+          );
+        }
+        else {
+          this.toast.error(
+            'Ett oväntat serverfel har inträffat.',
+            'Oväntat serverfel'
+          );
+        }
+      });
   }
 
   @action
