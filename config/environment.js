@@ -83,7 +83,7 @@ module.exports = function (environment) {
   }
   else {
     ENV.APP.serviceURL = `https://${process.env.BACKEND_SERVICE_HOSTNAME}`;
-    frontendBaseURL = `http://localhost:${process.env.FRONTEND_HOSTNAME}`;
+    frontendBaseURL = `https://${process.env.FRONTEND_HOSTNAME}`;
     ENV.APP.kohaSearchURL = process.env.KOHA_SEARCH_URL;
   }
   if (environment !== 'test') {
