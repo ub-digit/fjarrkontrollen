@@ -35,17 +35,14 @@ export default class AdminController extends Controller.extend(powerSelectOverla
   get affiliation() {
     let managingGroupId = this.session.defaultManagingGroupId;
     let pickupLocationId = this.session.defaultPickupLocationId;
+    let affiliation = [];
     if (managingGroupId) {
-      return " | Handläggningsgrupp: " + this.managingGroups.findBy('id', managingGroupId).name;
+      affiliation.push("Handläggningsgrupp: " + this.managingGroups.findBy('id', managingGroupId).name);
     }
-    else {
-      if (pickupLocationId) {
-        return " | Avhämtningsbibliotek: " + this.pickupLocations.findBy('id', pickupLocationId).nameSv;
-      }
-      else {
-        return "";
-      }
+    if (pickupLocationId) {
+      affiliation.push("Avhämtningsbibliotek: " + this.pickupLocations.findBy('id', pickupLocationId).nameSv);
     }
+    return " | " + affiliation.join(" | ");
   }
   /*
   //Could be replaced with @tracked loggeInUser?
