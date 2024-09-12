@@ -1,35 +1,36 @@
-import DS from 'ember-data';
+import Model from '@ember-data/model';
 import ENV from '../config/environment';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { computed } from '@ember/object';
 import ActiveModelAdapter from 'active-model-adapter';
-import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 
-export default ActiveModelAdapter.extend(DataAdapterMixin, {
-  session: inject(),
-  host: ENV.APP.serviceURL,
+export default class ApplicationAdapter extends ActiveModelAdapter {
+  @service session;
 
-  authorize(xhr) {
-    let { token } = this.get('session.data.authenticated');
-    if (isPresent(token)) {
-      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+  host = ENV.APP.serviceURL;
+
+  @computed('session.data.authenticated.token')
+  get headers() {
+    const headers = {};
+    if (this.session.isAuthenticated) {
+      headers['Authorization'] = `Bearer ${this.session.data.authenticated.token}`;
     }
-  },
-  /*
-  ajax: function(url, type, hash) {
-    if (Ember.isEmpty(hash)) { hash = {}; }
-    if (Ember.isEmpty(hash.data)) { hash.data = {}; }
-    hash.data.token = this.container.lookup('route:application').get('session.content.secure.token');
-    return this._super(url, type, hash);
+    return headers;
   }
-  */
-});
+
+  handleResponse(status) {
+    if (status === 401) {
+      this.session.invalidate()
+    }
+    return super.handleResponse(...arguments);
+  }
+}
 
 // TODO: Where is this used/needed? Should not id just be number in model?
-DS.Model.reopen({
+Model.reopen({
   idInt: computed('id', function() {
-    return this.get('id') ? parseInt(this.get('id')) : undefined;
+    return this.id ? parseInt(this.id) : undefined;
   })
 });
 

@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import { computed } from '@ember/object';
 
-export default Ember.Component.extend({
+export default Component.extend({
   //tagName: 'a',
   //attributeBindings: ['role'],
   //role: 'button',
@@ -11,21 +11,21 @@ export default Ember.Component.extend({
   currentSortDirection: null,
 
   faClass: computed('currentSortDirection', function() {
-    return this.get('currentSortDirection') == 'ASC' ? 'fa-angle-down' : 'fa-angle-up';
+    return this.currentSortDirection == 'ASC' ? 'fa-angle-down' : 'fa-angle-up';
   }),
 
   isCurrentSortField: computed('sortField', 'currentSortField', function() {
-    return this.get('sortField') == this.get('currentSortField');
+    return this.sortField == this.currentSortField;
   }),
 
   actions: {
     onClick() {
-      if (this.get('isCurrentSortField')) {
-        this.get('onChangeSortDirection')(this.get('currentSortDirection') == 'ASC' ? 'DESC' : 'ASC');
+      if (this.isCurrentSortField) {
+        this.onChangeSortDirection(this.currentSortDirection == 'ASC' ? 'DESC' : 'ASC');
       }
       else {
-        this.get('onChangeSortDirection')('DESC');
-        this.get('onChangeSortField')(this.get('sortField'));
+        this.onChangeSortDirection('DESC');
+        this.onChangeSortField(this.sortField);
       }
       return false;
     }

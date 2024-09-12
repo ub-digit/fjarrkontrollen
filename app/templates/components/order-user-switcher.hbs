@@ -1,43 +1,40 @@
-{{#bs-dropdown as |dd|}}
-    
-    {{#if assignedUsername}}
-      {{#dd.button type="primary" class="btn-sm"}}
-        {{assignedUsername}}
-        <span class="caret"></span>
-      {{/dd.button}}
-    {{else}}
-      {{#dd.button class="btn-sm"}}
-        Ingen
-        <span class="caret"></span>
-      {{/dd.button}}
-    {{/if}}
-    <span class="caret"></span>
-
-  {{#dd.menu as |ddm|}}
-    {{#unless assignedUserIsLoggedInUser}}
-      {{#ddm.item}}
+<BsDropdown as |dd|>
+  {{#if this.assignedUsername}}
+    <dd.button @type="primary" class="btn-sm">
+      {{this.assignedUsername}}
+      <span class="caret"></span>
+    </dd.button>
+  {{else}}
+    <dd.button class="btn-sm">
+      Ingen
+      <span class="caret"></span>
+    </dd.button>
+  {{/if}}
+  <dd.menu as |ddm|>
+    {{#unless this.assignedUserIsLoggedInUser}}
+      <ddm.item>
         <a
           class="dropdown-item"
           href="javascript:void(0)"
-          {{action (perform setOrderAssignedUser orderId loggedInUserId)}}
+          {{action (perform this.setOrderAssignedUser this.orderId this.loggedInUserId)}}
         >
           {{loggedInUsername}}
         </a>
-      {{/ddm.item}}
+      </ddm.item>
     {{/unless}}
-    {{#if assignedUserId}}
-      {{#ddm.item}}
+    {{#if this.assignedUserId}}
+      <ddm.item>
         <a
           class="dropdown-item"
           href="javascript:void(0)"
-          {{action (perform setOrderAssignedUser orderId null)}}
+          {{action (perform this.setOrderAssignedUser this.orderId null)}}
         >
           Släpp order
         </a>
-      {{/ddm.item}}
+      </ddm.item>
     {{/if}}
-  {{/dd.menu}}
-{{/bs-dropdown}}
-<div class="ml-2 spinner{{if setOrderAssignedUser.isRunning " loading"}}">
+  </dd.menu>
+</BsDropdown>
+<div class="ml-2 spinner{{if this.setOrderAssignedUser.isRunning " loading"}}">
   <i class="fas fa-spinner fa-spin"></i>
 </div>
