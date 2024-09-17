@@ -9,7 +9,7 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
-    this.set('barcodeData', new EmberObject({ barcode: null }));
+    this.set('barcodeData', EmberObject.create({ barcode: null }));
   },
 
   actions: {
