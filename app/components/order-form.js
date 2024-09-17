@@ -4,9 +4,8 @@ import Component from '@ember/component';
 import { Changeset } from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
-import { computed, observer, get, action } from '@ember/object';
+import { computed, get, action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import ENV from '../config/environment';
 
 export default class OrderFrom extends Component.extend(powerSelectOverlayedOptions) {
@@ -42,20 +41,7 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
   errors = null;
   saveOrder = null; //??
   showValidations = false;
-  changeset = null;
-
-  /*
-  // No longer works after update
-  setManagingGroup = observer('this.changeset.orderTypeId', function() {
-    console.log('hej hopp');
-    once(this, function() {
-      if (this.order.isNew && this.get('changeset.orderTypeId')) {
-        let orderType = this.orderTypes.findBy('id', this.get('changeset.orderTypeId'));
-        this.set('changeset.managingGroupId', orderType.get('defaultManagingGroupId'));
-      }
-    });
-  })
-  */
+  order = null;
 
   @computed('order.orderNumber')
   get kohaSearchUrl() {
@@ -67,14 +53,14 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
     return ENV.APP.librisFjarrlanURL + this.get('order.librisRequestId');
   }
 
-  init() {
-    super.init(...arguments);
+  @computed('order')
+  get changeset() {
     let validator = this.get('orderValidations');
-    this.set('changeset', Changeset(
+    return Changeset(
       this.get('order'),
       lookupValidator(validator),
       validator
-    ));
+    );
   }
 
   @action

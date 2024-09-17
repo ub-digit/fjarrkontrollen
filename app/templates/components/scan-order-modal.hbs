@@ -10,7 +10,7 @@
         </BsAlert>
       {{/if}}
       <BsForm @model={{changeset}} @onSubmit={{action "onSubmit" changeset}} @isSubmitting={{isSubmitting}} as |form|>
-        <form.element @id="scan-order-modal-input" @controlType="text" @autofocus={{true}} @label="Streckkod" @placeholder="Scanna streckkod (exempel: 2014052015160216)" @property="barcode" />
+        <form.element @controlType="text" @autofocus={{true}} @label="Streckkod" @placeholder="Scanna streckkod (exempel: 2014052015160216)" @property="barcode" />
         {{yield form}}
       </BsForm>
     </modal.body>

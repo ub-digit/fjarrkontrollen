@@ -20,7 +20,6 @@ export default Component.extend({
       // validate, or skip since cannot submit without isValid?
       return this.onSubmit(changeset).then(() => {
         changeset.rollback();
-        document.querySelector('#scan-order-modal-input-field').focus();
       }, (error) => {
         if (typeof error === 'string') {
           changeset.pushErrors('barcode', error);
