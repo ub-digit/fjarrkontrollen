@@ -52,28 +52,30 @@
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                <form.element @id="subjectSv" @controlType="text" @autofocus={{true}} @label="Titel (sv)" @placeholder="" @property="subjectSv" />
+                <form.element @id="subjectSv" @controlType="text" @label="Titel (sv)" @property="subjectSv" as |el|>
+                  <el.control autofocus="true" />
+                </form.element>
               </div>
               <div class="col-sm">
-            <form.element @id="subjectEn" @controlType="text" @label="Titel (en)" @placeholder="" @property="subjectEn" />
+            <form.element @id="subjectEn" @controlType="text" @label="Titel (en)" @property="subjectEn" />
             </div>
             </div>
 
             <div class="row">
               <div class="col-sm">
-            <form.element @id="bodySv" @controlType="textarea" @label="Meddelande (sv)" @rows="10" @placeholder="" @property="bodySv" />
+            <form.element @id="bodySv" @controlType="textarea" @label="Meddelande (sv)" @rows="10" @property="bodySv" />
               </div>
               <div class="col-sm">
-            <form.element @id="bodyEn" @rows="10" @controlType="textarea" @label="Meddelande (en)" @placeholder="" @property="bodyEn" />
+            <form.element @id="bodyEn" @rows="10" @controlType="textarea" @label="Meddelande (en)" @property="bodyEn" />
               </div>
             </div>
 
             <div class="row">
               <div class="col-sm">
-            <form.element @id="label" @controlType="text" @label="Label" @placeholder="" @property="label" @readonly={{true}} />
+            <form.element @id="label" @controlType="text" @label="Label" @property="label" @readonly={{true}} />
               </div>
               <div class="col-sm">
-            <form.element @id="position" @controlType="text" @label="Position" @placeholder="" @property="position" />
+            <form.element @id="position" @controlType="text" @label="Position" @property="position" />
               </div>
             </div>
             {{yield form}}

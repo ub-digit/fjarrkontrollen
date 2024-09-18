@@ -4,14 +4,14 @@
     <div class="row">
       <div class="col-6 col-sm-3 col-lg-4">
         <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroupOptions}} @value={{find-by "value" managingGroupId managingGroupOptions}} @onChange={{action (mut managingGroupId) value="value"}} as |el|>
-          <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
+          <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj handläggningsgrupp" @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
             {{option.label}}
           </el.control>
         </form.element>
       </div>
       <div class="col-6 col-sm-3 col-lg-4">
         <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @value={{find-by "value" pickupLocationId pickupLocationOptions}} @onChange={{this.setPickupLocationId}} as |el|>
-          <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
+          <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Völj avhämtningsbibliotek" @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
             {{option.label}}
           </el.control>
         </form.element>
@@ -24,7 +24,7 @@
           @value={{find-by "label" statusGroupLabel statusGroups}}
           @onChange={{this.setStatusGroupLabel}}
         as |el|>
-          <el.control @searchField="nameSv" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |statusGroup|>
+          <el.control @searchField="nameSv" @searchEnabled={{true}} @placeholder="Välj status" @searchPlaceholder="Skriv status" as |statusGroup|>
             {{statusGroup.nameSv}}
           </el.control>
         </form.element>
@@ -40,21 +40,21 @@
         <div class="row mt-4 mb-4">
           <div class="col-6 col-sm-3 col-lg-2">
             <form.element @label="Leveransställe" @controlType="power-select" @options={{deliverySourceOptions}} @value={{find-by "value" deliverySourceLabel deliverySourceOptions}} @onChange={{action (mut deliverySourceLabel) value="value"}} as |el|>
-              <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
+              <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj leveransställe" @searchPlaceholder="SKriv leveransställe" as |option|>
                 {{option.label}}
               </el.control>
             </form.element>
           </div>
           <div class="col-6 col-sm-3 col-lg-2">
             <form.element @label="Leveransmetod" @controlType="power-select" @options={{deliveryMethodOptions}} @value={{find-by "value" deliveryMethodLabel deliveryMethodOptions}} @onChange={{action (mut deliveryMethodLabel) value="value"}} as |el|>
-              <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
+              <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj leveransmetod" @ @searchPlaceholder="SKriv leveransmetod" as |option|>
                 {{option.label}}
               </el.control>
             </form.element>
           </div>
           <div class="col-6 col-sm-3 col-lg-2">
             <form.element @label="Beställningstyp" @controlType="power-select" @options={{orderTypeOptions}} @value={{find-by "value" orderTypeId orderTypeOptions}} @onChange={{action (mut orderTypeId) value="value"}} as |el|>
-              <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
+              <el.control @searchField="label" @searchEnabled={{true}} @@placeholder="Välj beställningstyp" @searchPlaceholder="Skriv beställningstyp" as |option|>
                 {{option.label}}
               </el.control>
             </form.element>

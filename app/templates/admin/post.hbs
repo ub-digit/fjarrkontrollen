@@ -75,8 +75,8 @@
                 </el.control>
               </form.element>
 
-              <form.element @controlType="power-select" @placeholder="Välj standardsvar" @options={{emailTemplateOptions}} @value={{find-by "id" emailTemplateId emailTemplates}} @onChange={{action (action "onTemplatePropertyChange" changeset "emailTemplateId") value="id"}} as |el|>
-                <el.control @searchEnabled={{false}} as |emailTemplate|>
+              <form.element @controlType="power-select" @options={{emailTemplateOptions}} @value={{find-by "id" emailTemplateId emailTemplates}} @onChange={{action (action "onTemplatePropertyChange" changeset "emailTemplateId") value="id"}} as |el|>
+                <el.control @searchEnabled={{false}} @placeholder="Välj standardsvar" as |emailTemplate|>
                   {{get emailTemplate (get
                       (find-by
                         "language"
@@ -88,9 +88,12 @@
                 </el.control>
               </form.element>
 
-              <form.element @property="subject" @placeholder="Ämne" @controlType="text" />
+              <form.element @property="subject" @controlType="text" as |el|>
+                <el.control placeholder="Ämne" />
+              </form.element>
 
               <form.element @property="message" @placeholder="Meddelande" @rows={{10}} @controlType="textarea" />
+
               {{!
                 FIXME: why no padding, wtf
                 "Fix" by adding form-group class
