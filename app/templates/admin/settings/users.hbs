@@ -48,31 +48,33 @@
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                <form.element @id="xkonto" @controlType="text" @autofocus={{true}} @label="xkonto" @placeholder="" @property="xkonto" @disabled={{if currentUser.id true}} />
+                <form.element @id="xkonto" @controlType="text" @label="xkonto" @property="xkonto" @disabled={{if currentUser.id true}} as |el|>
+                  <el.control autofocus="true" />
+                </form.element>
               </div>
             </div>
             <div class="row">
-          <div class="col-sm">
-            <form.element @id="name" @controlType="text" @label="Name" @placeholder="" @property="name" />
+              <div class="col-sm">
+                <form.element @id="name" @controlType="text" @label="Name" @property="name" />
+              </div>
             </div>
-             </div>
 
             <div class="row">
               <div class="col-sm">
-              <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroupOptions}} @disabled={{if changesetObj.pickupLocationId true}} @value={{find-by "value" changesetObj.managingGroupId managingGroupOptions}} @onChange={{action (mut changesetObj.managingGroupId) value="value"}} as |el|>
-              <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
+                <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroupOptions}} @disabled={{if changesetObj.pickupLocationId true}} @value={{find-by "value" changesetObj.managingGroupId managingGroupOptions}} @onChange={{action (mut changesetObj.managingGroupId) value="value"}} as |el|>
+                  <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
                     {{option.label}}
                   </el.control>
                 </form.element>
               </div>
             </div>
             <div class="row">
-          <div class="col-sm">
+              <div class="col-sm">
                 <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @disabled={{if changesetObj.managingGroupId true}} @value={{find-by "value" changesetObj.pickupLocationId pickupLocationOptions}} @onChange={{action (mut changesetObj.pickupLocationId) value="value"}} as |el|>
-                <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
-                      {{option.label}}
-                    </el.control>
-                  </form.element>
+                  <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
+                    {{option.label}}
+                  </el.control>
+                </form.element>
               </div>
             </div>
           </div>
@@ -84,8 +86,6 @@
       </modal.footer>
     {{/with}}
 </BsModal>
-
-
 
 
 

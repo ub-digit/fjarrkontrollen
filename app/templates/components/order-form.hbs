@@ -33,7 +33,7 @@ as |form|>
 
     {{#if isEditing}}
       <form.element @controlType="power-select" @options={{managingGroups}} @value={{find-by "id" changeset.managingGroupId managingGroups}} @onChange={{action (mut changeset.managingGroupId) value="id"}} as |el|>
-        <el.control @disabled={{order.isNew}} @searchField="name" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |pickupLocation|>
+        <el.control @disabled={{order.isNew}} @searchField="name" @searchEnabled={{true}} @placeholder="Välj handläggningsgrupp" @searchPlaceholder="Skriv handläggningsgrupp" as |pickupLocation|>
           {{pickupLocation.name}}
         </el.control>
       </form.element>
@@ -51,7 +51,7 @@ as |form|>
 
     {{#if isEditing}}
       <form.element @controlType="power-select" @options={{pickupLocations}} @value={{find-by "id" changeset.pickupLocationId pickupLocations}} @onChange={{action (mut changeset.pickupLocationId) value="id"}} as |el|>
-        <el.control @searchField="nameSv" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |pickupLocation|>
+        <el.control @searchField="nameSv" @searchEnabled={{true}} @placeholder="Välj avhämtningsbibliotek" @searchPlaceholder="Skriv avhämtningsbibliotek" as |pickupLocation|>
           {{pickupLocation.nameSv}}
         </el.control>
       </form.element>
@@ -67,8 +67,8 @@ as |form|>
     {{!TODO: Implement isActive}}
     <h5>Status</h5>
     {{#if isEditing}}
-      <form.element @controlType="power-select" @options={{statusOptions}} @placeholder="Välj status" @value={{find-by "value" changeset.statusId statusOptions}} @onChange={{action (mut changeset.statusId) value="value"}} as |el|>
-        <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |status|>
+      <form.element @controlType="power-select" @options={{statusOptions}} @value={{find-by "value" changeset.statusId statusOptions}} @onChange={{action (mut changeset.statusId) value="value"}} as |el|>
+        <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj status" @searchPlaceholder="Skriv status" as |status|>
           {{status.label}}
         </el.control>
       </form.element>
@@ -105,7 +105,7 @@ as |form|>
     <h5>Levererad från</h5>
     {{#if isEditing}}
       <form.element @controlType="power-select" @options={{deliverySourceOptions}} @value={{find-by "value" changeset.deliverySourceId deliverySourceOptions}} @onChange={{action (mut changeset.deliverySourceId) value="value"}} as |el|>
-        <el.control @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |option|>
+        <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj levererad från" @searchPlaceholder="Skriv levererad från" as |option|>
           {{option.label}}
         </el.control>
       </form.element>
@@ -334,7 +334,7 @@ as |form|>
           <td>
             {{#if isEditing}}
               <form.element @controlType="power-select" @options={{orderTypes}} @value={{find-by "id" changeset.orderTypeId orderTypes}} @onChange={{action "setOrderType" changeset}} as |el|>
-                <el.control @searchField="nameSv" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |orderType|>
+                <el.control @searchField="nameSv" @searchEnabled={{true}} @placeholder="Välj beställningstyp" @searchPlaceholder="Skirv beställningstyp" as |orderType|>
                   {{orderType.nameSv}}
                 </el.control>
               </form.element>
@@ -348,7 +348,7 @@ as |form|>
           <td>
             {{#if isEditing}}
               <form.element @controlType="power-select" @options={{deliveryMethods}} @value={{find-by "id" changeset.deliveryMethodId deliveryMethods}} @onChange={{action (mut changeset.deliveryMethodId) value="id"}} as |el|>
-                <el.control @searchField="name" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |deliveryMethod|>
+                <el.control @searchField="name" @searchEnabled={{true}} @placeholder="Välj leveransmetod" @searchPlaceholder="Skriv leveransmetod" as |deliveryMethod|>
                   {{deliveryMethod.name}}
                 </el.control>
               </form.element>
@@ -476,7 +476,7 @@ as |form|>
           <td>
             {{#if isEditing}}
               <form.element @controlType="power-select" @options={{customerTypes}} @value={{find-by "id" changeset.customerTypeId customerTypes}} @onChange={{action (mut changeset.customerTypeId) value="id"}} as |el|>
-                <el.control @searchField="nameSv" @searchEnabled={{true}} @searchPlaceholder="Type your name" as |customerType|>
+                <el.control @searchField="nameSv" @searchEnabled={{true}} @placeholder="Välj kundtyp" @searchPlaceholder="Skriv kundtyp" as |customerType|>
                   {{customerType.nameSv}}
                 </el.control>
               </form.element>
