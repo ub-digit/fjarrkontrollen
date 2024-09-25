@@ -24,7 +24,12 @@ export default ToriiAuthenticator.extend({
           })
         })
         .then((response) => {
-          return response.json();
+            if (response.ok) {
+              return response.json();
+            }
+            else {
+              throw response;
+            }
         })
         .then((responseData) => {
           run(() => {
@@ -39,8 +44,14 @@ export default ToriiAuthenticator.extend({
             });
           });
         }).catch((error) => {
-          //TODO: Trigger backend error, check error format!
-          run(null, reject, error);
+          let message;
+          if ('status' in error && error.status == 401) {
+            message = 'Inloggningen misslyckades, Användare hittades ej';
+          }
+          else {
+            message = 'Inloggningen misslyckades på grund av ett oväntat serverfel';
+          }
+          run(null, reject, message);
         });
       });
     });

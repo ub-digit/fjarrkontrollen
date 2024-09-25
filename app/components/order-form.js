@@ -66,7 +66,14 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
   @action
   fetchPatronInfo(cardnumber) {
     this.ajax.fetch(`${ENV.APP.serviceURL}/koha_patrons/${cardnumber}`)
-      .then(response => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        else {
+          throw response;
+        }
+      })
       .then((data) => {
         let patron = data.patron;
         this.set('changeset.name', `${patron.first_name} ${patron.last_name}`);
@@ -81,9 +88,8 @@ export default class OrderFrom extends Component.extend(powerSelectOverlayedOpti
         // Hidden properties
         this.set('changeset.authenticatedXAccount', patron.xaccount);
         this.set('changeset.kohaBorrowernumber', patron.borrowernumber);
-
       }).catch((error) => {
-        if (error.status == 404) {
+        if ('status' in error && error.status == 404) {
           this.toast.warning(
             `Hittar ingen låntagare med lånekortsnummber <b>${cardnumber}</b>.`,
             'Låntagaren hittades inte'

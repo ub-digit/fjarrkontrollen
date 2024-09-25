@@ -18,8 +18,14 @@ export default Oauth2.extend({
 
   fetch(data) {
     return fetch(`${config.APP.authenticationBaseURL}/${data.token}`)
-      .then(response => response.json())
-      .then((responseData) => {
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        else {
+          throw response;
+        }
+      }).then((responseData) => {
         return {
           token: responseData.access_token,
           userManagingGroupId: responseData.user.managing_group_id,
@@ -31,6 +37,7 @@ export default Oauth2.extend({
         };
       })
       .catch((error) => {
+        //TOODO: HOw to provide user feedback, seems like this is caught by adapter if thrown!?
         this.session.invalidate();
       });
   }
