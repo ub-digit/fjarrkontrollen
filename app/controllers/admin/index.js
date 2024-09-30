@@ -185,7 +185,7 @@ export default Controller.extend(powerSelectOverlayedOptions, {
 
     setMyOrders(value) {
       this.set('userId', value
-        ? this.get('session.authenticated.data.userid')
+        ? this.get('session.data.authenticated.userid')
         : null
       );
     },
