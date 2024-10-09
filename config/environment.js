@@ -1,7 +1,7 @@
 /* eslint-env node */
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'fjarrkontrollen',
     environment,
@@ -10,46 +10,56 @@ module.exports = function(environment) {
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
-
     APP: {
-      librisFjarrlanURL: 'http://iller.libris.kb.se/librisfjarrlan/lf.php?action=request&type=user&id='
+      librisFjarrlanURL: 'http://iller.libris.kb.se/librisfjarrlan/lf.php?action=request&type=user&id=',
+      'gub-oauth2': {},
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+    torii: {
+      sessionServiceName: 'session',
+      providers: {
+        'gub-oauth2': {
+          apiKey: process.env.GUB_OAUTH2_CLIENT_ID,
+          scope: 'openid profile email'
+        }
+      }
+    },
+    //@TODO: is this used?
+    'simple-auth': {
+      authorizer: 'authorizer:gub',
+      //crossOriginWhitelist: ['http://localhost:4000/'],
+    },
+    'ember-toastr':  {
+      injectAs: 'toast',
+      toastrOptions: {
+        closeButton: true,
+        debug: false,
+        newestOnTop: true,
+        progressBar: true,
+        positionClass: 'toast-bottom-left',
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: '300',
+        hideDuration: '1000',
+        timeOut: '10000',
+        extendedTimeOut: '10000',
+        showEasing: 'swing',
+        hideEasing: 'linear',
+        showMethod: 'fadeIn',
+        hideMethod: 'fadeOut'
+      }
     }
   };
 
-  ENV['simple-auth'] = {
-    authorizer: 'authorizer:gub',
-    //crossOriginWhitelist: ['http://localhost:4000/'],
-  };
-
-  ENV['ember-toastr'] = {
-    injectAs: 'toast',
-    toastrOptions: {
-      closeButton: true,
-      debug: false,
-      newestOnTop: true,
-      progressBar: true,
-      positionClass: 'toast-bottom-left',
-      preventDuplicates: true,
-      onclick: null,
-      showDuration: '300',
-      hideDuration: '1000',
-      timeOut: '10000',
-      extendedTimeOut: '10000',
-      showEasing: 'swing',
-      hideEasing: 'linear',
-      showMethod: 'fadeIn',
-      hideMethod: 'fadeOut'
-    }
-  };
+  let frontendBaseURL = null;
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -57,7 +67,8 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.serviceURL = 'http://localhost:'  + process.env.BACKEND_SERVICE_PORT;
+    ENV.APP.serviceURL = `http://localhost:${process.env.BACKEND_SERVICE_PORT}`;
+    frontendBaseURL = `http://localhost:${process.env.FRONTEND_PORT}`;
     ENV.contentSecurityPolicyHeader = 'Disabled-Content-Security-Policy';
     ENV.APP.kohaSearchURL = 'https://koha-lab-intra.ub.gu.se/cgi-bin/koha/catalogue/search.pl?q=';
   }
@@ -71,11 +82,15 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
   }
   else {
-    ENV.APP.serviceURL = 'https://' + process.env.BACKEND_SERVICE_HOSTNAME;
+    ENV.APP.serviceURL = `https://${process.env.BACKEND_SERVICE_HOSTNAME}`;
+    frontendBaseURL = `https://${process.env.FRONTEND_HOSTNAME}`;
     ENV.APP.kohaSearchURL = process.env.KOHA_SEARCH_URL;
   }
-  if (ENV.APP.serviceURL) {
+  if (environment !== 'test') {
     ENV.APP.authenticationBaseURL = ENV.APP.serviceURL + '/session';
+    ENV.torii.providers['gub-oauth2'].tokenExchangeUri = ENV.APP.authenticationBaseURL;
+    ENV.torii.providers['gub-oauth2'].redirectUri = `${frontendBaseURL}/torii/redirect.html`;
+    ENV.APP['gub-oauth2'].authorizeUri = process.env.GUB_OAUTH2_AUTHORIZE_ENDPOINT;
   }
 
   return ENV;

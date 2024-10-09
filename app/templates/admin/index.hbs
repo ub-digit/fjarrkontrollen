@@ -1,215 +1,111 @@
-{{#bs-form
-  model=this
-  formLayout="vertical"
-  class="orders-filters-form"
-as |form|
-}}
+<BsForm @model={{this}} @formLayout="vertical" class="orders-filters-form" as |form|>
 <div class="row">
   <div class="col-12">
     <div class="row">
       <div class="col-6 col-sm-3 col-lg-4">
-        {{#form.element
-          label="Handläggningsgrupp"
-          controlType="power-select"
-          options=managingGroupOptions
-          value=(find-by "value" managingGroupId managingGroupOptions)
-          onChange=(action (mut managingGroupId) value="value")
-        as |el|
-        }}
-          {{#el.control
-            searchField="label"
-            searchEnabled=true
-            searchPlaceholder="Type your name"
-          as |option|
-          }}
+        <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroupOptions}} @value={{find-by "value" managingGroupId managingGroupOptions}} @onChange={{action (mut managingGroupId) value="value"}} as |el|>
+          <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj handläggningsgrupp" @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
             {{option.label}}
-          {{/el.control}}
-        {{/form.element}}
+          </el.control>
+        </form.element>
       </div>
       <div class="col-6 col-sm-3 col-lg-4">
-        {{#form.element
-          label="Avhämtningsbibliotek"
-          controlType="power-select"
-          options=pickupLocationOptions
-          value=(find-by "value" pickupLocationId pickupLocationOptions)
-          onChange=(action (mut pickupLocationId) value="value")
-        as |el|
-        }}
-          {{#el.control
-            searchField="label"
-            searchEnabled=true
-            searchPlaceholder="Type your name"
-          as |option|
-          }}
+        <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @value={{find-by "value" pickupLocationId pickupLocationOptions}} @onChange={{this.setPickupLocationId}} as |el|>
+          <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj avhämtningsbibliotek" @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
             {{option.label}}
-          {{/el.control}}
-        {{/form.element}}
+          </el.control>
+        </form.element>
       </div>
       <div class="col-6 col-sm-3 col-lg-2">
-        {{#form.element
-          label="Status"
-          controlType="power-select"
-          options=statusGroups
-          value=(find-by "label" statusGroupLabel statusGroups)
-          onChange=(action (mut statusGroupLabel) value="label")
-        as |el|
-        }}
-          {{#el.control
-            searchField="nameSv"
-            searchEnabled=true
-            searchPlaceholder="Type your name"
-          as |statusGroup|
-          }}
+        <form.element
+          @label="Status"
+          @controlType="power-select"
+          @options={{this.statusGroups}}
+          @value={{find-by "label" statusGroupLabel statusGroups}}
+          @onChange={{this.setStatusGroupLabel}}
+        as |el|>
+          <el.control @searchField="nameSv" @searchEnabled={{true}} @placeholder="Välj status" @searchPlaceholder="Skriv status" as |statusGroup|>
             {{statusGroup.nameSv}}
-          {{/el.control}}
-        {{/form.element}}
+          </el.control>
+        </form.element>
       </div>
       <div class="col-6 col-sm-2 col-lg-2 d-flex align-items-end mb-sm-2 mb-lg-2">
-        {{form.element
-          label="Mina ordrar"
-          class="form-group"
-          controlType="checkbox"
-          value=myOrdersFilterActive
-          onChange=(action "setMyOrders")
-        }}
+        <form.element @label="Mina ordrar" @controlType="checkbox" @value={{myOrdersFilterActive}} @onChange={{action "setMyOrders"}} />
       </div>
       <div class="col-6 col-sm-3 col-lg-4">
-        {{form.element
-          label="Sök i fritext"
-          controlType="text"
-          value=searchTerms
-          onChange=(action "setSearchTerms")
-        }}
+        <form.element @label="Sök i fritext" @controlType="text" @value={{searchTerms}} @onChange={{action "setSearchTerms"}} />
       </div>
 
       {{#liquid-if filtersExpanded class="col-12 border-top"}}
-        <div class="row">
+        <div class="row mt-4 mb-4">
           <div class="col-6 col-sm-3 col-lg-2">
-            {{#form.element
-              label="Leveransställe"
-              controlType="power-select"
-              options=deliverySourceOptions
-              value=(find-by "value" deliverySourceLabel deliverySourceOptions)
-              onChange=(action (mut deliverySourceLabel) value="value")
-            as |el|
-              }}
-              {{#el.control
-                searchField="label"
-                searchEnabled=true
-                searchPlaceholder="Type your name"
-              as |option|
-              }}
+            <form.element @label="Leveransställe" @controlType="power-select" @options={{deliverySourceOptions}} @value={{find-by "value" deliverySourceLabel deliverySourceOptions}} @onChange={{action (mut deliverySourceLabel) value="value"}} as |el|>
+              <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj leveransställe" @searchPlaceholder="Skriv leveransställe" as |option|>
                 {{option.label}}
-              {{/el.control}}
-            {{/form.element}}
+              </el.control>
+            </form.element>
           </div>
           <div class="col-6 col-sm-3 col-lg-2">
-            {{#form.element
-              label="Leveransmetod"
-              controlType="power-select"
-              options=deliveryMethodOptions
-              value=(find-by "value" deliveryMethodLabel deliveryMethodOptions)
-              onChange=(action (mut deliveryMethodLabel) value="value")
-            as |el|
-              }}
-              {{#el.control
-                searchField="label"
-                searchEnabled=true
-                searchPlaceholder="Type your name"
-              as |option|
-              }}
+            <form.element @label="Leveransmetod" @controlType="power-select" @options={{deliveryMethodOptions}} @value={{find-by "value" deliveryMethodLabel deliveryMethodOptions}} @onChange={{action (mut deliveryMethodLabel) value="value"}} as |el|>
+              <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj leveransmetod" @ @searchPlaceholder="Skriv leveransmetod" as |option|>
                 {{option.label}}
-              {{/el.control}}
-            {{/form.element}}
+              </el.control>
+            </form.element>
           </div>
           <div class="col-6 col-sm-3 col-lg-2">
-            {{#form.element
-              label="Beställningstyp"
-              controlType="power-select"
-              options=orderTypeOptions
-              value=(find-by "value" orderTypeId orderTypeOptions)
-              onChange=(action (mut orderTypeId) value="value")
-            as |el|
-            }}
-              {{#el.control
-                searchField="label"
-                searchEnabled=true
-                searchPlaceholder="Type your name"
-              as |option|
-              }}
+            <form.element @label="Beställningstyp" @controlType="power-select" @options={{orderTypeOptions}} @value={{find-by "value" orderTypeId orderTypeOptions}} @onChange={{action (mut orderTypeId) value="value"}} as |el|>
+              <el.control @searchField="label" @searchEnabled={{true}} @placeholder="Välj beställningstyp" @searchPlaceholder="Skriv beställningstyp" as |option|>
                 {{option.label}}
-              {{/el.control}}
-            {{/form.element}}
+              </el.control>
+            </form.element>
           </div>
           <div class="col-6 col-sm-3 col-lg-2">
-            {{#form.element
-              label="Arkiverade/aktiva"
-              controlType="power-select"
-              options=isArchivedOptions
-              value=(find-by "value" isArchivedOptionValue isArchivedOptions)
-              onChange=(action (mut isArchivedOptionValue) value="value")
-            as |el|
-            }}
-              {{#el.control
-                searchEnabled=false
-              as |option|
-              }}
+            <form.element @label="Arkiverade/aktiva" @controlType="power-select" @options={{isArchivedOptions}} @value={{find-by "value" isArchivedOptionValue isArchivedOptions}} @onChange={{action (mut isArchivedOptionValue) value="value"}} as |el|>
+              <el.control @searchEnabled={{false}} as |option|>
                 {{option.label}}
-              {{/el.control}}
-            {{/form.element}}
+              </el.control>
+            </form.element>
           </div>
           <div class="col-6 col-lg-2 d-flex align-items-end mb-lg-2">
-            {{form.element
-              label="Skall faktureras"
-              class="form-group"
-              controlType="checkbox"
-              value=toBeInvoiced
-              onChange=(action "setToBeInvoiced")
-            }}
+            <form.element @label="Skall faktureras" @controlType="checkbox" @value={{toBeInvoiced}} @onChange={{action "setToBeInvoiced"}} />
           </div>
         </div>
       {{/liquid-if}}
     </div>
   </div>
   <div class="col-12 d-flex justify-content-center border-top">
-    {{#bs-button
-      class="px-3"
-      title=(if filtersExpanded "Dölj fler filter" "Visa fler filter")
-      type="link"
-      active=filtersExpanded
-      onClick=(toggle "filtersExpanded" this)
-    }}
+    <BsButton class="px-3" @title={{if filtersExpanded "Dölj fler filter" "Visa fler filter"}} @type="link" @active={{filtersExpanded}} @onClick={{toggle "filtersExpanded" this}}>
       {{#if filtersExpanded}}
       <i class="fas fa-angle-up"></i>
       {{else}}
       <i class="fas fa-angle-down"></i>
       {{/if}}
-    {{/bs-button}}
+    </BsButton>
   </div>
   <div class="col-12 mb-4 d-flex align-items-center">
-    {{#bs-button type="primary" onClick=(action "resetFilters")}}
+    <BsButton @type="primary" @onClick={{action "resetFilters"}}>
       Återställ filter <i class="fas fa-undo-alt"></i>
-    {{/bs-button}}
+    </BsButton>
     <div class="ml-4">
-      Fjärrkontrollen hittade <strong>{{model.meta.query.total}}</strong> ordrar
+      Fjärrkontrollen hittade <strong>{{this.meta.query.total}}</strong> ordrar
     </div>
   </div>
 </div>
-{{/bs-form}}
-{{#if (gt model.meta.pagination.pages 1)}}
+</BsForm>
+{{#if (gt this.meta.pagination.pages 1)}}
   <div class="row">
     <div class="col-12 d-flex justify-content-center">
-      {{bs4-paginator
-        navAreaLabelText="Orders pagination"
-        previousText="Föregående"
-        nextText="Nästa"
-        currentPage=model.meta.pagination.page
-        totalPages=model.meta.pagination.pages
-        currentPageItemsCount=3
-        firstPageItemsCount=2
-        lastPageItemsCount=2
-        pageChanged=(action (mut currentPage))
-      }}
+      <Bs4Paginator
+        @navAreaLabelText="Orders pagination"
+        @previousText="Föregående"
+        @nextText="Nästa"
+        @currentPage={{this.meta.pagination.page}}
+        @totalPages={{this.meta.pagination.pages}}
+        @currentPageItemsCount={{3}}
+        @firstPageItemsCount={{2}}
+        @lastPageItemsCount={{2}}
+        @pageChanged={{action (mut this.currentPage)}}
+      />
       {{! TODO rename => onPageChange}}
     </div>
   </div>
@@ -218,15 +114,7 @@ as |form|
   <div class="col-12 table-responsive-sm">
     <table class="orders-table table table-striped table-sm">
       <thead>
-        {{#sort-fields
-          tagName="tr"
-          sortFields=sortFields
-          currentSortField=sortField
-          currentSortDirection=sortDirection
-          onChangeSortField=(action (mut sortField))
-          onChangeSortDirection=(action (mut sortDirection))
-        as |sortFieldComponent sortField|
-        }}
+        <SortFields @tagName="tr" @sortFields={{sortFields}} @currentSortField={{sortField}} @currentSortDirection={{sortDirection}} @onChangeSortField={{action (mut sortField)}} @onChangeSortDirection={{action (mut sortDirection)}} as |sortFieldComponent sortField|>
           <th>
             {{sortFieldComponent}}
           </th>
@@ -236,12 +124,12 @@ as |form|
           {{else if (eq sortField 'status_id')}}
             <th></th>
           {{/if}}
-        {{/sort-fields}}
+        </SortFields>
       </thead>
       <tbody>
-        {{#each model as |order|}}
+        {{#each this.model as |order|}}
           <tr class="{{if (eq order.id lastOrderViewed) "table-success"}}">
-            <td><a href="{{href-to "admin.post" order.id}}">{{order.orderNumber}}</a></td>
+            <td><LinkTo @route="admin.post" @model={{order.id}}>{{order.orderNumber}}</LinkTo></td>
             <td>
               {{#if order.orderPath}}
                 {{#if (eq order.orderPath 'LibrisEnduser')}}
@@ -253,7 +141,7 @@ as |form|
               {{#if order.stickyNoteId}}
                 <span class="badge badge-pill badge-primary">
                   <i class="far fa-file-alt"></i>
-                  {{#bs-tooltip placement="right"}}
+                  <BsTooltip @placement="right">
                     {{#if order.stickyNoteSubject}}
                       <h5>{{order.stickyNoteSubject}}</h5>
                     {{/if}}
@@ -262,7 +150,7 @@ as |form|
                         {{order.stickyNoteMessage}}
                       </p>
                     {{/if}}
-                  {{/bs-tooltip}}
+                  </BsTooltip>
                 </span>
               {{/if}}
             </td>
@@ -276,14 +164,7 @@ as |form|
             </td>
             <td>{{get (find-by "id" order.statusId statuses) "nameSv"}}</td>
             <td>
-              {{order-user-switcher
-                setOrderAssignedUserPromise=setOrderAssignedUserPromise
-                orderId=order.id
-                assignedUsername=(get (find-by "id" order.userId users) "xkonto")
-                assignedUserId=order.userId
-                loggedInUsername=sessionAccount.username
-                loggedInUserId=sessionAccount.userid
-              }}
+              <OrderUserSwitcher @setOrderAssignedUserPromise={{setOrderAssignedUserPromise}} @orderId={{order.id}} @assignedUsername={{get (find-by "id" order.userId users) "xkonto"}} @assignedUserId={{order.userId}} @loggedInUsername={{session.data.authenticated.username}} @loggedInUserId={{session.data.authenticated.userid}} />
             </td>
           </tr>
         {{/each}}
@@ -292,19 +173,19 @@ as |form|
   </div>
 </div>
 <div class="row">
-  {{#if (gt model.meta.pagination.pages 1)}}
+  {{#if (gt this.meta.pagination.pages 1)}}
     <div class="col-12 d-flex justify-content-center">
-      {{bs4-paginator
-        navAreaLabelText="Orders pagination"
-        previousText="Föregående"
-        nextText="Nästa"
-        currentPage=model.meta.pagination.page
-        totalPages=model.meta.pagination.pages
-        currentPageItemsCount=3
-        firstPageItemsCount=2
-        lastPageItemsCount=2
-        pageChanged=(action (mut currentPage))
-      }}
+      <Bs4Paginator
+        @navAreaLabelText="Orders pagination"
+        @previousText="Föregående"
+        @nextText="Nästa"
+        @currentPage={{this.meta.pagination.page}}
+        @totalPages={{this.meta.pagination.pages}}
+        @currentPageItemsCount={{3}}
+        @firstPageItemsCount={{2}}
+        @lastPageItemsCount={{2}}
+        @pageChanged={{action (mut currentPage)}}
+      />
       {{! TODO rename => onPageChange}}
     </div>
   {{else}}

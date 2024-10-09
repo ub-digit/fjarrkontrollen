@@ -1,12 +1,13 @@
-import Ember from 'ember';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { isEmpty, isBlank } from '@ember/utils';
 import { computed } from '@ember/object';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
-  sessionAccount: inject(),
+export default class AdminIndexRoute extends Route {
+  @service session;
+  @service store;
 
-  queryParams: {
+  queryParams = {
     managingGroupId: {
       refreshModel: true
     },
@@ -46,22 +47,21 @@ export default Ember.Route.extend({
     sortDirection: {
       refreshModel: true
     },
-  },
+  }
 
-  defaultFiltersValuesSet: false, //hack
-  setDefaultFiltersValues: computed('sessionAccount.authenticatedOrRestored', 'defaultFiltersValuesSet', function() {
-    return (
-      this.get('sessionAccount.authenticatedOrRestored') == 'authenticated' &&
-      !this.get('defaultFiltersValuesSet')
-    );
-  }),
+  defaultFilterValuesSet = false //hack
+
+  @computed('session.authenticatedOrRestored', 'defaultFilterValuesSet')
+  get setDefaultFilterValues() {
+    return this.session.authenticatedOrRestored === 'authenticated' && !this.defaultFilterValuesSet;
+  }
 
   model(params) {
     let filter = {};
 
-    if (this.get('setDefaultFiltersValues')) {
-      params.managingGroupId = this.get('sessionAccount.defaultManagingGroupId');
-      params.pickupLocationId = this.get('sessionAccount.defaultPickupLocationId');
+    if (this.setDefaultFilterValues) {
+      params.managingGroupId = this.get('session.defaultManagingGroupId');
+      params.pickupLocationId = this.get('session.defaultPickupLocationId');
     }
 
     //TODO: Replace with mappings hash
@@ -105,10 +105,11 @@ export default Ember.Route.extend({
       filter['sortdir'] = params.sortDirection;
     }
     return this.store.query('order', filter);
-  },
+  }
 
-  setupController(controller) {
-    this._super(...arguments); // This sets model
+  setupController(controller, model) {
+    controller.set('model', model);
+    controller.set('meta', model.meta);
     let optionModels = this.modelFor('admin');
     [
       'managingGroups',
@@ -122,10 +123,10 @@ export default Ember.Route.extend({
     ].forEach(function (property) {
       controller.set(property, optionModels[property]);
     });
-    if (this.get('setDefaultFiltersValues')) {
-      controller.set('managingGroupId', this.get('sessionAccount.defaultManagingGroupId'));
-      controller.set('pickupLocationId', this.get('sessionAccount.defaultPickupLocationId'));
-      this.set('defaultFiltersValuesSet', true);
+    if (this.setDefaultFilterValues) {
+      controller.set('managingGroupId', this.get('session.defaultManagingGroupId'));
+      controller.set('pickupLocationId', this.get('session.defaultPickupLocationId'));
+      this.set('defaultFilterValuesSet', true);
     }
   }
-});
+}

@@ -2,37 +2,12 @@
   <div class="card login-form-card">
     <div class="card-body">
       <h5 class="card-title">Logga in i Fjärrkontrollen</h5>
-        {{#bs-form
-          class="login-form"
-          model=changeset
-          onSubmit=(action "authenticate" changeset)
-        as |form|}}
-          {{form.element
-            controlType="text"
-            focusIn=(action "resetServerErrors" changeset)
-            property="identification"
-            placeholder="X-konto"
-            autofocus=true
-            required=true
-          }}
-          {{form.element
-            controlType="password"
-            focusIn=(action "resetServerErrors" changeset)
-            property="password"
-            placeholder="Lösenord"
-            required=true
-          }}
-          {{#bs-button
-            type="primary"
-            buttonType="submit"
-            disabled=(or form.isSubmitting changeset.isInvalid)
-          }}
-            Logga in
-            {{#if form.isSubmitting}}
-              <i class="fas fa-spinner fa-spin"></i>
-            {{/if}}
-          {{/bs-button}}
-        {{/bs-form}}
+      {{#if this.errorMessage}}
+        <div class="alert alert-danger col-xs-12">{{ this.errorMessage }}</div>
+      {{/if}}
+      <BsButton @type="primary" @icon="glyphicon glyphicon-login" {{action "authenticate"}}>
+        Logga in
+      </BsButton>
     </div>
   </div>
 </div>

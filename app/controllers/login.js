@@ -1,33 +1,19 @@
-import Ember from 'ember';
-import { inject } from '@ember/service';
-export default Ember.Controller.extend({
-  session: inject(),
-  hasServerErrors: false,
+import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+export default class LoginController extends Controller {
+  @service session;
+  @tracked errorMessage = false; //#TODO Remove tracked?
 
-  actions: {
-    resetServerErrors(changeset) {
-      if (this.get('hasServerErrors')) {
-        changeset.validate();
-        this.set('hasServerErrors', false);
-      }
-    },
-    authenticate(changeset) {
-      return this.get('session')
-        .authenticate('authenticator:gub', {
-          identification: changeset.get('identification'),
-          password: changeset.get('password')
-        })
-        .catch((error) => {
-          this.set('hasServerErrors', true);
-          changeset.pushErrors('identification', '');
-          if(typeof error === 'string') {
-            changeset.pushErrors('password', error);
-          }
-          else {
-            changeset.pushErrors('password', "Någonting gick fel, det går eventuellt för närvarande inte att logga in");
-            console.dir(error);
-          }
-        });
-    }
+  @action
+  authenticate() {
+    this.get('session').authenticate('authenticator:torii', 'gub')
+    .catch((reason) => {
+      this.set('errorMessage', reason);
+    })
+    .finally(() => {
+      this.set('loginDisabled', false);
+    });
   }
-});
+}

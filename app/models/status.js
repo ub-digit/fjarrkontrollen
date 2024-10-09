@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 import { not } from '@ember/object/computed';
 
-export default DS.Model.extend({
-  nameSv: DS.attr('string'),
-  isActive: DS.attr('boolean'),
+export default Model.extend({
+  nameSv: attr('string'),
+  isActive: attr('boolean'),
   isDisabled: not('isActive'),
-  label: DS.attr('string')
+  label: attr('string')
 });

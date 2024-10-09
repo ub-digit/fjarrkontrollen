@@ -1,11 +1,11 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 
-export default DS.Model.extend({
-  label: DS.attr('string'),
-  subjectSv: DS.attr('string'),
-  subjectEn: DS.attr('string'),
-  bodySv: DS.attr('string'),
-  bodyEn: DS.attr('string'),
-  disabled: DS.attr('boolean'),
-  position: DS.attr('number')
+export default Model.extend({
+  label: attr('string'),
+  subjectSv: attr('string'),
+  subjectEn: attr('string'),
+  bodySv: attr('string'),
+  bodyEn: attr('string'),
+  disabled: attr('boolean'),
+  position: attr('number')
 });
