@@ -92,7 +92,9 @@
                 <el.control placeholder="Ämne" />
               </form.element>
 
-              <form.element @property="message" @placeholder="Meddelande" @rows={{10}} @controlType="textarea" />
+              <form.element @property="message" @controlType="textarea" as |el|>
+                <el.control placeholder="Meddelande" rows="10" />
+              </form.element>
 
               {{!
                 FIXME: why no padding, wtf
@@ -121,7 +123,10 @@
                   </BsAlert>
                 {{/each}}
               {{/if}}
-              <form.element @property="message" @placeholder="Meddelande" @rows={{10}} @controlType="textarea" />
+              <form.element @property="message" @controlType="textarea" as |el|>
+                <el.control placeholder="Meddelande" rows="10" />
+              </form.element>
+
               <BsButton @type="secondary" @buttonType="submit" @disabled={{form.isSubmitting}}>
                 Spara
                 {{#if form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
