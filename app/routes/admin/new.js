@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
 import { inject } from '@ember/service';
 import ResetScroll from "../../mixins/reset-scroll";
 
-export default Ember.Route.extend(ResetScroll, {
+export default Route.extend(ResetScroll, {
   session: inject(),
   mitt: inject(),
 
@@ -33,7 +33,7 @@ export default Ember.Route.extend(ResetScroll, {
 
   actions: {
     willTransition() {
-      this.controllerFor(this.routeName).set('showAllValidations', false);
+      this.controllerFor(this.routeName).set('showValidations', false);
       let order = this.modelFor(this.routeName);
       if (order.get('isNew')) {
         this.store.deleteRecord(order);

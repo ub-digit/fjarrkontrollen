@@ -1,148 +1,91 @@
-
-
-
-
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-sm">
-			<div class="action-tools">
-				{{#bs-button onClick=(action "createUser") type="secondary"}}Skapa ny användare <i class="fas fa-plus"></i>{{/bs-button}}
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-			<table class="table table-striped table-responsive">
-				<thead class="thead-dark">
-						<th>xkonto</th>
-						<th>Namn</th>
-						<th>Handläggningsgrupp</th>
-						<th>Avhämtningsbibliotek</th>
-						<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-				</thead>
-				<tbody>
-					{{#each this.usersExtendedSorted as |user|}}
-				    	<tr id="{{user.id}}">
-				    		<td>{{user.xkonto}}</td>
-				    		<td>{{user.name}}</td>
-				    		<td>{{user.managingGroupName}}</td>
-				    		<td class="">{{user.pickupLocationName}}</td>
-				    		<td>
-					    		{{#bs-button class="btn-sm" onClick=(action  "toggleModalUser" user)}}
-				      				<i class="fas fa-edit"></i>
-				        		{{/bs-button}}
-				        	</td>
-				    	</tr>
-					{{/each}}
-				</tbody>
-			</table>
-		</div>
-	</div>
+  <div class="row">
+    <div class="col-sm">
+      <div class="action-tools">
+        <BsButton @onClick={{action "createUser"}} @type="secondary">Skapa ny användare <i class="fas fa-plus"></i></BsButton>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <table class="table table-striped table-responsive">
+        <thead class="thead-dark">
+            <th>xkonto</th>
+            <th>Namn</th>
+            <th>Handläggningsgrupp</th>
+            <th>Avhämtningsbibliotek</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        </thead>
+        <tbody>
+          {{#each this.usersExtendedSorted as |user|}}
+              <tr id="{{user.id}}">
+                <td>{{user.xkonto}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.managingGroupName}}</td>
+                <td class="">{{user.pickupLocationName}}</td>
+                <td>
+                  <BsButton class="btn-sm" @onClick={{action "toggleModalUser" user}}>
+                      <i class="fas fa-edit"></i>
+                    </BsButton>
+                  </td>
+              </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 
 
-{{#bs-modal size="lg" open=isShowingUserEditModal
-  onHide=(action (mut isShowingUserEditModal) false)
-  onHidden=(action "resetState")
-    as |modal|
-}}
-  {{#modal.header}}
+<BsModal @size="lg" @open={{isShowingUserEditModal}} @onHide={{action (mut isShowingUserEditModal) false}} @onHidden={{action "resetState"}} as |modal|>
+  <modal.header>
     <h4 class="modal-title">{{if currentUser.id  "Ändra användare"  "Skapa användare"}}</h4>
-  {{/modal.header}}
-  	{{#with (changeset currentUser) as |changesetObj|}}
-	    {{#modal.body}}
-	      {{#bs-form
-	        model=changesetObj
-	        onSubmit=(action "onSubmit" changesetObj)
-	      as |form|
-	      }}
-	      	<div class="container">
-		      	<div class="row">
-		      		<div class="col-sm">
-				        {{form.element
-				          id="xkonto"
-				          controlType="text"
-				          autofocus=true
-				          label="xkonto"
-				          placeholder=""
-				          property="xkonto"
-				          disabled=(if currentUser.id true)
-				        }}
-		        	</div>
-		        </div>
-		        <div class="row">
-					<div class="col-sm">
-						{{form.element
-				          id="name"
-				          controlType="text"
-				          label="Name"
-				          placeholder=""
-				          property="name"
-				        }}
-				    </div>
-		       	</div>
+  </modal.header>
+    {{#with (changeset currentUser) as |changesetObj|}}
+      <modal.body>
+        <BsForm @model={{changesetObj}} @onSubmit={{action "onSubmit" changesetObj}} as |form|>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                <form.element @id="xkonto" @controlType="text" @label="xkonto" @property="xkonto" @disabled={{if currentUser.id true}} as |el|>
+                  <el.control autofocus="true" />
+                </form.element>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <form.element @id="name" @controlType="text" @label="Name" @property="name" />
+              </div>
+            </div>
 
-		        <div class="row">
-			        <div class="col-sm">
-			        {{#form.element
-						label="Handläggningsgrupp"
-						controlType="power-select"
-						options=managingGroupOptions
-						disabled=(if changesetObj.pickupLocationId  true)
-						value=(find-by "value" changesetObj.managingGroupId managingGroupOptions)
-						onChange=(action (mut changesetObj.managingGroupId) value="value")
-			        as |el|
-			        }}
-			        {{#el.control
-			        	renderInPlace=true
-		                searchField="label"
-		                searchEnabled=true
-		                searchPlaceholder="Skriv handläggningsgrupp"
-		              as |option|
-		              }}
-		              	{{option.label}}
-		              {{/el.control}}
-		            {{/form.element}}
-			        </div>
-		        </div>
-		        <div class="row">
-					<div class="col-sm">
-				        {{#form.element
-				          label="Avhämtningsbibliotek"	
-				          controlType="power-select"
-				          options=pickupLocationOptions
-				          disabled=(if changesetObj.managingGroupId  true)
-				          value=(find-by "value" changesetObj.pickupLocationId pickupLocationOptions)
-				          onChange=(action (mut changesetObj.pickupLocationId) value="value")
-				        as |el|
-				        }}
-				        {{#el.control
-				        	renderInPlace=true
-			                searchField="label"
-			                searchEnabled=true
-			                searchPlaceholder="Skriv avhämtningsbibliotek"
-			              as |option|
-			              }}
-			              	{{option.label}}
-			              {{/el.control}}
-			            {{/form.element}}
-			        </div>
-		        </div>
-	        </div>
-	      {{/bs-form}}
-	    {{/modal.body}}
-	    {{#modal.footer}}
-	      {{#bs-button onClick=(action modal.close) type="secondary"}}Avbryt{{/bs-button}}
-	      {{#bs-button
-	        onClick=(action modal.submit)
-	        type="success"
-	      }}Spara och stäng{{/bs-button}}
-	    {{/modal.footer}}
+            <div class="row">
+              <div class="col-sm">
+                <form.element @label="Handläggningsgrupp" @controlType="power-select" @options={{managingGroupOptions}} @disabled={{if changesetObj.pickupLocationId true}} @value={{find-by "value" changesetObj.managingGroupId managingGroupOptions}} @onChange={{action (mut changesetObj.managingGroupId) value="value"}} as |el|>
+                  <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv handläggningsgrupp" as |option|>
+                    {{option.label}}
+                  </el.control>
+                </form.element>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <form.element @label="Avhämtningsbibliotek" @controlType="power-select" @options={{pickupLocationOptions}} @disabled={{if changesetObj.managingGroupId true}} @value={{find-by "value" changesetObj.pickupLocationId pickupLocationOptions}} @onChange={{action (mut changesetObj.pickupLocationId) value="value"}} as |el|>
+                  <el.control @renderInPlace={{true}} @searchField="label" @searchEnabled={{true}} @searchPlaceholder="Skriv avhämtningsbibliotek" as |option|>
+                    {{option.label}}
+                  </el.control>
+                </form.element>
+              </div>
+            </div>
+          </div>
+        </BsForm>
+      </modal.body>
+      <modal.footer>
+        <BsButton @onClick={{action modal.close}} @type="secondary">Avbryt</BsButton>
+        <BsButton @onClick={{action modal.submit}} @type="success">Spara och stäng</BsButton>
+      </modal.footer>
     {{/with}}
-{{/bs-modal}}
-
-
+</BsModal>
 
 
 

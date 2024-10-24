@@ -1,5 +1,5 @@
-import DS from 'ember-data';
+import Model, { belongsTo } from '@ember-data/model';
 
-export default DS.Model.extend({
-  user: DS.belongsTo('user')
+export default Model.extend({
+  user: belongsTo('user')
 });

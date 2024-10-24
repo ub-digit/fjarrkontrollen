@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import EmberObject from '@ember/object';
 import BarcodeDataValidations from '../validations/barcode-data';
 
-export default Ember.Component.extend({
+export default Component.extend({
   BarcodeDataValidations,
   isSubmitting: false, //Hack to access internal form state outside of form
   error: null,
@@ -18,9 +18,8 @@ export default Ember.Component.extend({
     },
     onSubmit(changeset) {
       // validate, or skip since cannot submit without isValid?
-      return this.get('onSubmit')(changeset).then(() => {
+      return this.onSubmit(changeset).then(() => {
         changeset.rollback();
-        document.querySelector('#scan-order-modal-input-field').focus();
       }, (error) => {
         if (typeof error === 'string') {
           changeset.pushErrors('barcode', error);

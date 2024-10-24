@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-12 d-flex">
     <div class="flex-fill">
-      <a href={{href-to "admin.index"}}>
+      <LinkTo @route="admin.index">
         <i class="fas fa-chevron-left"></i> Tillbaka
-      </a>
+      </LinkTo>
     </div>
     <div>
       <a target="_blank" href="{{printOrderUrl}}" class="mr-3"><i class="fas fa-print"></i> Beställning</a>
@@ -11,20 +11,7 @@
     </div>
   </div>
   <div class="col-12 col-md-8 order">
-    {{#order-form
-      order=order
-      orderValidations=OrderValidations
-      saveOrder=(action "saveOrder")
-      deliverySources=deliverySources
-      deliveryMethods=deliveryMethods
-      statuses=statuses
-      managingGroups=managingGroups
-      pickupLocations=pickupLocations
-      orderTypes=orderTypes
-      customerTypes=customerTypes
-      showAllValidations=showAllValidations
-      isEditing=isEditing
-    as |orderForm|}}
+    <OrderForm @order={{order}} @orderValidations={{OrderValidations}} @saveOrder={{action "saveOrder"}} @deliverySources={{deliverySources}} @deliveryMethods={{deliveryMethods}} @statuses={{statuses}} @managingGroups={{managingGroups}} @pickupLocations={{pickupLocations}} @orderTypes={{orderTypes}} @customerTypes={{customerTypes}} @showValidations={{showValidations}} @isEditing={{isEditing}} as |orderForm|>
       <div class="row">
         <div class="col-12 order-header">
           <h2 class="order-header-title">
@@ -33,35 +20,23 @@
           </h2>
           <div class="order-header-tools">
             {{#if isEditing}}
-              {{#bs-button
-                class="btn-sm"
-                onClick=(action "cancelEditOrder" orderForm.changeset)
-              }}
+              <BsButton class="btn-sm" @onClick={{action "cancelEditOrder" orderForm.changeset}}>
                 Stäng <i class="fas fa-times"></i>
-              {{/bs-button}}
+              </BsButton>
 
-              {{#bs-button
-                type="primary"
-                class="btn-sm"
-                buttonType="submit"
-                disabled=orderForm.form.isSubmitting
-              }}
+              <BsButton @type="primary" class="btn-sm" @buttonType="submit" @disabled={{orderForm.form.isSubmitting}}>
                 Spara <i class="fas fa-check"></i>
                 {{#if orderForm.form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
-              {{/bs-button}}
+              </BsButton>
             {{else}}
-              {{#bs-button
-                type="primary"
-                class="btn-sm"
-                onClick=(action "editOrder" orderForm.changeset)
-              }}
+              <BsButton @type="primary" class="btn-sm" @onClick={{action "editOrder" orderForm.changeset}}>
                 Redigera <i class="fas fa-pencil-alt fa-xs ml-1"></i>
-              {{/bs-button}}
+              </BsButton>
             {{/if}}
           </div>
         </div>
       </div>
-    {{/order-form}}
+    </OrderForm>
   </div>
   <div class="col-12 col-md-4">
     <div class="row messages">
@@ -72,70 +47,36 @@
       </div>
         <div class="col-12 messages-tools">
         {{#unless (or isCreatingMessage isCreatingNote)}}
-          {{#bs-button
-            type="secondary"
-            onClick=(action "showCreateMessage")
-          }}
+          <BsButton @type="secondary" @onClick={{action "showCreateMessage"}}>
             Nytt meddelande <i class="far fa-envelope"></i>
-          {{/bs-button}}
-          {{#bs-button
-            type="secondary"
-            onClick=(action "showCreateNote")
-          }}
+          </BsButton>
+          <BsButton @type="secondary" @onClick={{action "showCreateNote"}}>
             Ny anteckning <i class="far fa-file-alt"></i>
-          {{/bs-button}}
+          </BsButton>
         {{/unless}}
         {{#if isCreatingMessage}}
           {{#with (changeset message MessageValidations) as |changeset|}}
-            {{#bs-form
-              formLayout="vertical"
-              model=changeset
-              onSubmit=(action "saveMessage")
-              onInvalid=(action "messageInvalid")
-              showAllValidations=showAllValidations
-            as |form|}}
+            <BsForm @formLayout="vertical" @model={{changeset}} @onSubmit={{action "saveMessage"}} @onInvalid={{action "messageInvalid"}} @showValidations={{showValidations}} as |form|>
               <div class="d-flex flex-row-reverse">
-                {{#bs-button
-                  type="link"
-                  onClick=(action (mut isCreatingMessage) false)
-                }}
+                <BsButton @type="link" @onClick={{action (mut isCreatingMessage) false}}>
                   <i class="fas fa-times"></i>
-                {{/bs-button}}
+                </BsButton>
               </div>
               {{#if messageErrors}}
                 {{#each messageErrors as |error|}}
-                  {{#bs-alert dismissible=false type="danger"}}
+                  <BsAlert @dismissible={{false}} @type="danger">
                     {{error}}
-                  {{/bs-alert}}
+                  </BsAlert>
                 {{/each}}
               {{/if}}
-              {{#form.element
-                controlType="power-select"
-                options=messageLanguageOptions
-                value=(find-by "language" messageLanguage messageLanguageOptions)
-                onChange=(action (action "onTemplatePropertyChange" changeset "messageLanguage") value="language")
-              as |el|
-              }}
-                {{#el.control
-                  searchEnabled=false
-                as |option|
-                }}
+              <form.element @controlType="power-select" @options={{messageLanguageOptions}} @value={{find-by "language" messageLanguage messageLanguageOptions}} @onChange={{action (action "onTemplatePropertyChange" changeset "messageLanguage") value="language"}} as |el|>
+                <el.control @searchEnabled={{false}} as |option|>
                   {{option.label}}
-                {{/el.control}}
-              {{/form.element}}
+                </el.control>
+              </form.element>
 
-              {{#form.element
-                controlType="power-select"
-                placeholder="Välj standardsvar"
-                options=emailTemplateOptions
-                value=(find-by "id" emailTemplateId emailTemplates)
-                onChange=(action (action "onTemplatePropertyChange" changeset "emailTemplateId") value="id")
-              as |el|
-              }}
-                {{#el.control
-                  searchEnabled=false
-                as |emailTemplate|
-                }}
+              <form.element @controlType="power-select" @options={{emailTemplateOptions}} @value={{find-by "id" emailTemplateId emailTemplates}} @onChange={{action (action "onTemplatePropertyChange" changeset "emailTemplateId") value="id"}} as |el|>
+                <el.control @searchEnabled={{false}} @placeholder="Välj standardsvar" as |emailTemplate|>
                   {{get emailTemplate (get
                       (find-by
                         "language"
@@ -144,82 +85,53 @@
                       ) "subjectProperty"
                     )
                   }}
-                {{/el.control}}
-              {{/form.element}}
+                </el.control>
+              </form.element>
 
-              {{form.element
-                property="subject"
-                placeholder="Ämne"
-                controlType="text"
-              }}
+              <form.element @property="subject" @controlType="text" as |el|>
+                <el.control placeholder="Ämne" />
+              </form.element>
 
-              {{form.element
-                property="message"
-                placeholder="Meddelande"
-                rows=10
-                controlType="textarea"
-              }}
+              <form.element @property="message" @controlType="textarea" as |el|>
+                <el.control placeholder="Meddelande" rows="10" />
+              </form.element>
+
               {{!
                 FIXME: why no padding, wtf
                 "Fix" by adding form-group class
               }}
-              {{form.element
-                label="Bifoga bibliografiska uppgifter i svaret"
-                controlType="checkbox"
-                class="form-group"
-                value=addBiblioInfo
-                onChange=(action "onAddBiblioInfoChange" changeset)
-              }}
+              <form.element @label="Bifoga bibliografiska uppgifter i svaret" @controlType="checkbox" @value={{addBiblioInfo}} @onChange={{action "onAddBiblioInfoChange" changeset}} />
 
-              {{#bs-button
-                type="secondary"
-                buttonType="submit"
-                disabled=form.isSubmitting
-              }}
+              <BsButton @type="secondary" @buttonType="submit" @disabled={{form.isSubmitting}}>
                 Skicka
                 {{#if form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
-              {{/bs-button}}
-            {{/bs-form}}
+              </BsButton>
+            </BsForm>
           {{/with}}
         {{else if isCreatingNote}}
           {{#with (changeset note NoteValidations) as |changeset|}}
-            {{#bs-form
-              formLayout="vertical"
-              model=changeset
-              onSubmit=(action "saveNote")
-              onInvalid=(action "noteInvalid")
-              showAllValidations=showAllValidations
-            as |form|}}
+            <BsForm @formLayout="vertical" @model={{changeset}} @onSubmit={{action "saveNote"}} @onInvalid={{action "noteInvalid"}} @showValidations={{this.showValidations}} as |form|>
               <div class="d-flex flex-row-reverse">
-                {{#bs-button
-                  type="link"
-                  onClick=(action (mut isCreatingNote) false)
-                }}
+                <BsButton @type="link" @onClick={{action (mut isCreatingNote) false}}>
                   <i class="fas fa-times"></i>
-                {{/bs-button}}
+                </BsButton>
               </div>
               {{#if noteErrors}}
                 {{#each noteErrors as |error|}}
-                  {{#bs-alert dismissible=false type="danger"}}
+                  <BsAlert @dismissible={{false}} @type="danger">
                     {{error}}
-                  {{/bs-alert}}
+                  </BsAlert>
                 {{/each}}
               {{/if}}
-              {{form.element
-                property="message"
-                placeholder="Meddelande"
-                rows=10
-                controlType="textarea"
-              }}
-              {{#bs-button
-                type="secondary"
-                buttonType="submit"
-                disabled=form.isSubmitting
-              }}
+              <form.element @property="message" @controlType="textarea" as |el|>
+                <el.control placeholder="Meddelande" rows="10" />
+              </form.element>
+
+              <BsButton @type="secondary" @buttonType="submit" @disabled={{form.isSubmitting}}>
                 Spara
                 {{#if form.isSubmitting}} <i class="fas fa-spinner fa-spin"></i> {{/if}}
-              {{/bs-button}}
-            {{/bs-form}}
+              </BsButton>
+            </BsForm>
           {{/with}}
         {{/if}}
         </div>
@@ -240,37 +152,22 @@
                   {{moment-format note.createdAt "YYYY-MM-DD HH:mm"}} av {{get (find-by "id" note.userId users) "xkonto"}}
                 </h6>
                 {{#if (eq (get (find-by "id" note.noteTypeId noteTypes) 'label') "user")}}
-                {{#bs-button
-                  title="Ta bort notering."
-                  type="link"
-                  class="font-size-sm"
-                  onClick=(action "deleteNote" note.id)
-                }}
+                <BsButton @title="Ta bort notering." @type="link" class="font-size-sm" @onClick={{action "deleteNote" note.id}}>
                   <small>
                     <i class="fas fa-trash-alt messages-card-remove-icon"></i>
                   </small>
-                {{/bs-button}}
-                {{#bs-button
-                  title="Ändra notering."
-                  type="link"
-                  class="font-size-sm"
-                  onClick=(action "showCreateNote" note)
-                }}
+                </BsButton>
+                <BsButton @title="Ändra notering." @type="link" class="font-size-sm" @onClick={{action "showCreateNote" note}}>
                   <small>
                     <i class="fas fa-edit messages-card-edit-icon"></i>
                   </small>
-                {{/bs-button}}
+                </BsButton>
                 {{/if}}
-                {{#bs-button
-                  title="Sätter denna notering som sticky. Detta gör att den blir tillgänglig i översiktslistan."
-                  type="link"
-                  class="font-size-sm"
-                  onClick=(action "toggleStickyNote" note.id)
-                }}
+                <BsButton @title="Sätter denna notering som sticky. Detta gör att den blir tillgänglig i översiktslistan." @type="link" class="font-size-sm" @onClick={{action "toggleStickyNote" note.id}}>
                   <small>
                     <i class="fas fa-thumbtack messages-card-sticky-icon {{ if (eq note.id order.stickyNoteId) " active"}}"></i>
                   </small>
-                {{/bs-button}}
+                </BsButton>
               </div>
               {{#if note.subject}}
                 <div class="messages-card-subject">

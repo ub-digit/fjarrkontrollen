@@ -1,10 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import { inject } from '@ember/service';
 import RSVP from 'rsvp';
 import { computed } from '@ember/object';
 
-export default Ember.Component.extend({
+export default Component.extend({
   store: inject(),
   setOrderAssignedUserPromise: null,
   orderId: null,
@@ -16,12 +16,12 @@ export default Ember.Component.extend({
   classNames: ['order-user-switcher'],
 
   assignedUserIsLoggedInUser: computed('assignedUserId', 'loggedInUserId', function() {
-    return this.get('assignedUserId') ==  this.get('loggedInUserId');
+    return this.assignedUserId == this.loggedInUserId;
   }),
 
   setOrderAssignedUser: task(function * (orderId, newUserId) {
     let promise = new RSVP.Promise((resolve, reject) => {
-      this.get('store').find('order', orderId).then((order) => {
+      this.store.find('order', orderId).then((order) => {
         order.set('userId', newUserId);
         //TODO: If error in then below, will propagate to parent catch???
         order.save().then(() => {
