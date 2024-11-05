@@ -177,7 +177,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="comments" />
             {{else}}
-              {{order.comments}}
+              <ClipboardText @text={{order.comments}} />
             {{/if}}
           </td>
         </tr>
@@ -187,7 +187,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="title" />
             {{else}}
-              {{order.title}}
+              <ClipboardText @text={{order.title}} />
             {{/if}}
           </td>
         </tr>
@@ -197,7 +197,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="librisLfNumber" />
             {{else}}
-              {{order.librisLfNumber}}
+              <ClipboardText @text={{order.librisLfNumber}} />
             {{/if}}
           </td>
         </tr>
@@ -223,7 +223,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="librisid" />
             {{else}}
-              {{order.librisid}}
+              <ClipboardText @text={{order.librisid}} />
             {{/if}}
           </td>
         </tr>
@@ -233,7 +233,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="librismisc" />
             {{else}}
-              {{order.librismisc}}
+              <ClipboardText @text={{order.librismisc}} />
             {{/if}}
           </td>
         </tr>
@@ -243,9 +243,8 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="authors" />
             {{else}}
-              {{order.authors}}
+              <ClipboardText @text={{order.authors}} />
             {{/if}}
-
           </td>
         </tr>
         <tr titel="ISSN/ISBN">
@@ -254,9 +253,8 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="issnIsbn" />
             {{else}}
-              {{order.issnIsbn}}
+              <ClipboardText @text={{order.issnIsbn}} />
             {{/if}}
-
           </td>
         </tr>
         <tr titel="Titel - tidskrift/bok">
@@ -265,7 +263,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="journalTitle" />
             {{else}}
-              {{order.journalTitle}}
+              <ClipboardText @text={{order.journalTitle}} />
             {{/if}}
           </td>
         </tr>
@@ -275,7 +273,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="publicationYear" />
             {{else}}
-              {{order.publicationYear}}
+              <ClipboardText @text={{order.publicationYear}} />
             {{/if}}
           </td>
         </tr>
@@ -285,7 +283,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="volume" />
             {{else}}
-              {{order.volume}}
+              <ClipboardText @text={{order.volume}} />
             {{/if}}
           </td>
         </tr>
@@ -295,7 +293,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="issue" />
             {{else}}
-              {{order.issue}}
+              <ClipboardText @text={{order.issue}} />
             {{/if}}
           </td>
         </tr>
@@ -305,7 +303,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="pages" />
             {{else}}
-              {{order.pages}}
+              <ClipboardText @text={{order.pages}} />
             {{/if}}
           </td>
         </tr>
@@ -315,7 +313,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="period" />
             {{else}}
-              {{order.period}}
+              <ClipboardText @text={{order.period}} />
             {{/if}}
           </td>
         </tr>
@@ -325,7 +323,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="publicationType" />
             {{else}}
-              {{order.publicationType}}
+	      <ClipboardText @text={{order.publicationType}} />
             {{/if}}
           </td>
         </tr>
@@ -339,7 +337,7 @@ as |form|>
                 </el.control>
               </form.element>
             {{else}}
-              {{get (find-by "id" order.orderTypeId orderTypes) 'nameSv'}}
+	      <ClipboardText @text={{get (find-by "id" order.orderTypeId orderTypes) 'nameSv'}} />
             {{/if}}
           </td>
         </tr>
@@ -353,7 +351,7 @@ as |form|>
                 </el.control>
               </form.element>
             {{else}}
-              {{get (find-by "id" order.deliveryMethodId deliveryMethods) 'name'}}
+              <ClipboardText @text={{get (find-by "id" order.deliveryMethodId deliveryMethods) 'name'}} />
             {{/if}}
           </td>
         </tr>
@@ -375,7 +373,7 @@ as |form|>
               </a>
               {{/if}}
             {{else}}
-              {{order.libraryCardNumber}}
+	      <ClipboardText @text={{order.libraryCardNumber}} />
               {{#if order.kohaBorrowernumber}}
                 <i class="fas fa-check"></i>
               {{/if}}
@@ -389,9 +387,8 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="name" />
             {{else}}
-              {{order.name}}
+	      <ClipboardText @text={{order.name}} />
             {{/if}}
-
           </td>
         </tr>
 
@@ -401,7 +398,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="xAccount" />
             {{else}}
-              {{order.xAccount}}
+	      <ClipboardText @text={{order.xAccount}} />
             {{/if}}
           </td>
         </tr>
@@ -412,7 +409,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="emailAddress" />
             {{else}}
-              {{order.emailAddress}}
+	      <ClipboardText @text={{order.emailAddress}} />
             {{/if}}
           </td>
         </tr>
@@ -423,7 +420,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="formLang" />
             {{else}}
-              {{order.formLang}}
+	      <ClipboardText @text={{order.formLang}} />
             {{/if}}
           </td>
         </tr>
@@ -434,7 +431,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="company1" />
             {{else}}
-              {{order.company1}}
+	      <ClipboardText @text={{order.company1}} />
             {{/if}}
           </td>
         </tr>
@@ -445,7 +442,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="company2" />
             {{else}}
-              {{order.company2}}
+	      <ClipboardText @text={{order.company2}} />
             {{/if}}
           </td>
         </tr>
@@ -456,7 +453,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="company3" />
             {{else}}
-              {{order.company3}}
+	      <ClipboardText @text={{order.company3}} />
             {{/if}}
           </td>
         </tr>
@@ -467,7 +464,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="phoneNumber" />
             {{else}}
-              {{order.phoneNumber}}
+	      <ClipboardText @text={{order.phoneNumber}} />
             {{/if}}
           </td>
         </tr>
@@ -481,7 +478,7 @@ as |form|>
                 </el.control>
               </form.element>
             {{else}}
-              {{get (find-by "id" order.customerTypeId customerTypes) 'nameSv'}}
+              <ClipboardText @text={{get (find-by "id" order.customerTypeId customerTypes) 'nameSv'}} />
             {{/if}}
           </td>
         </tr>
@@ -496,7 +493,7 @@ as |form|>
                 <el.control @disabled={{true}}/>
               </form.element>
             {{else}}
-              {{order.kohaBorrowernumber}}
+	      <ClipboardText @text={{order.kohaBorrowernumber}} />
             {{/if}}
           </td>
         </tr>
@@ -506,7 +503,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @maxlength="2" @property="kohaUserCategory" />
             {{else}}
-              {{order.kohaUserCategory}}
+	      <ClipboardText @text={{order.kohaUserCategory}} />
             {{/if}}
           </td>
         </tr>
@@ -516,7 +513,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @maxlength="1" @property="kohaOrganisation" />
             {{else}}
-              {{order.kohaOrganisation}}
+	      <ClipboardText @text={{order.kohaOrganisation}} />
             {{/if}}
           </td>
         </tr>
@@ -531,7 +528,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="deliveryAddress" />
             {{else}}
-              {{order.deliveryAddress}}
+	      <ClipboardText @text={{order.deliveryAddress}} />
             {{/if}}
           </td>
         </tr>
@@ -541,7 +538,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="deliveryPostalCode" />
             {{else}}
-              {{order.deliveryPostalCode}}
+	      <ClipboardText @text={{order.deliveryPostalCode}} />
             {{/if}}
           </td>
         </tr>
@@ -552,7 +549,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="deliveryCity" />
             {{else}}
-              {{order.deliveryCity}}
+	      <ClipboardText @text={{order.deliveryCity}} />
             {{/if}}
           </td>
         </tr>
@@ -563,7 +560,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="deliveryBox" />
             {{else}}
-              {{changeset.deliveryBox}}
+	      <ClipboardText @text={{order.deliveryBox}} />
             {{/if}}
           </td>
         </tr>
@@ -573,7 +570,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="deliveryComments" />
             {{else}}
-              {{order.deliveryComments}}
+	      <ClipboardText @text={{order.deliveryComments}} />
             {{/if}}
           </td>
         </tr>
@@ -589,7 +586,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="invoicingName" />
             {{else}}
-              {{order.invoicingName}}
+	      <ClipboardText @text={{order.invoicingName}} />
             {{/if}}
           </td>
         </tr>
@@ -600,7 +597,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="invoicingCompany" />
             {{else}}
-              {{order.invoicingCompany}}
+	      <ClipboardText @text={{order.invoicingCompany}} />
             {{/if}}
           </td>
         </tr>
@@ -611,7 +608,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="invoicingAddress" />
             {{else}}
-              {{order.invoicingAddress}}
+	      <ClipboardText @text={{order.invoicingAddress}} />
             {{/if}}
           </td>
         </tr>
@@ -622,7 +619,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="invoicingPostalAddress1" />
             {{else}}
-              {{order.invoicingPostalAddress1}}
+	      <ClipboardText @text={{order.invoicingPostalAddress1}} />
             {{/if}}
           </td>
         </tr>
@@ -633,7 +630,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="invoicingPostalAddress2" />
             {{else}}
-              {{order.invoicingPostalAddress2}}
+	      <ClipboardText @text={{order.invoicingPostalAddress2}} />
             {{/if}}
           </td>
         </tr>
@@ -644,7 +641,7 @@ as |form|>
             {{#if isEditing}}
               <form.element @controlType="text" @property="invoicingId" />
             {{else}}
-              {{order.invoicingId}}
+	      <ClipboardText @text={{order.invoicingId}} />
             {{/if}}
           </td>
         </tr>

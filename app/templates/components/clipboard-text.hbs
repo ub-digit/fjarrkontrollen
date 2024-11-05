@@ -1,0 +1,10 @@
+<div class="clipboard-text"
+  {{did-insert this.setupEventHandlers}}
+  {{will-destroy this.remoeEventHandlers}}
+>
+<span>{{ this.args.text }}
+{{#if this.copyButtonIsVisible}}
+  <ClipboardButton @copyText={{this.args.text}}/>
+{{/if}}
+</span>
+</div>
