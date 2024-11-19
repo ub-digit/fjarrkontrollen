@@ -2,9 +2,16 @@
   {{did-insert this.setupEventHandlers}}
   {{will-destroy this.remoeEventHandlers}}
 >
-<span>{{ this.args.text }}
-{{#if this.copyButtonIsVisible}}
-  <ClipboardButton @copyText={{this.args.text}}/>
+<span>
+{{#if (has-block)}}
+  {{ yield }}
+{{else}}
+  {{ this.args.text }}
 {{/if}}
 </span>
+{{#if this.copyButtonIsVisible}}
+  <ClipboardButton @copyText={{this.args.text}}/>
+{{else}}
+  <div class="clipboard-button-placeholder"></div>
+{{/if}}
 </div>

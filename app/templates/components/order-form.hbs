@@ -373,10 +373,12 @@ as |form|>
               </a>
               {{/if}}
             {{else}}
-	      <ClipboardText @text={{order.libraryCardNumber}} />
-              {{#if order.kohaBorrowernumber}}
-                <i class="fas fa-check"></i>
-              {{/if}}
+	      <ClipboardText @text={{order.libraryCardNumber}}>
+                {{order.libraryCardNumber}}
+                {{#if order.kohaBorrowernumber}}
+                  <i class="fas fa-check"></i>
+                {{/if}}
+              </ClipboardText>
             {{/if}}
           </td>
         </tr>
