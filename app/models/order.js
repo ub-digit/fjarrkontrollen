@@ -73,6 +73,9 @@ export default Model.extend({
   toBeInvoiced: attr('boolean'),
   publicationType: attr('string'),
   period: attr('string'),
+  articleIdentifier: attr('string'),
+  articleIdentifierSource: attr('string'),
+
 
   /* Actions: */
 
