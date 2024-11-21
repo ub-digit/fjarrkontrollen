@@ -328,21 +328,25 @@ as |form|>
           </td>
         </tr>
         {{#if (eq (get (find-by "id" order.orderTypeId orderTypes) 'label') 'photocopy')}}
-          <tr titel="Importid">
+          <tr titel="Import-id">
             <th>Import-id</th>
             <td>
               {{#if isEditing}}
-                <form.element @controlType="text" @property="articleIdentifier" />
+                <form.element @controlType="text" @property="articleIdentifier" as |el|>
+                  <el.control disabled/>
+                </form.element>
               {{else}}
                 <ClipboardText @text={{order.articleIdentifer}} />
               {{/if}}
             </td>
           </tr>
-          <tr titel="Importid källa">
+          <tr titel="Import-id källa">
             <th>Import-id källa</th>
             <td>
               {{#if isEditing}}
-                <form.element @controlType="text" @property="articleIdentifierSource" />
+                <form.element @controlType="text" @property="articleIdentifierSource" as |el|>
+                  <el.control disabled/>
+                </form.element>
               {{else}}
                 <ClipboardText @text={{order.articleIdentiferSource}} />
               {{/if}}
