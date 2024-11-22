@@ -237,6 +237,28 @@ as |form|>
             {{/if}}
           </td>
         </tr>
+        {{#if (eq (get (find-by "id" order.orderTypeId orderTypes) 'label') 'photocopy')}}
+          <tr titel="Import-id">
+            <th>Import-id</th>
+            <td>
+              {{#if isEditing}}
+                <form.element @controlType="text" @property="articleIdentifier"/>
+              {{else}}
+                <ClipboardText @text={{order.articleIdentifier}} />
+              {{/if}}
+            </td>
+          </tr>
+          <tr titel="Import-id källa">
+            <th>Import-id källa</th>
+            <td>
+              {{#if isEditing}}
+                <form.element @controlType="text" @property="articleIdentifierSource" />
+              {{else}}
+                <ClipboardText @text={{order.articleIdentifierSource}} />
+              {{/if}}
+            </td>
+          </tr>
+        {{/if}}
         <tr titel="Författare">
           <th>Författare</th>
           <td>
@@ -327,32 +349,6 @@ as |form|>
             {{/if}}
           </td>
         </tr>
-        {{#if (eq (get (find-by "id" order.orderTypeId orderTypes) 'label') 'photocopy')}}
-          <tr titel="Import-id">
-            <th>Import-id</th>
-            <td>
-              {{#if isEditing}}
-                <form.element @controlType="text" @property="articleIdentifier" as |el|>
-                  <el.control disabled/>
-                </form.element>
-              {{else}}
-                <ClipboardText @text={{order.articleIdentifier}} />
-              {{/if}}
-            </td>
-          </tr>
-          <tr titel="Import-id källa">
-            <th>Import-id källa</th>
-            <td>
-              {{#if isEditing}}
-                <form.element @controlType="text" @property="articleIdentifierSource" as |el|>
-                  <el.control disabled/>
-                </form.element>
-              {{else}}
-                <ClipboardText @text={{order.articleIdentifierSource}} />
-              {{/if}}
-            </td>
-          </tr>
-        {{/if}}
         <tr titel="Beställningstyp">
           <th>Beställningstyp</th>
           <td>
