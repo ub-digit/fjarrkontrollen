@@ -1,0 +1,66 @@
+<div class='row'>
+  <div class='col-12 d-flex'>
+    <div class='flex-fill'>
+      <LinkTo @route='admin.index'>
+        <i class='fas fa-chevron-left'></i>
+        Tillbaka
+      </LinkTo>
+    </div>
+  </div>
+  <div class='col-12 order-batch'>
+    <OrderFormBatch
+      @orderBatchRequest={{orderBatchRequest}}
+      @deliveryMethods={{deliveryMethods}}
+      @pickupLocations={{pickupLocations}}
+      @customerTypes={{customerTypes}}
+      @orderBatchRequestFetched={{action 'orderBatchRequestFetched'}}
+      @isEditing={{isEditing}}
+      as |orderBatchForm|
+    >
+      <div class='row'>
+        <div class='col-12 order-header'>
+          <h2 class='order-header-title'>
+            Nya ordrar från lista
+          </h2>
+          <div class='order-header-tools'>
+            {{#if this.isEditing}}
+              <BsButton
+                @type='secondary'
+                class='btn-sm mr-2'
+                @onClick={{action 'clearOrderBatchForm'}}
+                @buttonType='button'
+              >
+                Rensa formuläret
+              </BsButton>
+            {{/if}}
+            {{#unless this.isEditing}}
+              <BsButton
+                @type='secondary'
+                class='btn-sm mr-2'
+                @onClick={{action 'cancelOrderBatchImport'}}
+                @buttonType='button'
+              >
+                Avbryt
+              </BsButton>
+
+              <BsButton
+                @type='primary'
+                class='btn-sm'
+                @buttonType='submit'
+                @disabled={{orderBatchForm.form.isSubmitting}}
+              >
+                Skapa ordrar
+                <i class='fas fa-check'></i>
+                {{#if orderBatchForm.form.isSubmitting}}
+                  <i class='fas fa-spinner fa-spin'></i>
+                {{/if}}
+              </BsButton>
+            {{/unless}}
+          </div>
+        </div>
+      </div>
+    </OrderFormBatch>
+  </div>
+</div>
+
+{{outlet}}
