@@ -8,6 +8,9 @@
         <LinkTo @route="admin.new" class="new-order-link"><i class="fas fa-plus-circle"></i> Skapa order</LinkTo>
       </nav.item>
       <nav.item>
+        <LinkTo @route="admin.new-batch" class="new-batch-order-link"><i class="fas fa-plus-square"></i> Skapa nya från lista</LinkTo>
+      </nav.item>
+      <nav.item>
         <BsButton @type="link" @onClick={{action (mut isShowingScanModal) true}}>
           <i class="fas fa-barcode"></i> Scanna streckkod
         </BsButton>
