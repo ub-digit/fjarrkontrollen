@@ -499,12 +499,14 @@
                 {{/each}}
               </tbody>
             </table>
-            <div class='mt-3'>
-              <h4>Misslyckade hämtningar</h4>
-              <ClipboardText @text={{this.failedItems}}><pre
-                >{{this.failedItems}}
-                </pre></ClipboardText>
-            </div>
+            {{#if orderBatchRequest.itemsFailed}}
+              <div class='mt-3'>
+                <h4>Misslyckade hämtningar</h4>
+                <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
+                  >{{orderBatchRequest.itemsFailed}}
+                  </pre></ClipboardText>
+              </div>
+            {{/if}}
           {{else}}
             Inga artiklar hämtade
           {{/if}}
