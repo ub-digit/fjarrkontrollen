@@ -5,7 +5,7 @@ export default Model.extend({
   batchId: attr('number'), // uuid
   orderListIds: attr('string'),
   allItems: attr('json'), // array of objects with shortform data
-  itemsFailed: attr('json'), // array of objects with shortform data that failed
+  itemsFailed: attr('string'), // array of objects with shortform data that failed
   errors: attr('json'), // array of error messages
   pickupLocationId: attr('string'),
   name: attr('string'),
