@@ -16,8 +16,6 @@ export default class OrderFormBatch extends Component.extend(
   @service store;
   @service toast;
 
-  @tracked isFetching = false;
-
   powerSelectOverlayedOptions = [
     {
       source: 'deliverySources',
@@ -64,6 +62,18 @@ export default class OrderFormBatch extends Component.extend(
         return type;
       }
     });
+  }
+
+  @computed('orderBatchRequest.allItems')
+  get hasOrderID() {
+    if (
+      this.orderBatchRequest.allItems.length > 0 &&
+      Array.isArray(this.orderBatchRequest.allItems) &&
+      this.orderBatchRequest.allItems[0].id
+    ) {
+      return true;
+    }
+    return false;
   }
 
   @computed('isFetching', 'orderBatchRequest.orderListIds')
@@ -159,59 +169,5 @@ export default class OrderFormBatch extends Component.extend(
         orderType.get('defaultManagingGroupId')
       );
     }
-  }
-  @action
-  fetchOrders() {
-    this.isFetching = true;
-
-    setTimeout(() => {
-      this.set('errors', null);
-      this.set('itemsFound', null);
-      this.set('itemsFailed', null);
-      let orderListIds = get(this, 'orderBatchRequest.orderListIds')
-        .split('\n')
-        .map((id) => id.trim())
-        .filter((id) => id.length > 0);
-      if (orderListIds.length === 0) {
-        this.set('errors', ['Du måste ange minst ett beställnings-ID.']);
-        return;
-      }
-
-      // Prepare data
-      let data = {
-        orderListIds: orderListIds,
-      };
-      this.ajax
-        .fetch(`${ENV.APP.serviceURL}/order_batch_requests`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        })
-        .then((data) => {
-          console.log(data);
-          this.set('orderBatchRequest.allItems', data.allItems);
-          this.set('orderBatchRequest.itemsFailed', data.itemsFailed);
-          this.set('orderBatchRequest.errors', data.errors);
-        })
-        .catch((error) => {
-          if ('status' in error && error.status == 404) {
-            this.toast.warning(`Hittar inga ordrar.`, 'ordern hittades inte');
-          } else {
-            this.toast.error(
-              'Ett oväntat serverfel har inträffat.',
-              'Oväntat serverfel'
-            );
-          }
-        })
-        .finally(() => {
-          this.isFetching = false;
-          if (this.orderBatchRequest?.errors?.length === 0) {
-            this.orderBatchRequestFetched();
-          }
-        });
-    }, 2000); // Simulate loading
   }
 }

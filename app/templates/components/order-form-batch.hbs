@@ -1,7 +1,7 @@
 <BsForm
   @formLayout='vertical'
   @model={{orderBatchRequest}}
-  @onSubmit={{this.fetchOrders}}
+  @onSubmit={{this.submitOrdersForCreation}}
   as |form|
 >
   {{yield (hash form=form changeset=orderBatchRequest)}}
@@ -167,9 +167,8 @@
                   <td>
                     {{#if isEditing}}
                       <form.element @controlType='text' @property='xAccount' />
-                      {{#if orderBatchRequest.xAccount}}
+                      {{#if this.orderBatchRequest.xAccount}}
                         <a
-                          class='pt-1 d-block'
                           href='#'
                           {{action
                             'fetchPatronInfo'
@@ -445,8 +444,8 @@
             @type='secondary'
             class='btn-sm'
             @buttonType='button'
-            disabled={{isBtnFetchOrdersDisabled}}
-            @onClick={{this.fetchOrders}}
+            disabled={{this.isBtnFetchOrdersDisabled}}
+            @onClick={{@fetchOrdersForCreation}}
           >
             Hämta ordrar
             {{#if this.isFetching}}
@@ -467,34 +466,56 @@
         <div class='col-12'>
           <h4>Resultat</h4>
           {{#if orderBatchRequest.allItems}}
-            <table class='table table-striped table-sm'>
+            <table class='table table-striped'>
               <thead>
                 <tr>
-                  <th>Välj</th>
+                  {{#if this.hasOrderID}}
+                    <th>Order</th>
+                  {{else}}
+                    <th>Välj</th>
+                  {{/if}}
                   <th>ID</th>
                   <th>Titel</th>
+                  {{#if this.hasOrderID}}
+                    <th>&nbsp;</th>
+                  {{/if}}
                 </tr>
               </thead>
               <tbody>.
                 {{#each orderBatchRequest.allItems as |item|}}
                   <tr>
-                    <td>
-                      {{#if item.selected}}
-                        <form.element
-                          @controlType='checkbox'
-                          @value={{item.selected}}
-                          @label='Skapa order'
-                          @onChange={{fn this.updateSelected item.id}}
-                          as |el|
+                    {{#if this.hasOrderID}}
+                      <td>{{item.id}}</td>
+                    {{else}}
+                      <td>
+                        {{#if item.selected}}
+                          <form.element
+                            @controlType='checkbox'
+                            @value={{item.selected}}
+                            @label='Skapa order'
+                            @onChange={{fn this.updateSelected item.id}}
+                            as |el|
+                          >
+                            <el.control disabled={{not item.selected}} />
+                          </form.element>
+                        {{else}}
+                          N/A
+                        {{/if}}
+                      </td>
+                    {{/if}}
+                    <td>{{item.external_id}}</td>
+                    <td>{{item.presentation_string}}</td>
+                    {{#if this.hasOrderID}}
+                      <td>
+                        <a
+                          href='{{item.link_to_id}}'
+                          target='_blank'
+                          rel='noopener noreferrer'
                         >
-                          <el.control disabled={{not item.selected}} />
-                        </form.element>
-                      {{else}}
-                        N/A
-                      {{/if}}
-                    </td>
-                    <td>{{item.id}}</td>
-                    <td>{{item.title_vancouver}}</td>
+                          {{item.link_to_id}}
+                        </a>
+                      </td>
+                    {{/if}}
                   </tr>
                 {{/each}}
               </tbody>

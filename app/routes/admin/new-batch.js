@@ -25,8 +25,13 @@ export default Route.extend(ResetScroll, {
     });
   },
 
+  resetController(controller, isExiting, transition) {
+    if (isExiting && transition.targetName !== 'error') {
+    }
+  },
   setupController(controller, model) {
     let optionModels = this.modelFor('admin');
+    this.controller.set('currentState', this.controller.states[0]);
     ['pickupLocations', 'customerTypes', 'deliveryMethods'].forEach(function (
       property
     ) {
@@ -35,7 +40,5 @@ export default Route.extend(ResetScroll, {
     controller.set('orderBatchRequest', model);
   },
 
-  actions: {
-    willTransition() {},
-  },
+  actions: {},
 });

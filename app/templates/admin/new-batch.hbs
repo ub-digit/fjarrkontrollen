@@ -7,33 +7,50 @@
       </LinkTo>
     </div>
   </div>
+
+  <div class='col-12 border'>
+
+    <div class='row'>
+      <div class='col-12'>
+        batchid debug:{{this.orderBatchRequest.batchId}}
+      </div>
+      <div class='col-12'>
+        State debug:
+        {{this.currentState}}
+      </div>
+    </div>
+
+  </div>
   <div class='col-12 order-batch'>
     <OrderFormBatch
-      @orderBatchRequest={{orderBatchRequest}}
+      @orderBatchRequest={{this.orderBatchRequest}}
       @deliveryMethods={{deliveryMethods}}
       @pickupLocations={{pickupLocations}}
       @customerTypes={{customerTypes}}
-      @orderBatchRequestFetched={{action 'orderBatchRequestFetched'}}
-      @isEditing={{isEditing}}
+      @submitOrdersForCreation={{action 'submitOrdersForCreation'}}
+      @fetchOrdersForCreation={{action 'fetchOrdersForCreation'}}
+      @isEditing={{this.isEditing}}
+      @isFetching={{this.isFetching}}
       as |orderBatchForm|
     >
       <div class='row'>
         <div class='col-12 order-header'>
           <h2 class='order-header-title'>
-            Nya ordrar från lista
+            Skapa nya ordrar från lista
           </h2>
           <div class='order-header-tools'>
-            {{#if this.isEditing}}
+            {{#if this.isClearFormVisible}}
               <BsButton
                 @type='secondary'
                 class='btn-sm mr-2'
                 @onClick={{action 'clearOrderBatchForm'}}
                 @buttonType='button'
               >
+
                 Rensa formuläret
               </BsButton>
             {{/if}}
-            {{#unless this.isEditing}}
+            {{#if this.isCancelVisible}}
               <BsButton
                 @type='secondary'
                 class='btn-sm mr-2'
@@ -42,7 +59,8 @@
               >
                 Avbryt
               </BsButton>
-
+            {{/if}}
+            {{#if this.isPostFormVisible}}
               <BsButton
                 @type='primary'
                 class='btn-sm'
@@ -55,8 +73,16 @@
                   <i class='fas fa-spinner fa-spin'></i>
                 {{/if}}
               </BsButton>
-            {{/unless}}
+            {{/if}}
+            {{#if this.isHomelinkVisible}}
+              <LinkTo @route='admin.index' class='btn btn-sm btn-success ml-2'>
+                Till startsidan
+                <i class='fas fa-home'></i>
+              </LinkTo>
+
+            {{/if}}
           </div>
+
         </div>
       </div>
     </OrderFormBatch>
