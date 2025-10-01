@@ -10,9 +10,9 @@ import orderBatchRequest from '../../models/order-batch-request';
 export default Controller.extend({
   session: inject(),
   toast: inject(),
-  autuhathenticatedAjax: inject('authenticated-ajax'),
   userId: reads('session.data.authenticated.userid'),
   isFetching: false,
+  isPosting: false,
   states: ['new', 'processing', 'completed', 'failed'],
   currentState: null,
   init: function () {
@@ -23,6 +23,7 @@ export default Controller.extend({
   actions: {
     reset() {},
     submitOrdersForCreation() {
+      this.set('isPosting', true);
       setTimeout(() => {
         fetch(ENV.APP.serviceURL + '/orders_bulk_import', {
           method: 'POST',
@@ -63,7 +64,9 @@ export default Controller.extend({
               });
             }
           })
-          .finally(() => {});
+          .finally(() => {
+            this.set('isPosting', false);
+          });
       }, 2000);
     },
 

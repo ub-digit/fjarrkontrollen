@@ -65,11 +65,11 @@
                 @type='primary'
                 class='btn-sm'
                 @buttonType='submit'
-                @disabled={{orderBatchForm.form.isSubmitting}}
+                @disabled={{this.isPosting}}
               >
                 Skapa ordrar
                 <i class='fas fa-check'></i>
-                {{#if orderBatchForm.form.isSubmitting}}
+                {{#if this.isPosting}}
                   <i class='fas fa-spinner fa-spin'></i>
                 {{/if}}
               </BsButton>
