@@ -22,6 +22,7 @@ export default Route.extend(ResetScroll, {
       itemsFound: [],
       itemsFailed: [],
       customerTypeId: null,
+      libraryCardNumber: null,
     });
   },
 

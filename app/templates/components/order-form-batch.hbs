@@ -184,6 +184,39 @@
                     {{/if}}
                   </td>
                 </tr>
+
+                <tr titel='Lånekortsnummer'>
+                  <th>Lånekortsnummer</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element
+                        @controlType='text'
+                        @property='libraryCardNumber'
+                      />
+                      {{#if orderBatchRequest.libraryCardNumber}}
+                        <a
+                          class='pt-1 d-block'
+                          href='#'
+                          {{action
+                            'fetchPatronInfo'
+                            orderBatchRequest.libraryCardNumber
+                            preventDefault=true
+                          }}
+                        >
+                          Hämta uppgifter från Koha
+                        </a>
+                      {{/if}}
+                    {{else}}
+                      <ClipboardText @text={{order.libraryCardNumber}}>
+                        {{order.libraryCardNumber}}
+                        {{#if order.kohaBorrowernumber}}
+                          <i class='fas fa-check'></i>
+                        {{/if}}
+                      </ClipboardText>
+                    {{/if}}
+                  </td>
+                </tr>
+
                 <tr titel='Namn'>
                   <th>Namn</th>
                   <td>

@@ -25,17 +25,21 @@ export default Controller.extend({
     submitOrdersForCreation() {
       this.set('isPosting', true);
       setTimeout(() => {
-        fetch(ENV.APP.serviceURL + '/orders_bulk_import', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization:
-              'Bearer ' + this.get('session.data.authenticated.token'),
-          },
-          body: JSON.stringify({
-            orderBatchRequest: this.orderBatchRequest,
-          }),
-        })
+        fetch(
+          ENV.APP.serviceURL +
+            `/orders_bulk_import/${this.get('orderBatchRequest.batchId')}/`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization:
+                'Bearer ' + this.get('session.data.authenticated.token'),
+            },
+            body: JSON.stringify({
+              orderBatchRequest: this.orderBatchRequest,
+            }),
+          }
+        )
           .then((response) => {
             if (!response.ok) {
               throw response;
@@ -73,13 +77,22 @@ export default Controller.extend({
     fetchOrdersForCreation() {
       this.set('isFetching', true);
       setTimeout(() => {
-        fetch(`${ENV.APP.serviceURL}/order_batch_requests`)
+        fetch(ENV.APP.serviceURL + `/order_batch_requests/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer ' + this.get('session.data.authenticated.token'),
+          },
+          body: JSON.stringify({
+            orderBatchRequest: this.orderBatchRequest,
+          }),
+        })
           .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
+            if (!response.ok) {
               throw response;
             }
+            return response.json();
           })
           .then((data) => {
             console.log(data);

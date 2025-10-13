@@ -76,11 +76,16 @@ export default class OrderFormBatch extends Component.extend(
     return false;
   }
 
-  @computed('isFetching', 'orderBatchRequest.orderListIds')
+  @computed(
+    'isFetching',
+    'orderBatchRequest.orderListIds',
+    'orderBatchRequest.customerTypeId'
+  )
   get isBtnFetchOrdersDisabled() {
     return (
       this.isFetching ||
       !this.orderBatchRequest ||
+      !this.orderBatchRequest.customerTypeId ||
       !this.orderBatchRequest.orderListIds ||
       this.orderBatchRequest.orderListIds.trim().length === 0
     );
@@ -134,6 +139,7 @@ export default class OrderFormBatch extends Component.extend(
         this.set('orderBatchRequest.kohaOrganisation', patron.organisation);
         this.set('orderBatchRequest.kohaUserCategory', patron.user_category);
         this.set('orderBatchRequest.phoneNumber', patron.phone);
+        this.set('orderBatchRequest.libraryCardNumber', patron.cardnumber);
 
         this.set(
           'orderBatchRequest.customerTypeId',
