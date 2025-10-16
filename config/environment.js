@@ -18,7 +18,8 @@ module.exports = function (environment) {
       },
     },
     APP: {
-      librisFjarrlanURL: 'http://iller.libris.kb.se/librisfjarrlan/lf.php?action=request&type=user&id=',
+      librisFjarrlanURL:
+        'http://iller.libris.kb.se/librisfjarrlan/lf.php?action=request&type=user&id=',
       'gub-oauth2': {},
       // Here you can pass flags/options to your application instance
       // when it is created
@@ -28,16 +29,16 @@ module.exports = function (environment) {
       providers: {
         'gub-oauth2': {
           apiKey: process.env.GUB_OAUTH2_CLIENT_ID,
-          scope: 'openid profile email'
-        }
-      }
+          scope: 'openid profile email',
+        },
+      },
     },
     //@TODO: is this used?
     'simple-auth': {
       authorizer: 'authorizer:gub',
       //crossOriginWhitelist: ['http://localhost:4000/'],
     },
-    'ember-toastr':  {
+    'ember-toastr': {
       injectAs: 'toast',
       toastrOptions: {
         closeButton: true,
@@ -54,9 +55,9 @@ module.exports = function (environment) {
         showEasing: 'swing',
         hideEasing: 'linear',
         showMethod: 'fadeIn',
-        hideMethod: 'fadeOut'
-      }
-    }
+        hideMethod: 'fadeOut',
+      },
+    },
   };
 
   let frontendBaseURL = null;
@@ -70,9 +71,9 @@ module.exports = function (environment) {
     ENV.APP.serviceURL = `http://localhost:${process.env.BACKEND_SERVICE_PORT}`;
     frontendBaseURL = `http://localhost:${process.env.FRONTEND_PORT}`;
     ENV.contentSecurityPolicyHeader = 'Disabled-Content-Security-Policy';
-    ENV.APP.kohaSearchURL = 'https://koha-lab-intra.ub.gu.se/cgi-bin/koha/catalogue/search.pl?q=';
-  }
-  else if (environment === 'test') {
+    ENV.APP.kohaSearchURL =
+      'https://koha-lab-intra.ub.gu.se/cgi-bin/koha/catalogue/search.pl?q=';
+  } else if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
     // keep test console output quieter
@@ -80,17 +81,20 @@ module.exports = function (environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
-  }
-  else {
+  } else {
     ENV.APP.serviceURL = `https://${process.env.BACKEND_SERVICE_HOSTNAME}`;
     frontendBaseURL = `https://${process.env.FRONTEND_HOSTNAME}`;
     ENV.APP.kohaSearchURL = process.env.KOHA_SEARCH_URL;
   }
   if (environment !== 'test') {
     ENV.APP.authenticationBaseURL = ENV.APP.serviceURL + '/session';
-    ENV.torii.providers['gub-oauth2'].tokenExchangeUri = ENV.APP.authenticationBaseURL;
-    ENV.torii.providers['gub-oauth2'].redirectUri = `${frontendBaseURL}/torii/redirect.html`;
-    ENV.APP['gub-oauth2'].authorizeUri = process.env.GUB_OAUTH2_AUTHORIZE_ENDPOINT;
+    ENV.torii.providers['gub-oauth2'].tokenExchangeUri =
+      ENV.APP.authenticationBaseURL;
+    ENV.torii.providers[
+      'gub-oauth2'
+    ].redirectUri = `${frontendBaseURL}/torii/redirect.html`;
+    ENV.APP['gub-oauth2'].authorizeUri =
+      process.env.GUB_OAUTH2_AUTHORIZE_ENDPOINT;
   }
 
   return ENV;

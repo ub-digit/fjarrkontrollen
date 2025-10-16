@@ -1,11 +1,9 @@
 import { reads } from '@ember/object/computed';
 import Component from '@ember/component';
 import powerSelectOverlayedOptions from '../mixins/power-select-overlayed-options';
-import { computed, get, action } from '@ember/object';
+import { computed, get, action, observer } from '@ember/object';
 import { inject as service } from '@ember/service';
 import ENV from '../config/environment';
-import orderBatchRequest from '../models/order-batch-request';
-import { tracked } from '@glimmer/tracking';
 
 export default class OrderFormBatch extends Component.extend(
   powerSelectOverlayedOptions
@@ -47,6 +45,21 @@ export default class OrderFormBatch extends Component.extend(
     );
   }
 
+  @computed('currentState', 'states')
+  get isCurrentStateNew() {
+    return this.currentState === this.states[0];
+  }
+
+  @computed('currentState', 'states')
+  get isCurrentStateCompleted() {
+    return this.currentState === this.states[2];
+  }
+
+  @computed('currentState', 'states')
+  get isCurrentStateProcessing() {
+    return this.currentState === this.states[1];
+  }
+
   @computed('customerTypes', 'orderBatchRequest.customerTypeId')
   get isOvriCustomerType() {
     return (
@@ -64,18 +77,6 @@ export default class OrderFormBatch extends Component.extend(
     });
   }
 
-  @computed('orderBatchRequest.allItems')
-  get hasOrderID() {
-    if (
-      this.orderBatchRequest.allItems.length > 0 &&
-      Array.isArray(this.orderBatchRequest.allItems) &&
-      this.orderBatchRequest.allItems[0].id
-    ) {
-      return true;
-    }
-    return false;
-  }
-
   @computed(
     'isFetching',
     'orderBatchRequest.orderListIds',
@@ -91,25 +92,8 @@ export default class OrderFormBatch extends Component.extend(
     );
   }
 
-  @computed('orderBatchRequest.itemsFailed')
-  get failedItems() {
-    if (
-      !this.orderBatchRequest ||
-      !Array.isArray(this.orderBatchRequest.itemsFailed)
-    ) {
-      return '';
-    }
-    return this.orderBatchRequest.itemsFailed
-      .map((item) =>
-        Object.entries(item)
-          .map(([key, value]) => `${value}`)
-          .join(', ')
-      )
-      .join('\n');
-  }
-
-  @action updateSelected(id) {
-    let item = this.orderBatchRequest.allItems.findBy('id', id);
+  @action updateSelected(request_id) {
+    let item = this.orderBatchRequest.allItems.findBy('request_id', request_id);
     if (item) {
       item.selected = !item.selected;
     }
@@ -163,17 +147,5 @@ export default class OrderFormBatch extends Component.extend(
           );
         }
       });
-  }
-
-  // Use setter action instead since observers don't seem to work after update
-  @action
-  setOrderType(orderBatchRequest, orderType) {
-    orderBatchRequest.set('orderTypeId', orderType.get('id'));
-    if (this.order.isNew && orderType.get('id')) {
-      orderBatchRequest.set(
-        'managingGroupId',
-        orderType.get('defaultManagingGroupId')
-      );
-    }
   }
 }

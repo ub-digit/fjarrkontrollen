@@ -10,7 +10,7 @@
 
   <div class='col-12 border'>
 
-    <div class='row'>
+    <div class='row d-none'>
       <div class='col-12'>
         batchid debug:{{this.orderBatchRequest.batchId}}
       </div>
@@ -31,6 +31,8 @@
       @fetchOrdersForCreation={{action 'fetchOrdersForCreation'}}
       @isEditing={{this.isEditing}}
       @isFetching={{this.isFetching}}
+      @currentState={{this.currentState}}
+      @states={{this.states}}
       as |orderBatchForm|
     >
       <div class='row'>

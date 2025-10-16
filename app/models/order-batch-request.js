@@ -2,7 +2,7 @@ import Model, { attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 
 export default Model.extend({
-  batchId: attr('number'), // uuid
+  batchId: attr('string'), // uuid
   orderListIds: attr('string'),
   allItems: attr('json'), // array of objects with shortform data
   itemsFailed: attr('string'), // array of objects with shortform data that failed
