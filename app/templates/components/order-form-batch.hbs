@@ -528,12 +528,14 @@
               <p>Inga artiklar hämtade</p>
             {{/if}}
           </div>
-          <div class='col-12'>
-            <h4>Misslyckade hämtningar</h4>
-            <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
-              >{{orderBatchRequest.itemsFailed}}
-              </pre></ClipboardText>
-          </div>
+          {{#if orderBatchRequest.itemsFailed}}
+            <div class='col-12'>
+              <h4>Misslyckade hämtningar</h4>
+              <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
+                >{{orderBatchRequest.itemsFailed}}
+                </pre></ClipboardText>
+            </div>
+          {{/if}}
         </div>
       </div>
     {{/if}}
@@ -597,12 +599,14 @@
               <p>Inga artiklar hämtade</p>
             {{/if}}
           </div>
-          <div class='col-12'>
-            <h4>Misslyckade hämtningar</h4>
-            <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
-              >{{orderBatchRequest.itemsFailed}}
-              </pre></ClipboardText>
-          </div>
+          {{#if orderBatchRequest.itemsFailed}}
+            <div class='col-12'>
+              <h4>Misslyckade hämtningar</h4>
+              <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
+                >{{orderBatchRequest.itemsFailed}}
+                </pre></ClipboardText>
+            </div>
+          {{/if}}
         </div>
       </div>
     {{/if}}
