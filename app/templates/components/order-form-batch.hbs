@@ -509,7 +509,16 @@
                       </td>
                       <!-- is request id from server this will be changed later -->
                       <td>{{item.request_id}}</td>
-                      <td>{{item.display_title}}</td>
+                      <td>
+                        {{#unless item.success}}
+                          <i
+                            class='fas fa-exclamation-triangle text-danger'
+                          ></i>
+                          Den här gick inte att hämta
+                        {{else}}
+                          {{item.display_title}}
+                        {{/unless}}
+                      </td>
                     </tr>
                   {{/each}}
                 </tbody>
