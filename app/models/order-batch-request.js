@@ -8,6 +8,7 @@ export default Model.extend({
   itemsFailed: attr('string'), // array of objects with shortform data that failed
   errors: attr('json'), // array of error messages
   pickupLocationId: attr('string'),
+  comments: attr('string'),
   name: attr('string'),
   company1: attr('string'),
   company2: attr('string'),
@@ -27,7 +28,6 @@ export default Model.extend({
   deliveryBox: attr('string'),
   deliveryPostalCode: attr('string'),
   deliveryCity: attr('string'),
-  deliveryComments: attr('string'),
 
   /* Actions: */
 });
