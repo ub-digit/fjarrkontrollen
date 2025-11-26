@@ -80,7 +80,9 @@ export default class OrderFormBatch extends Component.extend(
   @computed(
     'isFetching',
     'orderBatchRequest.orderListIds',
-    'orderBatchRequest.customerTypeId'
+    'orderBatchRequest.customerTypeId',
+    'orderBatchRequest.name',
+    'orderBatchRequest.emailAddress'
   )
   get isBtnFetchOrdersDisabled() {
     return (
@@ -88,7 +90,9 @@ export default class OrderFormBatch extends Component.extend(
       !this.orderBatchRequest ||
       !this.orderBatchRequest.customerTypeId ||
       !this.orderBatchRequest.orderListIds ||
-      this.orderBatchRequest.orderListIds.trim().length === 0
+      this.orderBatchRequest.orderListIds.trim().length === 0 ||
+      !this.orderBatchRequest.name?.length ||
+      !this.orderBatchRequest.emailAddress?.length
     );
   }
 

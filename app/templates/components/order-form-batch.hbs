@@ -63,6 +63,14 @@
             </p>
           {{/if}}
         </div>
+        <div class='col-12'>
+          Kommentar
+          {{#if isEditing}}
+            <form.element @controlType='text' @property='comments' />
+          {{else}}
+            <ClipboardText @text={{orderBatchRequest.comments}} />
+          {{/if}}
+        </div>
       </div>
 
       <div class='row'>
@@ -218,7 +226,7 @@
                 </tr>
 
                 <tr titel='Namn'>
-                  <th>Namn</th>
+                  <th>Namn*</th>
                   <td>
                     {{#if isEditing}}
                       <form.element @controlType='text' @property='name' />
@@ -228,7 +236,7 @@
                   </td>
                 </tr>
                 <tr titel='E-post'>
-                  <th>E-post</th>
+                  <th>E-post*</th>
                   <td>
                     {{#if isEditing}}
                       <form.element
@@ -335,21 +343,7 @@
                     {{/if}}
                   </td>
                 </tr>
-                <tr titel='Kommentar'>
-                  <th>Kommentar</th>
-                  <td>
-                    {{#if isEditing}}
-                      <form.element
-                        @controlType='text'
-                        @property='deliveryComments'
-                      />
-                    {{else}}
-                      <ClipboardText
-                        @text={{orderBatchRequest.deliveryComments}}
-                      />
-                    {{/if}}
-                  </td>
-                </tr>
+
               </tbody>
             </table>
             {{#if isOvriCustomerType}}
@@ -468,7 +462,7 @@
           </div>
           <div class='col-12'>
             <BsButton
-              @type='secondary'
+              @type='primary'
               class='btn-sm'
               @buttonType='button'
               disabled={{this.isBtnFetchOrdersDisabled}}
