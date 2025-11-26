@@ -330,20 +330,6 @@
                   </td>
                 </tr>
 
-                <tr titel='Box'>
-                  <th>Box</th>
-                  <td>
-                    {{#if isEditing}}
-                      <form.element
-                        @controlType='text'
-                        @property='deliveryBox'
-                      />
-                    {{else}}
-                      <ClipboardText @text={{orderBatchRequest.deliveryBox}} />
-                    {{/if}}
-                  </td>
-                </tr>
-
               </tbody>
             </table>
             {{#if isOvriCustomerType}}
