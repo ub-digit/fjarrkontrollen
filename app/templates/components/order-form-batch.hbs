@@ -63,14 +63,6 @@
             </p>
           {{/if}}
         </div>
-        <div class='col-12'>
-          Kommentar
-          {{#if isEditing}}
-            <form.element @controlType='text' @property='comments' />
-          {{else}}
-            <ClipboardText @text={{orderBatchRequest.comments}} />
-          {{/if}}
-        </div>
       </div>
 
       <div class='row'>
@@ -78,6 +70,15 @@
           <h4>Orderkort</h4>
           <table class='table table-striped{{if isEditing " table-sm"}}'>
             <tbody>
+              <tr>
+                <th>Kommentar</th>
+                <td>
+                  {{#if isEditing}}
+                    <form.element @controlType='text' @property='comments' />
+                  {{else}}
+                    <ClipboardText @text={{orderBatchRequest.comments}} />
+                  {{/if}}</td>
+              </tr>
               <tr titel='Leveransmetod'>
                 <th>Leveransmetod</th>
                 <td>
@@ -461,13 +462,11 @@
             </BsButton>
             {{#if this.isBtnFetchOrdersDisabled}}
               {{#unless this.isFetching}}
-                <div>
-                  <span
-                    class='mt-3 fas fa-info-circle'
-                    title='Fyll i alla obligatoriska fält'
-                  ></span>
-                  Fyll i alla obligatoriska fält markerade med *
-                </div>
+                <span
+                  class='ml-3 fas fa-info-circle'
+                  title='Fyll i alla obligatoriska fält'
+                ></span>
+                Fyll i alla obligatoriska fält markerade med *
               {{/unless}}
             {{/if}}
           </div>

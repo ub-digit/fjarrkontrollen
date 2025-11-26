@@ -81,9 +81,9 @@ export default class OrderFormBatch extends Component.extend(
   get getStatusStr() {
     return `${
       this.orderBatchRequest.allItems.filter((item) => item.success)?.length
-    } ordrar kommer att skapas. ${
+    } hämtning(ar) lyckades. ${
       this.orderBatchRequest.allItems.filter((item) => !item.success)?.length
-    } hämtningar misslyckades.`;
+    } hämtning(ar) misslyckades.`;
   }
 
   @computed(
