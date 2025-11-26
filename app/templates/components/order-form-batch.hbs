@@ -459,6 +459,16 @@
                 <i class='fas fa-spinner fa-spin'></i>
               {{/if}}
             </BsButton>
+            {{#if this.isBtnFetchOrdersDisabled}}
+              <div>
+
+                <span
+                  class='mt-3 fas fa-info-circle'
+                  title='Fyll i alla obligatoriska fält'
+                ></span>
+                Fyll i alla obligatoriska fält markerade med *
+              </div>
+            {{/if}}
           </div>
         </div>
       </div>
