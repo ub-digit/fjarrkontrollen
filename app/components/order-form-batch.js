@@ -77,6 +77,15 @@ export default class OrderFormBatch extends Component.extend(
     });
   }
 
+  @computed('orderBatchRequest.allItems')
+  get getStatusStr() {
+    return `${
+      this.orderBatchRequest.allItems.filter((item) => item.success)?.length
+    } ordrar kommer att skapas. ${
+      this.orderBatchRequest.allItems.filter((item) => !item.success)?.length
+    } hämtningar misslyckades.`;
+  }
+
   @computed(
     'isFetching',
     'orderBatchRequest.orderListIds',

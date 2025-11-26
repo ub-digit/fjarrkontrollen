@@ -460,14 +460,15 @@
               {{/if}}
             </BsButton>
             {{#if this.isBtnFetchOrdersDisabled}}
-              <div>
-
-                <span
-                  class='mt-3 fas fa-info-circle'
-                  title='Fyll i alla obligatoriska fält'
-                ></span>
-                Fyll i alla obligatoriska fält markerade med *
-              </div>
+              {{#unless this.isFetching}}
+                <div>
+                  <span
+                    class='mt-3 fas fa-info-circle'
+                    title='Fyll i alla obligatoriska fält'
+                  ></span>
+                  Fyll i alla obligatoriska fält markerade med *
+                </div>
+              {{/unless}}
             {{/if}}
           </div>
         </div>
@@ -479,6 +480,8 @@
         <div class='row'>
           <div class='col-12'>
             <h4>Ordrar att skapa</h4>
+            <p>{{this.getStatusStr}}</p>
+
             {{#if orderBatchRequest.allItems}}
               <table class='table table-striped'>
                 <thead>
@@ -578,7 +581,17 @@
                           N/A
                         {{/if}}
                       </td>
-                      <td>{{item.display_title}}</td>
+                      <td>
+                        {{#unless item.success}}
+                          <i
+                            class='fas fa-exclamation-triangle text-danger'
+                          ></i>
+                          Den här gick inte att hämta
+                        {{else}}
+                          {{item.display_title}}
+                        {{/unless}}
+
+                      </td>
                       <td>
                         {{#if item.order_id}}
                           <LinkTo
