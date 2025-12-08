@@ -1,0 +1,627 @@
+<BsForm
+  @formLayout='vertical'
+  @model={{orderBatchRequest}}
+  @onSubmit={{this.submitOrdersForCreation}}
+  as |form|
+>
+  {{yield (hash form=form changeset=orderBatchRequest)}}
+
+  <div class='row'>
+    <div class='col-12'>
+      {{#if orderBatchRequest.errors}}
+        {{#each orderBatchRequest.errors as |error|}}
+          <BsAlert @dismissible={{false}} @type='danger'>
+            {{error.msg}}
+          </BsAlert>
+        {{/each}}
+      {{/if}}
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col-md-4 col-12'>
+      <div class='row'>
+        <div class='col-12'>
+          <h5>Avhämtningsbibliotek</h5>
+          {{#if isEditing}}
+            <form.element
+              @controlType='power-select'
+              @options={{pickupLocations}}
+              @value={{find-by
+                'id'
+                orderBatchRequest.pickupLocationId
+                pickupLocations
+              }}
+              @onChange={{action
+                (mut orderBatchRequest.pickupLocationId)
+                value='id'
+              }}
+              as |el|
+            >
+              <el.control
+                @searchField='nameSv'
+                @searchEnabled={{true}}
+                @placeholder='Välj avhämtningsbibliotek'
+                @searchPlaceholder='Skriv avhämtningsbibliotek'
+                as |pickupLocation|
+              >
+                {{pickupLocation.nameSv}}
+              </el.control>
+            </form.element>
+          {{else}}
+            <p>
+              {{#if orderBatchRequest.pickupLocationId}}
+                {{get
+                  (find-by
+                    'id' orderBatchRequest.pickupLocationId pickupLocations
+                  )
+                  'nameSv'
+                }}
+              {{else}}
+                Ej angivet
+              {{/if}}
+            </p>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class='row'>
+        <div class='col-12'>
+          <h4>Orderkort</h4>
+          <table class='table table-striped{{if isEditing " table-sm"}}'>
+            <tbody>
+              <tr>
+                <th>Kommentar</th>
+                <td>
+                  {{#if isEditing}}
+                    <form.element @controlType='text' @property='comments' />
+                  {{else}}
+                    <ClipboardText @text={{orderBatchRequest.comments}} />
+                  {{/if}}</td>
+              </tr>
+              <tr titel='Leveransmetod'>
+                <th>Leveransmetod</th>
+                <td>
+                  {{#if isEditing}}
+                    <form.element
+                      @controlType='power-select'
+                      @options={{deliveryMethods}}
+                      @value={{find-by
+                        'id'
+                        orderBatchRequest.deliveryMethodId
+                        deliveryMethods
+                      }}
+                      @onChange={{action
+                        (mut orderBatchRequest.deliveryMethodId)
+                        value='id'
+                      }}
+                      as |el|
+                    >
+                      <el.control
+                        @searchField='name'
+                        @searchEnabled={{true}}
+                        @placeholder='Välj leveransmetod'
+                        @searchPlaceholder='Skriv leveransmetod'
+                        as |deliveryMethod|
+                      >
+                        {{deliveryMethod.name}}
+                      </el.control>
+                    </form.element>
+                  {{else}}
+                    <ClipboardText
+                      @text={{get
+                        (find-by
+                          'id'
+                          orderBatchRequest.deliveryMethodId
+                          deliveryMethods
+                        )
+                        'name'
+                      }}
+                    />
+                  {{/if}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-12'>
+          <h4>Låntagare</h4>
+          <table class='table table-striped {{if isEditing " table-sm"}}'>
+            <tbody>
+              <tr titel='Kundtyp'>
+                <th>Kundtyp</th>
+                <td>
+                  {{#if isEditing}}
+                    <form.element
+                      @controlType='power-select'
+                      @options={{customerTypesFilteredForBatchImport}}
+                      @value={{find-by
+                        'id'
+                        orderBatchRequest.customerTypeId
+                        customerTypesFilteredForBatchImport
+                      }}
+                      @onChange={{action
+                        (mut orderBatchRequest.customerTypeId)
+                        value='id'
+                      }}
+                      as |el|
+                    >
+                      <el.control
+                        @searchField='nameSv'
+                        @searchEnabled={{true}}
+                        @placeholder='Välj kundtyp'
+                        @searchPlaceholder='Skriv kundtyp'
+                        as |customerType|
+                      >
+                        {{customerType.nameSv}}
+                      </el.control>
+                    </form.element>
+                  {{else}}
+                    <ClipboardText
+                      @text={{get
+                        (find-by
+                          'id' orderBatchRequest.customerTypeId customerTypes
+                        )
+                        'nameSv'
+                      }}
+                    />
+                  {{/if}}
+                </td>
+              </tr>
+              {{#if orderBatchRequest.customerTypeId}}
+                <tr titel='X-konto'>
+                  <th>X-konto</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element @controlType='text' @property='xAccount' />
+                      {{#if this.orderBatchRequest.xAccount}}
+                        <a
+                          href='#'
+                          {{action
+                            'fetchPatronInfo'
+                            orderBatchRequest.xAccount
+                            preventDefault=true
+                          }}
+                        >
+                          Hämta uppgifter från Koha
+                        </a>
+                      {{/if}}
+                    {{else}}
+                      <ClipboardText @text={{orderBatchRequest.xAccount}} />
+                    {{/if}}
+                  </td>
+                </tr>
+
+                <tr titel='Lånekortsnummer'>
+                  <th>Lånekortsnummer</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element
+                        @controlType='text'
+                        @property='libraryCardNumber'
+                      />
+                      {{#if orderBatchRequest.libraryCardNumber}}
+                        <a
+                          class='pt-1 d-block'
+                          href='#'
+                          {{action
+                            'fetchPatronInfo'
+                            orderBatchRequest.libraryCardNumber
+                            preventDefault=true
+                          }}
+                        >
+                          Hämta uppgifter från Koha
+                        </a>
+                      {{/if}}
+                    {{else}}
+                      <ClipboardText @text={{order.libraryCardNumber}}>
+                        {{order.libraryCardNumber}}
+                        {{#if order.kohaBorrowernumber}}
+                          <i class='fas fa-check'></i>
+                        {{/if}}
+                      </ClipboardText>
+                    {{/if}}
+                  </td>
+                </tr>
+
+                <tr titel='Namn'>
+                  <th>Namn*</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element @controlType='text' @property='name' />
+                    {{else}}
+                      <ClipboardText @text={{orderBatchRequest.name}} />
+                    {{/if}}
+                  </td>
+                </tr>
+                <tr titel='E-post'>
+                  <th>E-post*</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element
+                        @controlType='text'
+                        @property='emailAddress'
+                      />
+                    {{else}}
+                      <ClipboardText @text={{orderBatchRequest.emailAddress}} />
+                    {{/if}}
+                  </td>
+                </tr>
+                {{#if isOvriCustomerType}}
+                  <tr titel='Organisation'>
+                    <th>Organisation</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='company1'
+                        />
+                      {{else}}
+                        <ClipboardText @text={{orderBatchRequest.company1}} />
+                      {{/if}}
+                    </td>
+                  </tr>
+                {{/if}}
+                {{#if isUniversityCustomerType}}
+                  <tr titel='Institution'>
+                    <th>Institution</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='company2'
+                        />
+                      {{else}}
+                        <ClipboardText @text={{orderBatchRequest.company2}} />
+                      {{/if}}
+                    </td>
+                  </tr>
+                {{/if}}
+              {{/if}}
+            </tbody>
+          </table>
+          {{#if orderBatchRequest.customerTypeId}}
+            <h4>Leveransuppgifter</h4>
+            <table class='table table-striped {{if isEditing " table-sm"}}'>
+              <tbody>
+                <tr titel='Gatuadress/Box'>
+                  <th>Gatuadress/Box</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element
+                        @controlType='text'
+                        @property='deliveryAddress'
+                      />
+                    {{else}}
+                      <ClipboardText
+                        @text={{orderBatchRequest.deliveryAddress}}
+                      />
+                    {{/if}}
+                  </td>
+                </tr>
+                <tr titel='Postnummer'>
+                  <th>Postnummer</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element
+                        @controlType='text'
+                        @property='deliveryPostalCode'
+                      />
+                    {{else}}
+                      <ClipboardText
+                        @text={{orderBatchRequest.deliveryPostalCode}}
+                      />
+                    {{/if}}
+                  </td>
+                </tr>
+
+                <tr titel='Ort'>
+                  <th>Ort</th>
+                  <td>
+                    {{#if isEditing}}
+                      <form.element
+                        @controlType='text'
+                        @property='deliveryCity'
+                      />
+                    {{else}}
+                      <ClipboardText @text={{orderBatchRequest.deliveryCity}} />
+                    {{/if}}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+            {{#if isOvriCustomerType}}
+              <h4>Faktureringsuppgifter</h4>
+              <table class='table table-striped{{if isEditing " table-sm"}}'>
+                <tbody>
+                  <tr titel='Namn'>
+                    <th>Namn</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='invoicingName'
+                        />
+                      {{else}}
+                        <ClipboardText @text={{order.invoicingName}} />
+                      {{/if}}
+                    </td>
+                  </tr>
+
+                  <tr titel='Företag'>
+                    <th>Företag</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='invoicingCompany'
+                        />
+                      {{else}}
+                        <ClipboardText @text={{order.invoicingCompany}} />
+                      {{/if}}
+                    </td>
+                  </tr>
+
+                  <tr titel='Gatuadress/Box'>
+                    <th>Gatuadress/Box</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='invoicingAddress'
+                        />
+                      {{else}}
+                        <ClipboardText @text={{order.invoicingAddress}} />
+                      {{/if}}
+                    </td>
+                  </tr>
+
+                  <tr titel='Postnummer'>
+                    <th>Postnummer</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='invoicingPostalAddress1'
+                        />
+                      {{else}}
+                        <ClipboardText
+                          @text={{order.invoicingPostalAddress1}}
+                        />
+                      {{/if}}
+                    </td>
+                  </tr>
+
+                  <tr titel='Ort'>
+                    <th>Ort</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='invoicingPostalAddress2'
+                        />
+                      {{else}}
+                        <ClipboardText
+                          @text={{order.invoicingPostalAddress2}}
+                        />
+                      {{/if}}
+                    </td>
+                  </tr>
+
+                  <tr titel='Beställarid'>
+                    <th>Beställarid</th>
+                    <td>
+                      {{#if isEditing}}
+                        <form.element
+                          @controlType='text'
+                          @property='invoicingId'
+                        />
+                      {{else}}
+                        /<ClipboardText @text={{order.invoicingId}} />
+                      {{/if}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    {{#if this.isCurrentStateNew}}
+      <div class='col-md-4 col-12'>
+        <div class='row'>
+          <div class='col-12'>
+            <h4>Ange artikel idn</h4>
+            <form.element
+              @controlType='textarea'
+              @label='Ett id per rad'
+              @property='orderListIds'
+              as |el|
+            >
+              <el.control class='' rows='10' />
+
+            </form.element>
+          </div>
+          <div class='col-12'>
+            <BsButton
+              @type='primary'
+              class='btn-sm'
+              @buttonType='button'
+              disabled={{this.isBtnFetchOrdersDisabled}}
+              @onClick={{@fetchOrdersForCreation}}
+            >
+              Hämta ordrar
+              {{#if this.isFetching}}
+                <i class='fas fa-spinner fa-spin'></i>
+              {{/if}}
+            </BsButton>
+            {{#if this.isBtnFetchOrdersDisabled}}
+              {{#unless this.isFetching}}
+                <span
+                  class='ml-3 fas fa-info-circle'
+                  title='Fyll i alla obligatoriska fält'
+                ></span>
+                Fyll i alla obligatoriska fält markerade med *
+              {{/unless}}
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.isCurrentStateProcessing}}
+      <div class='col-md-8 col-xs-12'>
+        <div class='row'>
+          <div class='col-12'>
+            <h4>Ordrar att skapa</h4>
+            <p>{{this.getStatusStr}}</p>
+
+            {{#if orderBatchRequest.allItems}}
+              <table class='table table-striped'>
+                <thead>
+                  <tr>
+                    <th>Välj</th>
+                    <th>RequestID</th>
+                    <th>Titel</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each orderBatchRequest.allItems as |item|}}
+                    <tr>
+                      <td>
+                        {{#if item.selected}}
+                          <form.element
+                            @controlType='checkbox'
+                            @value={{item.selected}}
+                            @label='Skapa order'
+                            @onChange={{fn this.updateSelected item.request_id}}
+                            as |el|
+                          >
+                            <el.control disabled={{not item.selected}} />
+                          </form.element>
+
+                        {{else}}
+                          <div style='color: red;'>N/A</div>
+                        {{/if}}
+                      </td>
+                      <!-- is request id from server this will be changed later -->
+                      <td>{{item.request_id}}</td>
+                      <td>
+                        {{#unless item.success}}
+                          <i
+                            class='fas fa-exclamation-triangle text-danger'
+                          ></i>
+                          Den här gick inte att hämta
+                        {{else}}
+                          {{item.display_title}}
+                        {{/unless}}
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            {{else}}
+              <p>Inga artiklar hämtade</p>
+            {{/if}}
+          </div>
+          {{#if orderBatchRequest.itemsFailed}}
+            <div class='col-12'>
+              <h4>Misslyckade hämtningar</h4>
+              <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
+                >{{orderBatchRequest.itemsFailed}}
+                </pre></ClipboardText>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if this.isCurrentStateCompleted}}
+      <div class='col-md-8 col-xs-12'>
+        <div class='row'>
+          <div class='col-12'>
+            <h4>Ordrar skapade</h4>
+            {{#if orderBatchRequest.allItems}}
+              <table class='table table-striped'>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>RequestID</th>
+                    <th>OrderID</th>
+                    <th>Titel</th>
+                    <th>Länk</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each orderBatchRequest.allItems as |item|}}
+                    <tr>
+                      <td>
+                        {{#if item.error}}
+                          <i class='fas fa-times-circle text-danger'></i>
+                          Misslyckades
+                        {{else if item.order_id}}
+                          <i class='fas fa-check-circle text-success'></i>
+                        {{else}}
+                          <i class='fas fa-question-circle text-warning'></i>
+                          Ej skapad
+                        {{/if}}
+                      </td>
+                      <!-- is request id from server this will be changed later -->
+                      <td>{{item.request_id}}</td>
+                      <td>
+                        {{#if item.order_id}}
+                          {{item.order_id}}
+                        {{else}}
+                          N/A
+                        {{/if}}
+                      </td>
+                      <td>
+                        {{#unless item.success}}
+                          <i
+                            class='fas fa-exclamation-triangle text-danger'
+                          ></i>
+                          Den här gick inte att hämta
+                        {{else}}
+                          {{item.display_title}}
+                        {{/unless}}
+
+                      </td>
+                      <td>
+                        {{#if item.order_id}}
+                          <LinkTo
+                            @route='admin.post'
+                            @model={{item.order_id}}
+                            target='_blank'
+                          >{{item.order_number}}</LinkTo>
+                        {{else}}
+                          N/A
+                        {{/if}}
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            {{else}}
+              <p>Inga artiklar hämtade</p>
+            {{/if}}
+          </div>
+          {{#if orderBatchRequest.itemsFailed}}
+            <div class='col-12'>
+              <h4>Misslyckade hämtningar</h4>
+              <ClipboardText @text={{orderBatchRequest.itemsFailed}}><pre
+                >{{orderBatchRequest.itemsFailed}}
+                </pre></ClipboardText>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+
+  </div>
+
+</BsForm>

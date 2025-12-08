@@ -36,7 +36,7 @@
     "ember-bootstrap-changeset-validations": "^5.0.0",
     "ember-bootstrap-power-select": "^4.1.0",
     "ember-changeset": "^4.1.2",
-    "ember-changeset-validations": "^4.1.1",
+    "ember-changeset-validations": "4.1.1",
     "ember-cli": "^3.28.6",
     "ember-cli-app-version": "^5.0.0",
     "ember-cli-babel": "^8.1.0",

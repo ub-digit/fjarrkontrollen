@@ -1,0 +1,94 @@
+<div class='row'>
+  <div class='col-12 d-flex'>
+    <div class='flex-fill'>
+      <LinkTo @route='admin.index'>
+        <i class='fas fa-chevron-left'></i>
+        Tillbaka
+      </LinkTo>
+    </div>
+  </div>
+
+  <div class='col-12 border'>
+
+    <div class='row d-none'>
+      <div class='col-12'>
+        batchid debug:{{this.orderBatchRequest.batchId}}
+      </div>
+      <div class='col-12'>
+        State debug:
+        {{this.currentState}}
+      </div>
+    </div>
+
+  </div>
+  <div class='col-12 order-batch'>
+    <OrderFormBatch
+      @orderBatchRequest={{this.orderBatchRequest}}
+      @deliveryMethods={{deliveryMethods}}
+      @pickupLocations={{pickupLocations}}
+      @customerTypes={{customerTypes}}
+      @submitOrdersForCreation={{action 'submitOrdersForCreation'}}
+      @fetchOrdersForCreation={{action 'fetchOrdersForCreation'}}
+      @isEditing={{this.isEditing}}
+      @isFetching={{this.isFetching}}
+      @currentState={{this.currentState}}
+      @states={{this.states}}
+      as |orderBatchForm|
+    >
+      <div class='row'>
+        <div class='col-12 order-header'>
+          <h2 class='order-header-title'>
+            Skapa nya ordrar från lista
+          </h2>
+          <div class='order-header-tools'>
+            {{#if this.isClearFormVisible}}
+              <BsButton
+                @type='secondary'
+                class='btn-sm mr-2'
+                @onClick={{action 'clearOrderBatchForm'}}
+                @buttonType='button'
+              >
+
+                Rensa all information på sidan
+              </BsButton>
+            {{/if}}
+            {{#if this.isCancelVisible}}
+              <BsButton
+                @type='secondary'
+                class='btn-sm mr-2'
+                @onClick={{action 'cancelOrderBatchImport'}}
+                @buttonType='button'
+              >
+                Avbryt
+              </BsButton>
+            {{/if}}
+            {{#if this.isPostFormVisible}}
+              <BsButton
+                @type='primary'
+                class='btn-sm'
+                @buttonType='submit'
+                @disabled={{this.isPosting}}
+              >
+                Skapa ordrar
+                <i class='fas fa-check'></i>
+                {{#if this.isPosting}}
+                  <i class='fas fa-spinner fa-spin'></i>
+                {{/if}}
+              </BsButton>
+            {{/if}}
+            {{#if this.isHomelinkVisible}}
+              <LinkTo @route='admin.index' class='btn btn-sm btn-success ml-2'>
+                Till startsidan
+                <i class='fas fa-home'></i>
+              </LinkTo>
+
+            {{/if}}
+          </div>
+
+        </div>
+      </div>
+    </OrderFormBatch>
+  </div>
+</div>
+
+{{outlet}}
